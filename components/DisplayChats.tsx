@@ -5,6 +5,7 @@ import { Message } from "ai";
 import { FaUser } from "react-icons/fa6";
 import { SiOpenaigym } from "react-icons/si";
 export const dynamic = "force-dynamic";
+export const maxDuration = 0;
 export default function DisplayChats({ messages }: { messages: Message[] }) {
   return (
     <div className="flex-1 h-full w-full flex flex-col  p-4 gap-y-3 whitespace-pre-wrap">

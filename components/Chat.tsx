@@ -55,7 +55,7 @@ export default function Chat() {
   );
   return (
     <div className="grid grid-rows-[1fr,auto] gap-y-5 h-[94vh] pb-10 w-full">
-      <div ref={chatScrollingRef} className="overflow-auto p-4">
+      <div ref={chatScrollingRef} className="overflow-y-auto p-4">
         {messages.length ? (
           <DisplayChats messages={messages} />
         ) : (
