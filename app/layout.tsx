@@ -9,15 +9,12 @@ const inter = Josefin_Sans({ subsets: ["latin"] });
 
 export default function RootLayout({
   children,
-  pageProps,
 }: {
   children: React.ReactNode;
-  pageProps: any;
 }) {
   return (
     <ClerkProvider
-      {...pageProps}
-      publishableKey={process.env.NEXT_PUBLIC_CLERK_PUBLISHABLE_KEY}
+      publishableKey={process.env.NEXT_PUBLIC_CLERK_PUBLISHABLE_KEY!}
     >
       <html lang="en" data-theme="dark">
         <body className={inter.className}>

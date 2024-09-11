@@ -17,7 +17,6 @@
     "@tanstack/react-query-devtools": "^5.8.1",
     "@types/react": "^18.3.4",
     "ai": "^3.3.19",
-    "axios": "^1.6.1",
     "clsx": "^2.1.1",
     "framer-motion": "^11.3.30",
     "next": "14.2.5",

@@ -211,7 +211,7 @@ export function PlaceholdersAndVanishInput({
       <button
         disabled={!value}
         type="submit"
-        className="absolute right-2 top-1/2 z-50 -translate-y-1/2 h-8 w-8 rounded-full disabled:bg-gray-600 bg-primary  transition duration-200 flex items-center justify-center"
+        className={`absolute right-2 top-1/2 z-50 -translate-y-1/2 h-8 w-8 rounded-full disabled:bg-gray-600 bg-primary  transition duration-200 flex items-center justify-center `}
       >
         <motion.svg
           xmlns="http://www.w3.org/2000/svg"
@@ -223,9 +223,14 @@ export function PlaceholdersAndVanishInput({
           strokeWidth="2"
           strokeLinecap="round"
           strokeLinejoin="round"
-          className="text-gray-300 h-4 w-4"
+          className={`text-gray-300 h-4 w-4 ${disable ? " animate-spin" : ""}`}
         >
-          <path stroke="none" d="M0 0h24v24H0z" fill="none" />
+          <path
+            stroke="none"
+            d="M0 0h24v24H0z"
+            fill="none"
+            className={`${disable ? " hidden" : " block"}`}
+          />
           <motion.path
             d="M5 12l14 0"
             initial={{
@@ -240,6 +245,7 @@ export function PlaceholdersAndVanishInput({
               ease: "linear",
             }}
           />
+
           <path d="M13 18l6 -6" />
           <path d="M13 6l6 6" />
         </motion.svg>

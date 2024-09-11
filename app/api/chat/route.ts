@@ -8,6 +8,7 @@ export async function POST(req: Request, res: Response) {
     const requestBody = await req.json();
     const prompt = requestBody.data.prompt;
 
+    // Generate content stream using Gemini Pro model
     const geminiStream = await genAI
       .getGenerativeModel({ model: "gemini-pro" })
       .generateContentStream(prompt);

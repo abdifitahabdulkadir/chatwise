@@ -4,15 +4,6 @@ const navLinks = [
     href: "/chat",
     label: "Chat",
   },
-  {
-    href: "/tours",
-    label: "Tours",
-  },
-
-  {
-    href: "/tours/new-tours",
-    label: "New Tour",
-  },
 
   {
     href: "/profile",
