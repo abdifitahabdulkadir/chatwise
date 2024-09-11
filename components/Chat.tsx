@@ -1,7 +1,7 @@
 "use client";
-
 import GenerateChat from "@/components/GenerateChat";
 import { useChat } from "ai/react";
+import { unstable_noStore as noStore } from "next/cache";
 import { useEffect, useRef, useState } from "react";
 import toast from "react-hot-toast";
 import DisplayChats from "./DisplayChats";
@@ -9,6 +9,7 @@ import NoChatState from "./NoChatState";
 export const dynamic = "force-dynamic";
 // components
 export default function Chat() {
+  noStore();
   const [isFetching, setIsFetching] = useState(false);
   const chatScrollingRef = useRef<HTMLDivElement | null>(null);
   const { messages, isLoading, input, handleInputChange, handleSubmit } =
