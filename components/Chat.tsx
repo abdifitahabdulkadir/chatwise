@@ -6,7 +6,7 @@ import { useEffect, useRef, useState } from "react";
 import toast from "react-hot-toast";
 import DisplayChats from "./DisplayChats";
 import NoChatState from "./NoChatState";
-
+export const dynamic = "force-dynamic";
 // components
 export default function Chat() {
   const [isFetching, setIsFetching] = useState(false);
@@ -15,6 +15,7 @@ export default function Chat() {
     useChat({
       api: "/api/chat",
       keepLastMessageOnError: true,
+
       onError: (errro) => {
         toast.error("Couldnot fetch the request try again.");
         setIsFetching(false);
