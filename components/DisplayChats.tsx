@@ -19,7 +19,7 @@ export default function DisplayChats({ messages }: { messages: Message[] }) {
               </div>
             )}
             {mes.role === "assistant" && (
-              <div className=" bg-base-200 relative flex gap-x-3 text-xl px-2 py-3 w-fit rounded-lg">
+              <div className=" bg-base-200  relative flex gap-x-3 text-xl px-2 py-3 w-fit rounded-lg">
                 <SiOpenaigym className="w-[2rem] absolute top-3 left-3 h-[2rem] text-primary" />
                 <div
                   className="mt-10 py-3 px-4 text-sm text-left leading-relaxed"
