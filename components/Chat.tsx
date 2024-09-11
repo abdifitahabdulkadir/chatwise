@@ -7,6 +7,7 @@ import toast from "react-hot-toast";
 import DisplayChats from "./DisplayChats";
 import NoChatState from "./NoChatState";
 export const dynamic = "force-dynamic";
+export const maxDuration = 0;
 // components
 export default function Chat() {
   noStore();
