@@ -2,7 +2,7 @@ import Link from "next/link";
 export const metadata = {
   title: "ChatWise",
   description:
-    "ChatWise: Your AI language companion. Powered by OpenAI, it enhances your conversations, content creation, and more!",
+    "ChatWise: Your AI language companion. Powered by Gemini API, it enhances your conversations, content creation, and more!",
 };
 export default function Home() {
   return (
