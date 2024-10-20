@@ -40,7 +40,7 @@ https://github.com/abdifitahabdulkadir/chatwise
 Go to the project directory
 
 ```bash
-  cd easymart
+  cd chatwise
 ```
 
 Install dependencies
