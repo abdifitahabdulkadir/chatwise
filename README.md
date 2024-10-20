@@ -1,7 +1,8 @@
 
 # Chatwise: AI Chatbot 
 
-<img src="https://github.com/abdifitahabdulkadir/easymart/blob/d9a3910052675b9b745ab0c1a8e1eab2bf905e8c/bg.png" alt="easymart image" style="width: 100%; height: 500px; margin: 20px auto; display: block;" />
+<img src="https://github.com/abdifitahabdulkadir/chatwise/blob/main/chatwise.png" alt="Chatwise" width="100%" height="500px" />
+
 
 ## 📝 Description
 Experience seamless conversations with Chatwise, your intelligent AI chatbot companion. Designed to engage users with real-time responses, our chatbot elevates interactions to new levels of efficiency and ease. Whether for personal or business use, Chatwise ensures smooth communication while offering intuitive support and answers.
