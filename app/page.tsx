@@ -1,3 +1,4 @@
+import LeftSideBar from "@/components/LeftSideBar";
 import { Metadata } from "next";
 
 export const metadata: Metadata = {
@@ -7,8 +8,12 @@ export const metadata: Metadata = {
 
 export default function Home() {
   return (
-    <main>
-      <h5>Home</h5>
+    <main className="w-full min-h-screen overscroll-none bg-MediumGray grid grid-cols-[20%_80%]">
+      <div className="h-screen sticky top-0">
+        <LeftSideBar />
+      </div>
+
+      <div className="overflow-y-auto flex-grow flex items-center justify-center"></div>
     </main>
   );
 }

@@ -1,4 +1,4 @@
-import { OAuthButtons } from "@/components/oauth-buttons";
+import { OAuthButtons } from "@/components/OauthButtons";
 import Image from "next/image";
 
 export default function Home() {
