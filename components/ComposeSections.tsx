@@ -10,7 +10,7 @@ export default function ComposeSections({ children }: { children: ReactNode }) {
   return (
     <main className={cn("w-full bg-MediumGray overflow-hidden   h-screen")}>
       <NavBar />
-      <div className={cn("", isSidebarOpen ? "grid grid-cols-[20%_80%]" : "grid-cols-[1fr] sm:px-[50px]  md:px-[100px]")}>
+      <div className={cn("", isSidebarOpen ? "grid grid-cols-[20%_80%] max-md:grid-cols-[1fr]" : "grid-cols-[1fr] ")}>
         {isSidebarOpen && <LeftSideBar />}
         {children}
       </div>
