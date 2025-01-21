@@ -10,6 +10,7 @@ export default {
         MediumGray: "#343541",
         LightGray: "#444654",
         LightDaker: "#343540",
+        Daker: "#444654",
         SoftGray: "#9A9B9F",
         PaleGray: "#C5C5D1",
         OffWhite: "#ECECF1",

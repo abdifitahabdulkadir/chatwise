@@ -18,7 +18,6 @@ export default function SidebarItem({ text, iconUrl }: SideBarItemPros) {
     e.preventDefault();
     toggle();
   };
-  console.log(isEditing, text);
   const textFormat = (input || text).substring(0, input.length > 20 ? 20 : input.length);
   return (
     <div className={cn("bg-LightDaker/4 px-1  duration-300   border-none  cursor-pointer transition-all hover:bg-opacity-90 items-center gap-1.5 grid grid-cols-[1fr_8fr_1fr_1fr]  py-3 w-full h-fit text-white", !isEditing && "hover:bg-LightGray/30 ")}>

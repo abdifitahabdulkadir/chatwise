@@ -1,5 +1,7 @@
-import LeftSideBar from "@/components/LeftSideBar";
+import ChatLists from "@/components/ChatLists";
 import { Metadata } from "next";
+import ComposeSections from "@/components/ComposeSections";
+import SideBarToggleProvider from "@/components/SidBarToggleProvider";
 
 export const metadata: Metadata = {
   title: "ThinkSphere - Your AI Conversation Hub",
@@ -8,12 +10,10 @@ export const metadata: Metadata = {
 
 export default function Home() {
   return (
-    <main className="w-full min-h-screen overscroll-none bg-MediumGray grid grid-cols-[20%_80%]">
-      <div className="h-screen sticky top-0">
-        <LeftSideBar />
-      </div>
-
-      <div className="overflow-y-auto flex-grow flex items-center justify-center"></div>
-    </main>
+    <SideBarToggleProvider>
+      <ComposeSections>
+        <ChatLists />
+      </ComposeSections>
+    </SideBarToggleProvider>
   );
 }
