@@ -12,7 +12,7 @@ export async function signInWithOAuth({ provider }: AuthProps) {
 
     if (!validate.success) throw new Error("Invalid provider");
 
-    await signIn("google", { redirectTo: "/" });
+    await signIn(provider, { redirect: false });
 
     return { success: true };
   } catch (error: unknown) {
