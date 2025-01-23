@@ -10,9 +10,9 @@ export default function MobileSidebar() {
     <div className="hidden max-md:block">
       <Sheet>
         <SheetTrigger>
-          <AlignJustify className="text-white size-[30px]" />
+          <AlignJustify className="size-[30px] text-white" />
         </SheetTrigger>
-        <SheetContent className="bg-DarkGray border-none  " side={"left"}>
+        <SheetContent className="border-none bg-DarkGray" side={"left"}>
           <DialogTitle className="hidden">Sidebar of chats</DialogTitle>
           <NavLinks isMobile />
         </SheetContent>

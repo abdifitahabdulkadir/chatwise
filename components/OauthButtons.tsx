@@ -1,24 +1,39 @@
 "use client";
+import { signIn } from "@/auth";
 import { Button } from "./ui/button";
-import { motion } from "framer-motion";
+import { toast } from "@/hooks/use-toast";
 export function OAuthButtons() {
+  const handleAuth = async (provider: "github" | "google") => {
+    try {
+      await signIn(provider, {
+        redirect: false,
+        redirectTo: "google.com",
+      });
+    } catch (error) {
+      toast({
+        title: "SignIn Failed!",
+        variant: "destructive",
+        description:
+          error instanceof Error
+            ? "Faild to sign In with " + provider
+            : "An error occured while authenticating with " + provider,
+      });
+    }
+  };
   return (
-    <motion.div
-      initial={{
-        y: 20,
-        opacity: 0,
-      }}
-      transition={{
-        duration: 0.3,
-      }}
-      animate={{
-        y: 0,
-        opacity: 1,
-      }}
-      className="w-fit flex-col h-full px-3 py-4 gap-3 borde flex md:flex-row"
-    >
-      <Button className="bg-TealGreen text-white transition-all duration-300 rounded-md px-2 py-6 hover:bg-DarkGray ">Continue with Github</Button>
-      <Button className="bg-TealGreen text-white transition-colors duration-300 rounded-md px-2 py-6 hover:bg-DarkGray">Continue with Google</Button>
-    </motion.div>
+    <div className="borde flex h-full w-fit flex-col gap-3 px-3 py-4 md:flex-row">
+      <Button
+        onClick={() => handleAuth("github")}
+        className="rounded-md bg-TealGreen px-2 py-6 text-white transition-all duration-300 hover:bg-DarkGray"
+      >
+        Continue with Github
+      </Button>
+      <Button
+        onClick={() => handleAuth("google")}
+        className="rounded-md bg-TealGreen px-2 py-6 text-white transition-colors duration-300 hover:bg-DarkGray"
+      >
+        Continue with Google
+      </Button>
+    </div>
   );
 }

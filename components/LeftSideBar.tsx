@@ -15,7 +15,7 @@ export default function DesktoLeftSideBar() {
       transition={{
         duration: 0.2,
       }}
-      className={cn("h-screen sticky  top-0 max-md:hidden  ")}
+      className={cn("sticky top-0 h-screen max-md:hidden")}
     >
       <NavLinks />
     </motion.section>

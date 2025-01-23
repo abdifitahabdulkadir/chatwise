@@ -1,3 +1,4 @@
+import { SessionProvider } from "next-auth/react";
 import { interFont } from "../lib/fonts";
 import "./globals.css";
 
@@ -8,7 +9,11 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en">
-      <body className={` ${interFont.className}  antialiased`}>{children}</body>
+      <SessionProvider>
+        <body className={` ${interFont.className} antialiased`}>
+          {children}
+        </body>
+      </SessionProvider>
     </html>
   );
 }
