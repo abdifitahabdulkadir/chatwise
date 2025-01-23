@@ -2,6 +2,8 @@ import ChatLists from "@/components/ChatLists";
 import { Metadata } from "next";
 import ComposeSections from "@/components/ComposeSections";
 import SideBarToggleProvider from "@/components/SidBarToggleProvider";
+import { auth } from "@/auth";
+import { redirect } from "next/navigation";
 
 export const metadata: Metadata = {
   title: "ThinkSphere - Your AI Conversation Hub",
@@ -10,6 +12,8 @@ export const metadata: Metadata = {
 };
 
 export default async function Home() {
+  const session = await auth();
+  if (!session) redirect("/auth");
   return (
     <SideBarToggleProvider>
       <ComposeSections>
