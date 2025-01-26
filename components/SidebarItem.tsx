@@ -37,7 +37,7 @@ export default function SidebarItem({ text, iconUrl }: SideBarItemPros) {
           onSubmit={handleSubmit}
           className="col-span-full "
         >
-          <input title="title  change input" autoFocus value={input} onChange={changeText} className={cn("w-full bg-transparent text-white border-none shadow-none focus-visible:outline-none py-2 rounded focus-visible:ring-1  focus-visible:ring-Purple", isEditing && "ring-1 ring-Purple")} />
+          <input title="title  change input" autoFocus value={input} onChange={changeText} className={cn("w-full bg-transparent text-white border-none shadow-none focus-visible:outline-hidden py-2 rounded-sm focus-visible:ring-1  focus-visible:ring-Purple", isEditing && "ring-1 ring-Purple")} />
         </motion.form>
       )}
       {!isEditing && <p className="overflow-hidden    text-xs font-normal">{textFormat}</p>}

@@ -24,7 +24,7 @@ export default function ChatInput() {
           onChange={hanldeInputChnage}
           placeholder="Ask Anything..."
           rows={inputChange.length === 0 ? 1 : rows}
-          className={cn("bg-transparent outline-none border-none flex-grow shadow-none overflow-y-auto resize-none text-white focus-visible:ring-0 max-h-[10rem] h-auto min-h-[2.5rem] leading-6 custom-scrollbar")}
+          className={cn("bg-transparent outline-hidden border-none grow shadow-none overflow-y-auto resize-none text-white focus-visible:ring-0 max-h-[10rem] h-auto min-h-[2.5rem] leading-6 custom-scrollbar")}
         />
 
         <button className="hover:scale-[1.2] transition-all duration-200">
