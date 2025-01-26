@@ -50,7 +50,7 @@ export default function CredentialAuthForm<T extends FieldValues>({
       router.push("/");
     } else {
       toast({
-        title: `Error ${result.statusCode}`,
+        title: "Authentication Failed",
         description: result.errors?.message,
         variant: "destructive",
       });
@@ -84,7 +84,7 @@ export default function CredentialAuthForm<T extends FieldValues>({
                 <Input
                   type={"text"}
                   {...register(item as Path<T>)}
-                  className="no-focus rounded-1.5 f focus-visible:!ring-dark-green min-h-12 w-[300px] border !border-white focus-within:border-none focus-visible:!ring-1 focus-visible:!outline-hidden"
+                  className="no-focus rounded-1.5 f focus-visible:!ring-dark-green min-h-12 w-full border !border-white focus-within:border-none focus-visible:!ring-1 focus-visible:!outline-hidden md:w-[400px]"
                 />
                 {errors[item] && (
                   <FromErrorElement>
@@ -125,7 +125,7 @@ export default function CredentialAuthForm<T extends FieldValues>({
             <p>OR</p>
             <div className="border-darker/50 w-full border" />
           </div>
-          <OAuthButtons />
+          <OAuthButtons disabled={isSubmitting} />
         </div>
       </div>
     </section>

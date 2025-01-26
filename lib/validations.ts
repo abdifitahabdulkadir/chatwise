@@ -1,4 +1,3 @@
-import exp from "constants";
 import { z } from "zod";
 
 export const AuthParamsSchema = z.object({
@@ -56,7 +55,6 @@ export const SignInWithOAuthSchema = z.object({
     email: z
       .string()
       .email({ message: "Please provide a valid email address." }),
-    username: z.string().min(1, { message: "username is required" }),
     image: z
       .string()
       .url({ message: "Please provide a valid URL." })

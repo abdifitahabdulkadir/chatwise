@@ -30,7 +30,6 @@ export default async function dbConnect(): Promise<Mongoose> {
         return result;
       })
       .catch((error) => {
-        console.log(error);
         throw error;
       });
   }

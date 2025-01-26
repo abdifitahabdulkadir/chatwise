@@ -2,7 +2,7 @@
 import { Button } from "./ui/button";
 import { toast } from "@/hooks/use-toast";
 import { signIn } from "next-auth/react";
-export function OAuthButtons() {
+export function OAuthButtons({ disabled }: { disabled: boolean }) {
   const handleAuth = async (provider: "github" | "google") => {
     try {
       await signIn(provider, { redirect: false, redirectTo: "/" });
@@ -20,6 +20,7 @@ export function OAuthButtons() {
   return (
     <div className="borde flex h-full w-fit flex-col gap-3 px-3 py-4 md:flex-row">
       <Button
+        disabled={disabled}
         onClick={() => handleAuth("github")}
         className="!bg-tele-green hover:!bg-dark-gray cursor-pointer rounded-md px-2 py-6 !text-white transition-all duration-300"
       >
@@ -27,6 +28,7 @@ export function OAuthButtons() {
       </Button>
 
       <Button
+        disabled={disabled}
         onClick={() => handleAuth("google")}
         className="!bg-tele-green hover:!bg-dark-gray cursor-pointer rounded-md px-2 py-6 !text-white transition-colors duration-300"
       >

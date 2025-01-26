@@ -8,17 +8,31 @@ export const API = {
       provider,
       providerAccountId,
     }: SignInWithOAuthProps) {
-      const result = await fetchHandler(`${BASE_URL}/auth/social-media`, {
+      return fetchHandler(`${BASE_URL}/auth/social-media`, {
         method: "POST",
         body: JSON.stringify({ user, provider, providerAccountId }),
       });
-      console.log(result);
-      return result;
     },
   },
   accounts: {
     getProviderById(providerId: string) {
-      return fetchHandler<AccountI>(`${BASE_URL}/accounts/${providerId}`, {
+      return fetchHandler<AccountI>(`${BASE_URL}/auth/accounts/${providerId}`, {
+        method: "GET",
+      });
+    },
+    async getProviderByProviderAccountId(providerAccountId: string) {
+      return fetchHandler<AccountI>(
+        `${BASE_URL}/auth/accounts/providerAccountId`,
+        {
+          method: "POST",
+          body: JSON.stringify({ providerAccountId }),
+        },
+      );
+    },
+  },
+  users: {
+    getUserById(id: string) {
+      return fetchHandler<UserI>(`${BASE_URL}/auth/users/${id}`, {
         method: "GET",
       });
     },

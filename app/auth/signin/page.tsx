@@ -1,18 +1,19 @@
 "use client";
 import CredentailAuthForm from "@/components/CredentailAuthForm";
+import { signInWithCredentials } from "@/lib/actions/action.crendetial";
+import { SignInSchema } from "@/lib/validations";
 
 export default function SignInPage() {
   return (
     <>
       <CredentailAuthForm
+        schema={SignInSchema}
         formType="SIGN_IN"
         defaultValues={{
           email: "",
           password: "",
         }}
-        onSubmit={async (data) => {
-          console.log(data);
-        }}
+        onSubmit={signInWithCredentials}
       />
     </>
   );

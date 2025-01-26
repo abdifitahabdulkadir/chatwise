@@ -19,7 +19,7 @@ export function FormLabel({
 }
 
 export function FromDescription({ children }: { children?: ReactNode }) {
-  return <p className="body-regular text-light-500 mt-2.5">{children}</p>;
+  return <p className="mt-2.5 font-normal italic">{children}</p>;
 }
 
 export function FromErrorElement({
@@ -27,7 +27,11 @@ export function FromErrorElement({
 }: {
   children?: ReactNode | string;
 }) {
-  return <p className="body-regular text-primary-400 mt-1">{children}</p>;
+  return (
+    <p className="mt-1 line-clamp-2 font-normal text-red-300 italic">
+      {children}
+    </p>
+  );
 }
 
 export function FormFieldItem({ children }: { children?: ReactNode }) {

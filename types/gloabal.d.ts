@@ -49,7 +49,6 @@ interface RouteParams {
 interface SignInWithOAuthProps {
   user: {
     name: string;
-    username: string;
     email: string;
     image?: string;
   };

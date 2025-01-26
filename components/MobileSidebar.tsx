@@ -12,7 +12,10 @@ export default function MobileSidebar() {
         <SheetTrigger>
           <AlignJustify className="size-[30px] text-white" />
         </SheetTrigger>
-        <SheetContent className="border-none bg-DarkGray" side={"left"}>
+        <SheetContent
+          className="custom-scrollbar !bg-dark-gray overflow-y-auto border-none"
+          side={"left"}
+        >
           <DialogTitle className="hidden">Sidebar of chats</DialogTitle>
           <NavLinks isMobile />
         </SheetContent>

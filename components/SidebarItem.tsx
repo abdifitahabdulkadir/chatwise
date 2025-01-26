@@ -53,7 +53,7 @@ export default function SidebarItem({ text, iconUrl }: SideBarItemPros) {
             onChange={changeText}
             className={cn(
               "focus-visible:ring-Purple w-full rounded-sm border-none bg-transparent py-2 text-white shadow-none focus-visible:ring-1 focus-visible:outline-hidden",
-              isEditing && "ring-purple ring-1",
+              isEditing && "ring-dark-green ring-1",
             )}
           />
         </motion.form>

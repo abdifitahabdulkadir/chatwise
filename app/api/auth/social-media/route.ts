@@ -6,7 +6,6 @@ import { ValidationError } from "@/lib/http-erros";
 import { SignInWithOAuthSchema } from "@/lib/validations";
 import mongoose from "mongoose";
 import { NextResponse } from "next/server";
-import slugigy from "slugify";
 
 // post method to register users who
 //signs with OAuth providers like google and github
@@ -27,13 +26,7 @@ export async function POST(request: Request) {
     if (!validateData.success)
       throw new ValidationError(validateData.error.flatten().fieldErrors);
 
-    const { name, username, email, image } = user;
-
-    const usernameFormatted = slugigy(username, {
-      lower: true,
-      strict: true,
-      trim: true,
-    });
+    const { name, email, image } = user;
 
     // check if user exsts -- and this operation fails entire transaction
     // should also fail
@@ -41,12 +34,9 @@ export async function POST(request: Request) {
 
     // create if it is new user
     if (!isUserExisted) {
-      [isUserExisted] = await UserModel.create(
-        [{ name, username: usernameFormatted, email, image }],
-        {
-          session,
-        },
-      );
+      [isUserExisted] = await UserModel.create([{ name, email, image }], {
+        session,
+      });
     }
     // updating some user information like image and username if he existed
     else {

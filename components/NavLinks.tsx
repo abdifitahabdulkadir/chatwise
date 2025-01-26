@@ -48,12 +48,6 @@ export default function NavLinks({ isMobile = false }: NavLinksProps) {
           alt="delete icon"
         />
         <ButtonWithIconText
-          buttonType="lightMode"
-          iconUrl="/icons/contrast.svg"
-          text="Light mode"
-          alt="light mode icon"
-        />
-        <ButtonWithIconText
           buttonType="logout"
           iconUrl="/icons/logout.svg"
           text="Logout"
