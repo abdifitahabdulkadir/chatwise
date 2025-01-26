@@ -11,7 +11,7 @@ import ChatInput from "./ChatInput";
 export default function ComposeSections({ children }: { children: ReactNode }) {
   const { isSidebarOpen } = useSideBarToogle();
   return (
-    <main className={cn("h-screen w-full overflow-hidden bg-MediumGray")}>
+    <main className={cn("bg-medium-gray h-screen w-full overflow-hidden")}>
       <NavBar />
       <div
         className={cn(
@@ -21,8 +21,8 @@ export default function ComposeSections({ children }: { children: ReactNode }) {
         )}
       >
         {isSidebarOpen && <LeftSideBar />}
-        <div className="grid h-full max-h-screen w-full grid-rows-[1fr_auto] gap-y-5 overflow-clip pb-[1rem] pt-14">
-          {!chats.length ? <EmptyChats /> : children}
+        <div className="grid h-full max-h-screen w-full grid-rows-[1fr_auto] gap-y-5 overflow-clip pt-14 pb-[1rem]">
+          {chats.length ? <EmptyChats /> : children}
           <ChatInput />
         </div>
       </div>

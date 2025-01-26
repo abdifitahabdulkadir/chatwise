@@ -12,10 +12,10 @@ interface NavLinksProps {
 export default function NavLinks({ isMobile = false }: NavLinksProps) {
   return (
     <div
-      className={cn("relative flex h-full w-full flex-col bg-DarkGray pt-16")}
+      className={cn("bg-dark-gray relative flex h-full w-full flex-col pt-16")}
     >
       <div className="custom-scrollbar h-0 max-h-[70vh] w-full grow overflow-y-auto px-4 py-10">
-        <button className="flex h-fit w-full items-center justify-start gap-4 rounded-[6px] border border-LightGray bg-transparent px-5 py-3 text-white outline-hidden">
+        <button className="border-light-gray flex h-fit w-full items-center justify-start gap-4 rounded-[6px] border bg-transparent px-5 py-3 text-white outline-hidden">
           <Image
             src={"/icons/plus.svg"}
             alt="plus icon"
@@ -40,7 +40,7 @@ export default function NavLinks({ isMobile = false }: NavLinksProps) {
           })}
         </div>
       </div>
-      <div className="flex w-full flex-col gap-y-2 border-t border-LightGray py-4">
+      <div className="border-light-gray flex w-full flex-col gap-y-2 border-t py-4">
         <ButtonWithIconText
           buttonType="clear"
           iconUrl="/icons/delete.svg"

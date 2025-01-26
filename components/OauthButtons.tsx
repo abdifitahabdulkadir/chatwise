@@ -21,14 +21,14 @@ export function OAuthButtons() {
     <div className="borde flex h-full w-fit flex-col gap-3 px-3 py-4 md:flex-row">
       <Button
         onClick={() => handleAuth("github")}
-        className="rounded-md bg-TealGreen px-2 py-6 text-white transition-all duration-300 hover:bg-DarkGray"
+        className="!bg-tele-green hover:!bg-dark-gray cursor-pointer rounded-md px-2 py-6 !text-white transition-all duration-300"
       >
         Continue with Github
       </Button>
 
       <Button
         onClick={() => handleAuth("google")}
-        className="rounded-md bg-TealGreen px-2 py-6 text-white transition-colors duration-300 hover:bg-DarkGray"
+        className="!bg-tele-green hover:!bg-dark-gray cursor-pointer rounded-md px-2 py-6 !text-white transition-colors duration-300"
       >
         Continue with Google
       </Button>

@@ -12,14 +12,23 @@ export default function SidebarItem({ text, iconUrl }: SideBarItemPros) {
   const [isEditing, setIsEditing] = useState(false);
   const [input, setInput] = useState(text);
   const toggle = () => setIsEditing((prev) => !prev);
-  const changeText = (value: React.ChangeEvent<HTMLInputElement>) => setInput(value.target.value);
+  const changeText = (value: React.ChangeEvent<HTMLInputElement>) =>
+    setInput(value.target.value);
   const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     toggle();
   };
-  const textFormat = (input || text).substring(0, input.length > 20 ? 20 : input.length);
+  const textFormat = (input || text).substring(
+    0,
+    input.length > 20 ? 20 : input.length,
+  );
   return (
-    <div className={cn("bg-LightDaker/4 px-1  duration-300   border-none  cursor-pointer transition-all hover:bg-opacity-90 items-center gap-1.5 grid grid-cols-[1fr_8fr_1fr_1fr]  py-3 w-full h-fit text-white", !isEditing && "hover:bg-LightGray/30 ")}>
+    <div
+      className={cn(
+        "bg-light-darker/4 hover:bg-opacity-90 grid h-fit w-full cursor-pointer grid-cols-[1fr_8fr_1fr_1fr] items-center gap-1.5 border-none px-1 py-3 text-white transition-all duration-300",
+        !isEditing && "hover:bg-light-gray/30",
+      )}
+    >
       {!isEditing && <ImageIcon iconUrl={iconUrl} alt="message icon" />}
       {isEditing && (
         <motion.form
@@ -35,19 +44,38 @@ export default function SidebarItem({ text, iconUrl }: SideBarItemPros) {
             opacity: 1,
           }}
           onSubmit={handleSubmit}
-          className="col-span-full "
+          className="col-span-full"
         >
-          <input title="title  change input" autoFocus value={input} onChange={changeText} className={cn("w-full bg-transparent text-white border-none shadow-none focus-visible:outline-hidden py-2 rounded-sm focus-visible:ring-1  focus-visible:ring-Purple", isEditing && "ring-1 ring-Purple")} />
+          <input
+            title="title  change input"
+            autoFocus
+            value={input}
+            onChange={changeText}
+            className={cn(
+              "focus-visible:ring-Purple w-full rounded-sm border-none bg-transparent py-2 text-white shadow-none focus-visible:ring-1 focus-visible:outline-hidden",
+              isEditing && "ring-purple ring-1",
+            )}
+          />
         </motion.form>
       )}
-      {!isEditing && <p className="overflow-hidden    text-xs font-normal">{textFormat}</p>}
+      {!isEditing && (
+        <p className="overflow-hidden text-xs font-normal">{textFormat}</p>
+      )}
       {!isEditing && (
         <>
           <button onClick={toggle} title="edit chat">
-            <ImageIcon iconUrl={"/icons/pen.svg"} alt="edit icon" imageStyle="hover:scale-[1.4] transition-all  duration-400 " />
+            <ImageIcon
+              iconUrl={"/icons/pen.svg"}
+              alt="edit icon"
+              imageStyle="hover:scale-[1.4] transition-all  duration-400 "
+            />
           </button>
           <button title="delete chat">
-            <ImageIcon iconUrl={"/icons/delete.svg"} alt="delete icon" imageStyle="hover:scale-[1.4] transition-all  duration-400 " />
+            <ImageIcon
+              iconUrl={"/icons/delete.svg"}
+              alt="delete icon"
+              imageStyle="hover:scale-[1.4] transition-all  duration-400 "
+            />
           </button>
         </>
       )}

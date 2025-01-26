@@ -13,7 +13,7 @@ export const metadata: Metadata = {
 
 export default async function Home() {
   const session = await auth();
-  if (!session) redirect("/auth");
+  if (!session) redirect("/auth/signin");
   return (
     <SideBarToggleProvider>
       <ComposeSections>

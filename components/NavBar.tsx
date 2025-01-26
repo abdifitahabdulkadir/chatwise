@@ -15,12 +15,12 @@ export default function NavBar() {
       <MobileSidebar />
       <PanelLeft
         onClick={toggle}
-        className="ml-2 mt-1 size-[30px] cursor-pointer text-white transition-all duration-300 hover:scale-[1.1] max-md:hidden"
+        className="mt-1 ml-2 size-[30px] cursor-pointer text-white transition-all duration-300 hover:scale-[1.1] max-md:hidden"
       />
       <div className="mr-5 flex items-start gap-6">
         <button
           title="share the link"
-          className="rounded-full border border-Daker bg-transparent px-3 py-2 text-white transition-all duration-200 hover:bg-DarkGray"
+          className="border-darker hover:bg-dark-gray cursor-pointer rounded-full border bg-transparent px-3 py-2 text-white transition-all duration-200"
         >
           Share
         </button>

@@ -4,26 +4,56 @@ import React from "react";
 export default function ChatItem({ icon, message, role }: ChatItemI) {
   if (role == "user") {
     return (
-      <div className="grid max-w-5xl grid-cols-[5%__90%] py-5 bg-DarkGray items-center  w-fit   px-4 gap-2 rounded-sm">
-        <Image src={icon} alt="user icon" width={30} height={30} quality={100} className="object-contain" />
-        <p className="text-white font-normal text-[15px]">{message}</p>
+      <div className="bg-dark-gray grid w-fit max-w-5xl grid-cols-[5%__90%] items-center gap-2 rounded-sm px-4 py-5">
+        <Image
+          src={icon}
+          alt="user icon"
+          width={30}
+          height={30}
+          quality={100}
+          className="object-contain"
+        />
+        <p className="text-[15px] font-normal text-white">{message}</p>
       </div>
     );
   }
   return (
-    <div className="w-full max-w-5xl flex items-center gap-3 py-6 pl-5 md:pl-[100px]   ">
-      <div className="w-full grid grid-cols-[5%__1fr] gap-6 md:gap-1 items-start">
-        <div className="rounded-xs  bg-DarkGreen size-[30px] flex items-center justify-center  ">
-          <Image src={icon} alt="ai icon" width={22} height={22} quality={100} className=" size-[22px] object-contain" />
+    <div className="flex w-full max-w-5xl items-center gap-3 py-6 pl-5 md:pl-[100px]">
+      <div className="grid w-full grid-cols-[5%__1fr] items-start gap-6 md:gap-1">
+        <div className="bg-dark-green flex size-[30px] items-center justify-center rounded-xs">
+          <Image
+            src={icon}
+            alt="ai icon"
+            width={22}
+            height={22}
+            quality={100}
+            className="size-[22px] object-contain"
+          />
         </div>
-        <p className="text-white mt-6 grow leading-9 pr-5  font-normal text-[15px]">{message}</p>
-        <div className="col-span-full border-Daker border-t-2 my-2" />
-        <div className="flex items-center w-full  gap-2 ml-10 col-span-4 ">
-          <button className="hover:bg-DarkGray rounded-md px-3 py-2 transition-all duration-200 group ">
-            <Image src={"/icons/like.svg"} alt="like button svg icon" width={16} height={16} quality={100} className=" size-[16px] transform transition-all duration-200 group-hover:scale-[1.2]" />
+        <p className="mt-6 grow pr-5 text-[15px] leading-9 font-normal text-white">
+          {message}
+        </p>
+        <div className="border-darker col-span-full my-2 border-t-2" />
+        <div className="col-span-4 ml-10 flex w-full items-center gap-2">
+          <button className="hover:bg-dark-gray group rounded-md px-3 py-2 transition-all duration-200">
+            <Image
+              src={"/icons/like.svg"}
+              alt="like button svg icon"
+              width={16}
+              height={16}
+              quality={100}
+              className="size-[16px] transform transition-all duration-200 group-hover:scale-[1.2]"
+            />
           </button>
-          <button className="hover:bg-DarkGray rounded-md px-3 py-2 transition-all duration-200 group ">
-            <Image src={"/icons/dislike.svg"} alt="like button svg icon" width={16} height={16} quality={100} className=" size-[16px] transform transition-all duration-200 group-hover:scale-[1.2]" />
+          <button className="hover:bg-dark-gray group cursor-pointer rounded-md px-3 py-2 transition-all duration-200">
+            <Image
+              src={"/icons/dislike.svg"}
+              alt="like button svg icon"
+              width={16}
+              height={16}
+              quality={100}
+              className="size-[16px] transform transition-all duration-200 group-hover:scale-[1.2]"
+            />
           </button>
         </div>
       </div>

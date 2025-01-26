@@ -1,11 +1,21 @@
 @import "tailwindcss";
 
-@config '../tailwind.config.ts';
-
+@theme {
+  --radius: 0.5rem;
+  --color-dark-gray: #202123;
+  --color-medium-gray: #343541;
+  --color-light-gray: #444654;
+  --color-light-darker: #343540;
+  --color-darker: #444654;
+  --color-soft-darker: #9a9b9f;
+  --color-pele-gray: #c5c5d1;
+  --color-off-white: #ececf1;
+  --color-dark-green: #0fa47f;
+  --color-tele-green: #00897b;
+  --color-light-green: #8dcdb8;
+  --color-purple: #5536da;
+}
 @layer base {
-  :root {
-    --radius: 0.5rem;
-  }
   /* leftsider bar scroll style */
   .custom-scrollbar {
     scrollbar-width: thin;
