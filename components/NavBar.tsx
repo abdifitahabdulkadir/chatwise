@@ -1,10 +1,8 @@
 "use client";
-import React from "react";
 
-import MobileSidebar from "./MobileSidebar";
 import { PanelLeft } from "lucide-react";
+import MobileSidebar from "./MobileSidebar";
 import { useSideBarToogle } from "./SidBarToggleProvider";
-import UserAvator from "./UserAvator";
 
 export default function NavBar() {
   const { toggle } = useSideBarToogle();
@@ -22,7 +20,6 @@ export default function NavBar() {
         >
           Share
         </button>
-        <UserAvator />
       </div>
     </div>
   );

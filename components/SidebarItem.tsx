@@ -1,8 +1,11 @@
 "use client";
-import React, { useState } from "react";
-import ImageIcon from "./shared/ImageIcon";
 import { cn } from "@/lib/utils";
+import { DropdownMenuItem } from "@radix-ui/react-dropdown-menu";
 import { motion } from "framer-motion";
+import { Ellipsis } from "lucide-react";
+import React, { useState } from "react";
+import DropDownMenu from "./DropDownMenu";
+import ImageIcon from "./shared/ImageIcon";
 
 interface SideBarItemPros {
   text: string;
@@ -62,22 +65,26 @@ export default function SidebarItem({ text, iconUrl }: SideBarItemPros) {
         <p className="overflow-hidden text-xs font-normal">{textFormat}</p>
       )}
       {!isEditing && (
-        <>
-          <button onClick={toggle} title="edit chat">
-            <ImageIcon
-              iconUrl={"/icons/pen.svg"}
-              alt="edit icon"
-              imageStyle="hover:scale-[1.4] transition-all  duration-400 "
-            />
-          </button>
-          <button title="delete chat">
+        <DropDownMenu
+          label="Settings"
+          trigger={<Ellipsis className="ml-auto cursor-pointer" />}
+        >
+          <DropdownMenuItem
+            onClick={toggle}
+            className="hover:bg-medium-gray/50 flex cursor-pointer items-center gap-2 rounded-sm px-2 py-1 transition-all duration-200 hover:border-none hover:outline-hidden"
+          >
+            <ImageIcon iconUrl={"/icons/pen.svg"} alt="edit icon" />
+            <span className="text-sm font-normal">Edit</span>
+          </DropdownMenuItem>
+          <DropdownMenuItem className="hover:bg-medium-gray/50 mt-5 flex cursor-pointer items-center gap-2 rounded-sm px-2 py-1 transition-all duration-200 hover:border-none hover:outline-hidden">
             <ImageIcon
               iconUrl={"/icons/delete.svg"}
               alt="delete icon"
               imageStyle="hover:scale-[1.4] transition-all  duration-400 "
             />
-          </button>
-        </>
+            <span className="text-sm font-normal">Delete</span>
+          </DropdownMenuItem>
+        </DropDownMenu>
       )}
     </div>
   );

@@ -1,9 +1,8 @@
 import { chats } from "@/constants/sidebar";
 import { cn } from "@/lib/utils";
-import React from "react";
-import ButtonWithIconText from "./shared/ButtonWithIconText";
-import SidebarItem from "./SidebarItem";
 import Image from "next/image";
+import UserProfile from "./shared/UserProfile";
+import SidebarItem from "./SidebarItem";
 import { SheetClose } from "./ui/sheet";
 
 interface NavLinksProps {
@@ -14,7 +13,7 @@ export default function NavLinks({ isMobile = false }: NavLinksProps) {
     <div
       className={cn("bg-dark-gray relative flex h-full w-full flex-col pt-16")}
     >
-      <div className="custom-scrollbar h-0 max-h-[70vh] w-full grow overflow-y-auto px-4 py-10">
+      <div className="custom-scrollbar h-0 w-full grow overflow-y-auto px-4 py-10">
         <button className="border-light-gray flex h-fit w-full items-center justify-start gap-4 rounded-[6px] border bg-transparent px-5 py-3 text-white outline-hidden">
           <Image
             src={"/icons/plus.svg"}
@@ -40,19 +39,8 @@ export default function NavLinks({ isMobile = false }: NavLinksProps) {
           })}
         </div>
       </div>
-      <div className="border-light-gray flex w-full flex-col gap-y-2 border-t py-4">
-        <ButtonWithIconText
-          buttonType="clear"
-          iconUrl="/icons/delete.svg"
-          text="Clear conversations"
-          alt="delete icon"
-        />
-        <ButtonWithIconText
-          buttonType="logout"
-          iconUrl="/icons/logout.svg"
-          text="Logout"
-          alt="logout icon"
-        />
+      <div className="border-light-gray flex w-full flex-col gap-y-2 border-t px-3 py-4">
+        <UserProfile />
       </div>
     </div>
   );

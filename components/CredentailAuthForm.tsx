@@ -49,9 +49,10 @@ export default function CredentialAuthForm<T extends FieldValues>({
       });
       router.push("/");
     } else {
+      console.log(result.errors);
       toast({
         title: "Authentication Failed",
-        description: result.errors?.message,
+        description: result.errors?.message.split(".")[0] + ".",
         variant: "destructive",
       });
     }

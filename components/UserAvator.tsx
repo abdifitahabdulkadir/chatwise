@@ -5,6 +5,7 @@ import React from "react";
 export default function UserAvator() {
   const { data } = useSession();
 
+  if (data === null || data === undefined) return null;
   if (data?.user?.image)
     return (
       <Image

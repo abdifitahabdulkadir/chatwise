@@ -1,5 +1,4 @@
 import Image from "next/image";
-import React from "react";
 
 import { cn } from "@/lib/utils";
 interface ImageIconProps {
@@ -7,6 +6,19 @@ interface ImageIconProps {
   imageStyle?: string;
   alt: string;
 }
-export default function ImageIcon({ iconUrl, alt, imageStyle }: ImageIconProps) {
-  return <Image src={iconUrl} alt={alt} height={15} width={15} className={cn("object-contain ", imageStyle)} loading="eager" />;
+export default function ImageIcon({
+  iconUrl,
+  alt,
+  imageStyle,
+}: ImageIconProps) {
+  return (
+    <Image
+      src={iconUrl}
+      alt={alt}
+      height={20}
+      width={20}
+      className={cn("object-contain", imageStyle)}
+      loading="eager"
+    />
+  );
 }

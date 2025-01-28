@@ -1,11 +1,17 @@
-import NextAuth from "next-auth";
+import NextAuth, { CredentialsSignin } from "next-auth";
 import GitHub from "next-auth/providers/github";
 import Google from "next-auth/providers/google";
 import { API } from "./lib/api";
 import Credentials from "next-auth/providers/credentials";
-import { NotFoundError } from "./lib/http-erros";
 import bycrpt from "bcryptjs";
 import { SignInSchema } from "./lib/validations";
+
+const message = "Invalid Crendentials, Please check your email and password";
+class InvalidLoginError extends CredentialsSignin {
+  constructor(public code: string) {
+    super(code);
+  }
+}
 export const { handlers, auth, signIn, signOut } = NextAuth({
   providers: [
     Credentials({
@@ -21,21 +27,19 @@ export const { handlers, auth, signIn, signOut } = NextAuth({
           const { data: existedUserAccount, success: accountSuccess } =
             await API.accounts.getProviderByProviderAccountId(email);
 
-          if (!accountSuccess)
-            throw new NotFoundError("Account linked with this email");
+          if (!accountSuccess) throw new InvalidLoginError(message);
 
           const { data: existedUser, success: userSuccess } =
             await API.users.getUserById(String(existedUserAccount?.userId));
 
-          if (!userSuccess)
-            throw new NotFoundError("User linked with this email");
+          if (!userSuccess) throw new InvalidLoginError(message);
 
           const verifyPassword = bycrpt.compare(
             password,
             existedUserAccount?.password ?? "",
           );
 
-          if (!verifyPassword) throw new Error("Password is not correct");
+          if (!verifyPassword) throw new InvalidLoginError(message);
 
           return {
             id: String(existedUserAccount?.userId),
