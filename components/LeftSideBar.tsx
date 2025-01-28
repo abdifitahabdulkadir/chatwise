@@ -1,7 +1,6 @@
-import React from "react";
+import { cn } from "@/lib/utils";
 import { motion } from "framer-motion";
 import NavLinks from "./NavLinks";
-import { cn } from "@/lib/utils";
 
 export default function DesktoLeftSideBar() {
   return (
@@ -13,7 +12,7 @@ export default function DesktoLeftSideBar() {
         translateX: 0,
       }}
       transition={{
-        duration: 0.2,
+        duration: 0.3,
       }}
       className={cn("sticky top-0 h-screen max-md:hidden")}
     >

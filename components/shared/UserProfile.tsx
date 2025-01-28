@@ -32,7 +32,7 @@ export default function UserProfile() {
           {data?.user?.name?.substring(0, 2).toUpperCase()}
         </div>
       )}
-      <h2 className="line-clamp-1 text-xl font-bold">{data?.user?.name}</h2>
+      <h2 className="text-md line-clamp-1 font-normal">{data?.user?.name}</h2>
       <div className="ml-auto">
         <DropDownMenu
           label="Settings"

@@ -1,12 +1,12 @@
 "use client";
-import LeftSideBar from "./LeftSideBar";
-import { cn } from "@/lib/utils";
-import NavBar from "./NavBar";
-import { ReactNode } from "react";
-import { useSideBarToogle } from "./SidBarToggleProvider";
 import { chats } from "@/constants/sidebar";
-import EmptyChats from "./EmptyChats";
+import { cn } from "@/lib/utils";
+import { ReactNode } from "react";
 import ChatInput from "./ChatInput";
+import EmptyChats from "./EmptyChats";
+import LeftSideBar from "./LeftSideBar";
+import NavBar from "./NavBar";
+import { useSideBarToogle } from "./SidBarToggleProvider";
 
 export default function ComposeSections({ children }: { children: ReactNode }) {
   const { isSidebarOpen } = useSideBarToogle();
@@ -21,7 +21,7 @@ export default function ComposeSections({ children }: { children: ReactNode }) {
         )}
       >
         {isSidebarOpen && <LeftSideBar />}
-        <div className="grid h-full max-h-screen w-full grid-rows-[1fr_auto] gap-y-5 overflow-clip pt-14 pb-[1rem]">
+        <div className="grid h-full max-h-[95vh] w-full grid-rows-[1fr_auto] gap-y-5 overflow-clip pt-14 pb-[1rem]">
           {chats.length ? <EmptyChats /> : children}
           <ChatInput />
         </div>
