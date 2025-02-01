@@ -15,8 +15,8 @@ export default function ImageIcon({
     <Image
       src={iconUrl}
       alt={alt}
-      height={20}
-      width={20}
+      height={15}
+      width={15}
       className={cn("object-contain", imageStyle)}
       loading="eager"
     />

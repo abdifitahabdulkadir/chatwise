@@ -19,7 +19,7 @@ export default function DropDownMenu({
   return (
     <DropdownMenu>
       <DropdownMenuTrigger>{trigger}</DropdownMenuTrigger>
-      <DropdownMenuContent className="!bg-dark-gray border-medium-gray w-[200px] border px-5 py-6">
+      <DropdownMenuContent className="!bg-dark-gray/90 border-medium-gray w-[200px] border px-5 py-6">
         <DropdownMenuLabel>{label}</DropdownMenuLabel>
         <DropdownMenuSeparator />
         {children}

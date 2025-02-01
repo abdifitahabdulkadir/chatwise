@@ -1,19 +1,22 @@
 import Image from "next/image";
-import React from "react";
 
 export default function ChatItem({ icon, message, role }: ChatItemI) {
   if (role == "user") {
     return (
-      <div className="bg-dark-gray grid w-fit max-w-5xl grid-cols-[5%__90%] items-center gap-2 rounded-sm px-4 py-5">
-        <Image
-          src={icon}
-          alt="user icon"
-          width={30}
-          height={30}
-          quality={100}
-          className="object-contain"
-        />
-        <p className="text-[15px] font-normal text-white">{message}</p>
+      <div className="flex w-full max-w-5xl items-center justify-end">
+        <div className="bg-dark-gray/50 grid w-[60%] grid-cols-[5%_1fr] items-center gap-2 rounded-3xl px-5 py-5 pl-5">
+          <Image
+            src={icon}
+            alt="user icon"
+            width={30}
+            height={30}
+            quality={100}
+            className="object-contain"
+          />
+          <p className="text-md leading-6 font-normal text-wrap text-white">
+            {message}
+          </p>
+        </div>
       </div>
     );
   }
@@ -30,7 +33,7 @@ export default function ChatItem({ icon, message, role }: ChatItemI) {
             className="size-[22px] object-contain"
           />
         </div>
-        <p className="mt-6 grow pr-5 text-[15px] leading-9 font-normal text-white">
+        <p className="text-md ml-2 grow pr-5 leading-9 font-normal text-white">
           {message}
         </p>
         <div className="border-darker col-span-full my-2 border-t-2" />

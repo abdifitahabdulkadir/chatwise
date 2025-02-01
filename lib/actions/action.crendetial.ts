@@ -3,12 +3,12 @@
 import { signIn } from "@/auth";
 import AccountModel from "@/database/account.model";
 import UserModel from "@/database/user.model";
+import bcrypt from "bcryptjs";
 import mongoose from "mongoose";
+import { z } from "zod";
+import dbConnect from "../dbconnection";
 import handleError from "../error-handler";
 import { SignInSchema, SignUpSchema } from "../validations";
-import { z } from "zod";
-import bcrypt from "bcryptjs";
-import dbConnect from "../dbconnection";
 // signup action for basic credentials based signup
 export async function signUpWithCrendentials(
   params: z.infer<typeof SignUpSchema>,

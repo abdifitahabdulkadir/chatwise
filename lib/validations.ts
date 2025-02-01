@@ -61,3 +61,14 @@ export const SignInWithOAuthSchema = z.object({
       .optional(),
   }),
 });
+
+export const ChatSchema = z.object({
+  question: z
+    .string()
+    .min(1, "Question field is required")
+    .regex(
+      /^[a-zA-Z0-9\s.,!?#'"()-]+$/,
+      "Only text, numbers, and basic punctuation are allowed",
+    )
+    .optional(),
+});

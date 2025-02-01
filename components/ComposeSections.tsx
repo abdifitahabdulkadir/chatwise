@@ -22,7 +22,7 @@ export default function ComposeSections({ children }: { children: ReactNode }) {
       >
         {isSidebarOpen && <LeftSideBar />}
         <div className="grid h-full max-h-[95vh] w-full grid-rows-[1fr_auto] gap-y-5 overflow-clip pt-14 pb-[1rem]">
-          {chats.length ? <EmptyChats /> : children}
+          {!chats.length ? <EmptyChats /> : children}
           <ChatInput />
         </div>
       </div>
