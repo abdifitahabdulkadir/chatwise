@@ -1,13 +1,19 @@
 "use client";
+import { toast } from "@/hooks/use-toast";
+import { storeChat } from "@/lib/actions/chat.action";
 import { cn } from "@/lib/utils";
 import { useChat } from "ai/react";
+import { useParams } from "next/navigation";
 import { ReactNode, useEffect, useRef, useState } from "react";
 import ChatInput from "./ChatInput";
 import { useSideBarToogle } from "./SidBarToggleProvider";
 export default function ChatLists({ children }: { children: ReactNode }) {
   const messageParentRef = useRef<HTMLDivElement | null>(null);
-  const [, setIsLoading] = useState(0);
+  const [isLoading, setIsLoading] = useState(0);
   const { isSidebarOpen } = useSideBarToogle();
+  const params = useParams();
+  const [isFinish, setIsFinish] = useState(false);
+
   const {
     messages,
     handleInputChange,
@@ -19,29 +25,24 @@ export default function ChatLists({ children }: { children: ReactNode }) {
     onResponse: () => {
       setIsLoading(2);
     },
-    onFinish() {
-      //   try {
-      //     storeChat({
-      //       question: input,
-      //       titleId: params.id as string,
-      //       answer: message.content,
-      //       role: message.role == "user" ? "user" : "system",
-      //     });
-      //     toast({
-      //       title: "Sucesss",
-      //       description: "Chat stored successfully",
-      //     });
-      //     return;
-      //     // eslint-disable-next-line @typescript-eslint/no-unused-vars
-      //   } catch (err) {
-      //     toast({
-      //       title: "Failure",
-      //       description: `Failed to store chat`,
-      //       variant: "destructive",
-      //     });
-      //   }
-      //
+    onError: (error) => {
+      console.log(error);
     },
+    onFinish(message) {
+      setIsFinish(true);
+      setMessage({
+        content: message.content,
+        role: message.role,
+        titleId: String(params.id ?? ""),
+        question: input,
+      });
+    },
+  });
+  const [message, setMessage] = useState({
+    content: "",
+    role: "",
+    titleId: "",
+    question: "",
   });
   useEffect(
     function () {
@@ -52,50 +53,60 @@ export default function ChatLists({ children }: { children: ReactNode }) {
     },
     [messages],
   );
-
   function formSubmitHandler(
     event?: { preventDefault?: (() => void) | undefined } | undefined,
   ) {
     setIsLoading(1);
+    setIsFinish(false);
     handleSubmit(event);
   }
+
+  useEffect(() => {
+    if (!isFinish) return;
+    (async function saveData() {
+      const result = await storeChat({
+        question: message.question,
+        titleId: message.titleId,
+        answer: message.content,
+        role: message.role == "user" ? "user" : "system",
+      });
+
+      if (result.success) {
+        toast({
+          title: "Chat saved successfully",
+          description: "Chat has been saved successfully",
+        });
+        return;
+      }
+      toast({
+        title: "Failed to Store Chat",
+        description: "Failed to store chat, try again",
+        variant: "destructive",
+      });
+    })();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [isFinish]);
+
   return (
     <div
       className={cn(
-        "mt-20 grid h-full max-h-[88vh] w-full grid-rows-[1fr_auto] pb-[1rem]",
+        "mt-20 grid h-full max-h-[86vh] w-full grid-rows-[1fr_auto] pb-[1.3rem]",
         isSidebarOpen ? "col-span-full" : "cols-span-1",
       )}
     >
       <div
         ref={messageParentRef}
-        className="max-h-[70vh] w-full overflow-x-clip overflow-y-auto"
+        className="max-h-[90%] w-full overflow-x-clip overflow-y-auto"
       >
-        <div className="w-fullmax-w-5xl mx-auto h-full md:max-w-[80rem] md:px-20">
+        <div className="mx-auto h-full w-full max-w-5xl md:max-w-[80rem] md:px-20">
           {/* {!chats?.length && <EmptyChats />} */}
 
           <div className="mx-auto flex w-full flex-col items-center gap-4">
-            {/* {chats !== undefined &&
-              chats?.map(({ role, content }, index) => {
-                return (
-                  <RenderPreviousChat
-                    key={index}
-                    content={content}
-                    role={role}
-                  />
-                );
-              })} */}
             {children}
 
-            {/* {messages?.map(({ role, content }, index) => {
-              return (
-                <RenderActiveChat
-                  isLoading={isLoading === 1}
-                  key={index}
-                  content={content}
-                  role={role}
-                />
-              );
-            })} */}
+            {messages?.map(({ content }, index) => {
+              return <p key={index}>{content}</p>;
+            })}
           </div>
         </div>
       </div>

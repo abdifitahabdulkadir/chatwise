@@ -16,6 +16,8 @@ export async function storeChat(
     authorize: true,
   });
 
+  console.log(params);
+
   if (validateResult instanceof Error) {
     return handleError("server", validateResult) as ErrorResponse;
   }
@@ -25,7 +27,6 @@ export async function storeChat(
 
   const { question, answer, titleId } = params;
   const userId = validateResult.session?.user?.id;
-
   try {
     let currentTitle;
     if (titleId)

@@ -36,6 +36,15 @@ interface PageRouteParams {
   params: Promise<Record<string, string>>;
   searchParams: Promise<Record<string, string>>;
 }
+
+interface PreviousChatPros {
+  content: string;
+  role: string;
+}
+
+interface RenderActiveProps extends PreviousChatPros {
+  isLoading: boolean;
+}
 type ActionResponse<T = null> = {
   success: boolean;
   data?: T;

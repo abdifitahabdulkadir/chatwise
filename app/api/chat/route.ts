@@ -27,16 +27,10 @@ You are **AI Chat Assistant** of the **Chatwise Web App**. Your role is to answe
 export async function POST(request: Request) {
   const req = await request.json();
   const stream = streamText({
-    messages: [
-      ...req.messages,
-      {
-        role: "system",
-        content: systemMessage,
-      },
-    ],
-    model: google("gemini-2.0-flash-001"),
+    messages: [...req.messages],
+    model: google("gemini-1.5-pro"),
     temperature: 0.6,
+    system: systemMessage,
   });
-
   return stream.toDataStreamResponse();
 }
