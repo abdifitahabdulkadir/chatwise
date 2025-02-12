@@ -1,3 +1,4 @@
+import { RenderPreviousChat } from "@/components/ChatItem";
 import Main from "@/components/Main";
 import { getChats } from "@/lib/actions/chat.action";
 
@@ -7,5 +8,14 @@ export default async function ChatHome({ params }: PageRouteParams) {
     titleId: String(id),
   });
 
-  return <Main chats={result.data} />;
+  return (
+    <Main>
+      {result.data &&
+        result?.data.map(({ content, role }, index) => {
+          return (
+            <RenderPreviousChat key={index} content={content} role={role} />
+          );
+        })}
+    </Main>
+  );
 }

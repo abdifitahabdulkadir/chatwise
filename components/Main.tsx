@@ -1,12 +1,13 @@
 "use client";
 import { cn } from "@/lib/utils";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
+import { ReactNode } from "react";
 import ChatLists from "./ChatLists";
 import LeftSideBar from "./LeftSideBar";
 import NavBar from "./NavBar";
 import SideBarToggleProvider from "./SidBarToggleProvider";
 const client = new QueryClient();
-export default function Main({ chats }: { chats: ChatItemI[] | undefined }) {
+export default function Main({ children }: { children: ReactNode }) {
   // const queryClient = useQueryClient();
   // const params = useParams();
   // const { data: chats } = useQuery({
@@ -34,7 +35,7 @@ export default function Main({ chats }: { chats: ChatItemI[] | undefined }) {
             )}
           >
             <LeftSideBar />
-            <ChatLists chats={chats} />
+            <ChatLists>{children}</ChatLists>
           </section>
         </main>
       </SideBarToggleProvider>

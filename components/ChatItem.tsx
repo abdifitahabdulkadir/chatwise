@@ -1,5 +1,6 @@
 import Image from "next/image";
 import SyncLoader from "react-spinners/SyncLoader";
+import ChatMessageFormatter from "./ChatMessageFormatter";
 interface PreviousChatPros {
   content: string;
   role: string;
@@ -12,7 +13,7 @@ interface RenderActiveProps extends PreviousChatPros {
 export function RenderPreviousChat({ content, role }: PreviousChatPros) {
   if (role == "user") return <UserChatItem content={content} />;
 
-  return <SystemChatItem content={content} />;
+  return <SystemChatItem isFromSever={true} content={content} />;
 }
 
 export function RenderActiveChat({
@@ -27,7 +28,7 @@ export function RenderActiveChat({
 
 export function UserChatItem({ content }: { content: string }) {
   return (
-    <div className="flex w-full max-w-5xl items-center justify-end">
+    <div className="flex w-full items-center justify-end">
       <div className="bg-dark-gray/50 mx-4 grid w-full grid-cols-[5%_1fr] items-center gap-2 rounded-3xl px-5 py-5 pl-5 md:w-[60%]">
         <Image
           src={"/icons/user.svg"}
@@ -47,12 +48,14 @@ export function UserChatItem({ content }: { content: string }) {
 export function SystemChatItem({
   content,
   isLoading,
+  isFromSever,
 }: {
   content: string;
   isLoading?: boolean;
+  isFromSever?: boolean;
 }) {
   return (
-    <div className="flex w-full max-w-5xl items-center gap-3 py-6 pl-5 md:pl-[100px]">
+    <div className="flex w-full items-center gap-3 py-6 pl-5">
       <div className="grid w-full grid-cols-[5%__1fr] items-start gap-6 md:gap-1">
         <div className="bg-dark-green flex size-[30px] items-center justify-center rounded-xs">
           <Image
@@ -73,12 +76,12 @@ export function SystemChatItem({
             className="grow"
           />
         )}
-        {!isLoading && (
+        {!isLoading && !isFromSever && (
           <p className="text-md ml-2 grow pr-5 leading-9 font-normal text-white">
             {content}
           </p>
         )}
-
+        {isFromSever && <ChatMessageFormatter content={content} />}
         <div className="border-darker col-span-full my-2 border-t-2" />
         <div className="col-span-4 ml-10 flex w-full items-center gap-2">
           <button className="hover:bg-dark-gray group rounded-md px-3 py-2 transition-all duration-200">

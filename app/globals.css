@@ -1,4 +1,5 @@
 @import "tailwindcss";
+@config "../tailwind.config.js";
 @theme {
   --radius: 0.5rem;
   --color-dark-gray: #202123;

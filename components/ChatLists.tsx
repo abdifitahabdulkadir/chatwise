@@ -1,18 +1,12 @@
 "use client";
 import { cn } from "@/lib/utils";
 import { useChat } from "ai/react";
-import { useEffect, useRef, useState } from "react";
+import { ReactNode, useEffect, useRef, useState } from "react";
 import ChatInput from "./ChatInput";
-import { RenderActiveChat, RenderPreviousChat } from "./ChatItem";
-import EmptyChats from "./EmptyChats";
 import { useSideBarToogle } from "./SidBarToggleProvider";
-export default function ChatLists({
-  chats,
-}: {
-  chats: ChatItemI[] | undefined;
-}) {
+export default function ChatLists({ children }: { children: ReactNode }) {
   const messageParentRef = useRef<HTMLDivElement | null>(null);
-  const [isLoading, setIsLoading] = useState(0);
+  const [, setIsLoading] = useState(0);
   const { isSidebarOpen } = useSideBarToogle();
   const {
     messages,
@@ -49,7 +43,6 @@ export default function ChatLists({
       //
     },
   });
-
   useEffect(
     function () {
       if (messageParentRef.current) {
@@ -57,7 +50,7 @@ export default function ChatLists({
           messageParentRef.current.scrollHeight;
       }
     },
-    [chats, messages],
+    [messages],
   );
 
   function formSubmitHandler(
@@ -75,13 +68,13 @@ export default function ChatLists({
     >
       <div
         ref={messageParentRef}
-        className="max-h-[70vh] w-full overflow-x-clip overflow-y-auto align-middle"
+        className="max-h-[70vh] w-full overflow-x-clip overflow-y-auto"
       >
-        <div className="mx-auto h-full w-full max-w-7xl">
-          {!chats?.length && <EmptyChats />}
+        <div className="w-fullmax-w-5xl mx-auto h-full md:max-w-[80rem] md:px-20">
+          {/* {!chats?.length && <EmptyChats />} */}
 
-          <div className="flex flex-col items-center gap-4">
-            {chats !== undefined &&
+          <div className="mx-auto flex w-full flex-col items-center gap-4">
+            {/* {chats !== undefined &&
               chats?.map(({ role, content }, index) => {
                 return (
                   <RenderPreviousChat
@@ -90,9 +83,10 @@ export default function ChatLists({
                     role={role}
                   />
                 );
-              })}
+              })} */}
+            {children}
 
-            {messages?.map(({ role, content }, index) => {
+            {/* {messages?.map(({ role, content }, index) => {
               return (
                 <RenderActiveChat
                   isLoading={isLoading === 1}
@@ -101,7 +95,7 @@ export default function ChatLists({
                   role={role}
                 />
               );
-            })}
+            })} */}
           </div>
         </div>
       </div>
