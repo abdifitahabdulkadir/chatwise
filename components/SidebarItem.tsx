@@ -3,17 +3,21 @@ import { cn } from "@/lib/utils";
 import { DropdownMenuItem } from "@radix-ui/react-dropdown-menu";
 import { motion } from "framer-motion";
 import { Ellipsis } from "lucide-react";
+import { useParams, useRouter } from "next/navigation";
 import React, { useState } from "react";
 import DropDownMenu from "./DropDownMenu";
 import ImageIcon from "./shared/ImageIcon";
 
 interface SideBarItemPros {
   text: string;
-  iconUrl: string;
+  id: string;
 }
-export default function SidebarItem({ text, iconUrl }: SideBarItemPros) {
+
+export default function SidebarItem({ text, id }: SideBarItemPros) {
   const [isEditing, setIsEditing] = useState(false);
   const [input, setInput] = useState(text);
+  const router = useRouter();
+  const params = useParams();
   const toggle = () => setIsEditing((prev) => !prev);
   const changeText = (value: React.ChangeEvent<HTMLInputElement>) =>
     setInput(value.target.value);
@@ -25,14 +29,27 @@ export default function SidebarItem({ text, iconUrl }: SideBarItemPros) {
     0,
     input.length > 20 ? 20 : input.length,
   );
+
+  function hanleSelectedSidebar() {
+    const current = localStorage.getItem("selectedSidebarItem");
+    if (current === String(id) && params?.id === id) {
+      return;
+    }
+    localStorage.removeItem("sselectedSidebarItemele");
+    localStorage.setItem("selectedSidebarItem", String(id));
+    router.replace(`/chat/${id}`, { scroll: false });
+  }
   return (
     <div
+      onClick={hanleSelectedSidebar}
       className={cn(
-        "bg-light-darker/4 hover:bg-opacity-90 grid h-fit w-full cursor-pointer grid-cols-[1fr_8fr_1fr_1fr] items-center gap-1.5 border-none px-1 py-3 text-white transition-all duration-300",
+        "bg-light-darker/4 hover:bg-opacity-90 grid h-fit w-full cursor-pointer grid-cols-[1fr_8fr_1fr_1fr] items-center gap-1.5 border-none px-1 py-3 pl-2 text-white transition-all duration-300",
         !isEditing && "hover:bg-light-gray/30",
       )}
     >
-      {!isEditing && <ImageIcon iconUrl={iconUrl} alt="message icon" />}
+      {!isEditing && (
+        <ImageIcon iconUrl={"/icons/message.svg"} alt="message icon" />
+      )}
       {isEditing && (
         <motion.form
           initial={{
@@ -53,6 +70,7 @@ export default function SidebarItem({ text, iconUrl }: SideBarItemPros) {
             title="title  change input"
             autoFocus
             value={input}
+            onClick={(e) => e.stopPropagation()}
             onChange={changeText}
             className={cn(
               "focus-visible:ring-Purple w-full rounded-sm border-none bg-transparent py-2 text-white shadow-none focus-visible:ring-1 focus-visible:outline-hidden",
@@ -62,7 +80,9 @@ export default function SidebarItem({ text, iconUrl }: SideBarItemPros) {
         </motion.form>
       )}
       {!isEditing && (
-        <p className="overflow-hidden text-xs font-normal">{textFormat}</p>
+        <p className="line-clamp-4 h-fit text-xs font-normal text-wrap">
+          {textFormat}
+        </p>
       )}
       {!isEditing && (
         <DropDownMenu

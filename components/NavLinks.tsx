@@ -1,5 +1,6 @@
-import { chats } from "@/constants/sidebar";
+import { getChatSidebarTitles } from "@/lib/actions/chat.action";
 import { cn } from "@/lib/utils";
+import { useQuery } from "@tanstack/react-query";
 import Image from "next/image";
 import UserProfile from "./shared/UserProfile";
 import SidebarItem from "./SidebarItem";
@@ -9,6 +10,14 @@ interface NavLinksProps {
   isMobile?: boolean;
 }
 export default function NavLinks({ isMobile = false }: NavLinksProps) {
+  const { data: sidebarData } = useQuery({
+    queryKey: ["sidabartitles"],
+    queryFn: async () => {
+      const { data: sidebarTitles } = await getChatSidebarTitles();
+      return sidebarTitles;
+    },
+  });
+
   return (
     <div
       className={cn(
@@ -26,10 +35,10 @@ export default function NavLinks({ isMobile = false }: NavLinksProps) {
           />
           <span className="text-xs lg:text-sm">New chat</span>
         </button>
-        <div className="flex w-full flex-col gap-y-3 py-5">
-          {chats.map((item, index) => {
+        <div className="flex w-full flex-col gap-1 py-5">
+          {sidebarData?.map(({ title, _id }, index) => {
             const contnet = (
-              <SidebarItem key={index} iconUrl={item.icon} text={item.title} />
+              <SidebarItem id={String(_id)} key={index} text={title} />
             );
             return isMobile ? (
               <SheetClose asChild key={index}>

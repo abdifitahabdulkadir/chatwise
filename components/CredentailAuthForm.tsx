@@ -1,6 +1,8 @@
-import React from "react";
-import { OAuthButtons } from "./OauthButtons";
-import { z, ZodType } from "zod";
+import { toast } from "@/hooks/use-toast";
+import { zodResolver } from "@hookform/resolvers/zod";
+import Image from "next/image";
+import Link from "next/link";
+import { useRouter } from "next/navigation";
 import {
   DefaultValues,
   FieldValues,
@@ -8,14 +10,11 @@ import {
   SubmitHandler,
   useForm,
 } from "react-hook-form";
-import { zodResolver } from "@hookform/resolvers/zod";
+import { z, ZodType } from "zod";
 import { FormFieldItem, FormLabel, FromErrorElement } from "./FormElements";
+import { OAuthButtons } from "./OauthButtons";
 import { Button } from "./ui/button";
 import { Input } from "./ui/input";
-import Link from "next/link";
-import Image from "next/image";
-import { useRouter } from "next/navigation";
-import { toast } from "@/hooks/use-toast";
 interface CredentialAuthFormProps<T extends FieldValues> {
   schema: ZodType<T>;
   defaultValues: T;
@@ -49,7 +48,6 @@ export default function CredentialAuthForm<T extends FieldValues>({
       });
       router.push("/");
     } else {
-      console.log(result.errors);
       toast({
         title: "Authentication Failed",
         description: result.errors?.message.split(".")[0] + ".",

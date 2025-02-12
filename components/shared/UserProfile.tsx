@@ -1,3 +1,5 @@
+"use client";
+
 import { DropdownMenuItem } from "@radix-ui/react-dropdown-menu";
 import { LogOut, Settings } from "lucide-react";
 import { signOut, useSession } from "next-auth/react";

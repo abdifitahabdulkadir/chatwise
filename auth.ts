@@ -1,9 +1,9 @@
+import bycrpt from "bcryptjs";
 import NextAuth, { CredentialsSignin } from "next-auth";
+import Credentials from "next-auth/providers/credentials";
 import GitHub from "next-auth/providers/github";
 import Google from "next-auth/providers/google";
 import { API } from "./lib/api";
-import Credentials from "next-auth/providers/credentials";
-import bycrpt from "bcryptjs";
 import { SignInSchema } from "./lib/validations";
 
 const message = "Invalid Crendentials, Please check your email and password";
@@ -54,7 +54,7 @@ export const { handlers, auth, signIn, signOut } = NextAuth({
 
     GitHub({
       clientId: process.env.AUTH_GITHUB_ID,
-      clientSecret: process.env.AUTH_GITHUB_SECRET,
+      clientSecret: process.env.AUTH_GITUB_SECRET,
     }),
     Google({
       clientId: process.env.AUTH_GOOGLE_ID,

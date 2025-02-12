@@ -1,7 +1,4 @@
 import { auth } from "@/auth";
-import ChatLists from "@/components/ChatLists";
-import ComposeSections from "@/components/ComposeSections";
-import SideBarToggleProvider from "@/components/SidBarToggleProvider";
 import { Metadata } from "next";
 import { redirect } from "next/navigation";
 
@@ -15,11 +12,5 @@ export default async function Home() {
   const session = await auth();
   if (!session) redirect("/auth/signin");
 
-  return (
-    <SideBarToggleProvider>
-      <ComposeSections>
-        <ChatLists />
-      </ComposeSections>
-    </SideBarToggleProvider>
-  );
+  return redirect("/chat");
 }

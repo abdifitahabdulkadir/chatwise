@@ -1,11 +1,11 @@
 "use client";
-import { Button } from "./ui/button";
 import { toast } from "@/hooks/use-toast";
 import { signIn } from "next-auth/react";
+import { Button } from "./ui/button";
 export function OAuthButtons({ disabled }: { disabled: boolean }) {
   const handleAuth = async (provider: "github" | "google") => {
     try {
-      await signIn(provider, { redirect: false, redirectTo: "/" });
+      await signIn(provider, { redirect: true, redirectTo: "/chat" });
     } catch (error) {
       toast({
         title: "SignIn Failed!",

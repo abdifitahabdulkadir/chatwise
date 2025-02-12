@@ -6,6 +6,7 @@ import { AuthParamsSchema } from "../validations";
 interface AuthProps {
   provider: string;
 }
+
 export async function signInWithOAuth({ provider }: AuthProps) {
   try {
     const validate = AuthParamsSchema.safeParse({ provider });

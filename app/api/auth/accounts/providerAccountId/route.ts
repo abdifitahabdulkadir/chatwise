@@ -4,10 +4,6 @@ import handleError from "@/lib/error-handler";
 import { NotFoundError } from "@/lib/http-erros";
 import { NextResponse } from "next/server";
 
-// get account by providerAccountId
-//[for credentials it is email of usr
-// and then oauth it is provided provider account
-//-> api / accounts / email / route.ts
 export async function POST(req: Request) {
   const { providerAccountId } = await req.json();
 

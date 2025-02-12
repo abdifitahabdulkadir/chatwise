@@ -1,7 +1,6 @@
 interface ChatItemI {
-  role: "system" | "user";
-  icon: string;
-  message: string;
+  role: "data" | "system" | "user" | "assistant";
+  content: string;
 }
 
 interface UserI {
@@ -10,6 +9,11 @@ interface UserI {
   email: string;
   password?: string;
   image?: string;
+}
+interface ChatTitleI {
+  _id: Schema.Types.ObjectId;
+  title: string;
+  userId: Schema.Types.ObjectId;
 }
 interface AccountI {
   _id: Schema.Types.ObjectId;
@@ -21,6 +25,17 @@ interface AccountI {
   userId: Schema.Types.ObjectId;
 }
 
+interface StoreChatParams {
+  question: string;
+  answer: string;
+  role: "system" | "user";
+  titleId?: string;
+}
+
+interface PageRouteParams {
+  params: Promise<Record<string, string>>;
+  searchParams: Promise<Record<string, string>>;
+}
 type ActionResponse<T = null> = {
   success: boolean;
   data?: T;

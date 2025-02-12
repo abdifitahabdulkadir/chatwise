@@ -1,38 +1,51 @@
 "use client";
 import { cn } from "@/lib/utils";
 import Image from "next/image";
-import { ChangeEvent, FormEvent, useRef, useState } from "react";
+import { useEffect, useRef } from "react";
 
-export default function ChatInput() {
-  const [inputChange, setInputChange] = useState("");
+interface ChatInputProps {
+  isLoading: boolean;
+  hanldeOnChange: (
+    e:
+      | React.ChangeEvent<HTMLInputElement>
+      | React.ChangeEvent<HTMLTextAreaElement>,
+  ) => void;
+  handleFormSubmit: (event?: { preventDefault?: () => void }) => void;
+  inputValue: string;
+}
+export default function ChatInput({
+  handleFormSubmit,
+  hanldeOnChange,
+  inputValue,
+  isLoading,
+}: ChatInputProps) {
   const ref = useRef<HTMLTextAreaElement | null>(null);
 
-  function handleOnChange(e: ChangeEvent<HTMLTextAreaElement>) {
-    setInputChange(e.target.value);
-    const textarea = ref.current;
-    if (textarea) {
-      // Reset height to auto to calculate new height
-      textarea.style.height = "auto";
-      textarea.style.height = `${textarea.scrollHeight}px`;
-    }
-  }
-
-  function handleFormSubmit(e: FormEvent<HTMLFormElement>) {
-    e.preventDefault();
-  }
+  useEffect(
+    function () {
+      const textarea = ref.current;
+      if (textarea) {
+        // Reset height to auto to calculate new height
+        textarea.style.height = "auto";
+        textarea.style.height = `${textarea.scrollHeight}px`;
+      }
+    },
+    [inputValue],
+  );
 
   return (
     <div className="flex h-full w-full items-center justify-center px-10">
       <form
-        onSubmit={handleFormSubmit}
+        onSubmit={(e) => handleFormSubmit(e)}
         className={cn(
           "flex max-h-[15rem] w-full max-w-[767px] flex-col gap-1 overflow-hidden rounded-lg bg-[#40414E] px-5 py-3",
         )}
       >
         <textarea
+          disabled={isLoading}
           ref={ref}
-          value={inputChange}
-          onChange={handleOnChange}
+          value={inputValue}
+          onChange={hanldeOnChange}
           rows={1}
           placeholder="Ask Anything..."
           className={cn(
@@ -41,7 +54,11 @@ export default function ChatInput() {
           )}
         />
 
-        <button className="ml-auto cursor-pointer transition-all duration-200 hover:scale-[1.2]">
+        <button
+          disabled={isLoading}
+          type="submit"
+          className="ml-auto cursor-pointer transition-all duration-200 hover:scale-[1.2]"
+        >
           <Image
             src={"/icons/send.svg"}
             alt="send icon"

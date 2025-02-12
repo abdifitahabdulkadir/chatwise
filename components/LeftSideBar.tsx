@@ -1,22 +1,19 @@
-import { cn } from "@/lib/utils";
-import { motion } from "framer-motion";
-import NavLinks from "./NavLinks";
+"use client";
 
-export default function DesktoLeftSideBar() {
+import { cn } from "@/lib/utils";
+import NavLinks from "./NavLinks";
+import { useSideBarToogle } from "./SidBarToggleProvider";
+
+export default function LeftSideBar() {
+  const { isSidebarOpen } = useSideBarToogle();
+  if (isSidebarOpen) return null;
   return (
-    <motion.section
-      initial={{
-        translateX: -40,
-      }}
-      animate={{
-        translateX: 0,
-      }}
-      transition={{
-        duration: 0.3,
-      }}
-      className={cn("sticky top-0 h-screen max-md:hidden")}
+    <section
+      className={cn(
+        "custom-scrollbar h-screen w-full overflow-y-auto max-md:hidden",
+      )}
     >
       <NavLinks />
-    </motion.section>
+    </section>
   );
 }

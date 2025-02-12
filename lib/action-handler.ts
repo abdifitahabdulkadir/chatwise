@@ -1,10 +1,10 @@
 "use server";
 
-import { ZodError, ZodSchema } from "zod";
-import { UnauthorizedError, ValidationError } from "./http-erros";
-import { Session } from "next-auth";
 import { auth } from "@/auth";
+import { Session } from "next-auth";
+import { ZodError, ZodSchema } from "zod";
 import dbConnect from "./dbconnection";
+import { UnauthorizedError, ValidationError } from "./http-erros";
 
 type ActionOptions<T> = {
   params?: T;
@@ -17,8 +17,6 @@ export async function actionHandler<T>({
   schema,
   authorize,
 }: ActionOptions<T>) {
-  // if there is schema and parse then
-  // validate and handle their erros
   if (schema && params) {
     try {
       schema.safeParse(params);
@@ -33,8 +31,6 @@ export async function actionHandler<T>({
     }
   }
 
-  // this true, means this server actions
-  // needs to be done only by authorized users.
   let session: Session | null = null;
   if (authorize) {
     session = await auth();

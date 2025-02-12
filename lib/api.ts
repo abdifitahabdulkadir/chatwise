@@ -21,13 +21,14 @@ export const API = {
       });
     },
     async getProviderByProviderAccountId(providerAccountId: string) {
-      return fetchHandler<AccountI>(
+      const result = await fetchHandler<AccountI>(
         `${BASE_URL}/auth/accounts/providerAccountId`,
         {
           method: "POST",
           body: JSON.stringify({ providerAccountId }),
         },
       );
+      return result;
     },
   },
   users: {

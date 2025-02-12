@@ -62,13 +62,13 @@ export const SignInWithOAuthSchema = z.object({
   }),
 });
 
-export const ChatSchema = z.object({
-  question: z
-    .string()
-    .min(1, "Question field is required")
-    .regex(
-      /^[a-zA-Z0-9\s.,!?#'"()-]+$/,
-      "Only text, numbers, and basic punctuation are allowed",
-    )
-    .optional(),
+export const StoreChatSchema = z.object({
+  answer: z.string().min(1, "Answer field is required"),
+  role: z.enum(["system", "user"]),
+  question: z.string().min(1, "Question field is required").optional(),
+  titleId: z.string().min(1, "Title Id is required").optional(),
+});
+
+export const GetAllChatsSchema = z.object({
+  titleId: z.string().min(1, "Title Id is required"),
 });
