@@ -1,12 +1,11 @@
 "use client";
-import { toast } from "@/hooks/use-toast";
-import { storeChat } from "@/lib/actions/chat.action";
 import { cn } from "@/lib/utils";
 import { useChat } from "ai/react";
 import { useParams } from "next/navigation";
 import { ReactNode, useEffect, useRef, useState } from "react";
 import ChatInput from "./ChatInput";
 import EmptyChats from "./EmptyChats";
+import RenderActiveChat from "./RenderActiveChat";
 import { useSideBarToogle } from "./SidBarToggleProvider";
 
 interface ChatListPros {
@@ -30,9 +29,7 @@ export default function ChatLists({ children }: ChatListPros) {
     onResponse: () => {
       setIsLoading(2);
     },
-    onError: (error) => {
-      console.log(error);
-    },
+
     onFinish(message) {
       setIsFinish(true);
       setMessage({
@@ -68,27 +65,28 @@ export default function ChatLists({ children }: ChatListPros) {
 
   useEffect(() => {
     if (!isFinish) return;
-    (async function saveData() {
-      const result = await storeChat({
-        question: message.question,
-        titleId: message.titleId,
-        answer: message.content,
-        role: message.role == "user" ? "user" : "system",
-      });
+    // (async function saveData() {
+    //   const result = await storeChat({
+    //     question: message.question,
+    //     titleId: message.titleId,
+    //     answer: message.content,
+    //     role: message.role == "user" ? "user" : "system",
+    //   });
 
-      if (result.success) {
-        toast({
-          title: "Chat saved successfully",
-          description: "Chat has been saved successfully",
-        });
-        return;
-      }
-      toast({
-        title: "Failed to Store Chat",
-        description: "Failed to store chat, try again",
-        variant: "destructive",
-      });
-    })();
+    //   if (result.success) {
+    //     toast({
+    //       title: "Chat saved successfully",
+    //       description: "Chat has been saved successfully",
+    //     });
+    //     return;
+    //   }
+    //   console.log(result);
+    //   toast({
+    //     title: "Failed to Store Chat",
+    //     description: "Failed to store chat, try again",
+    //     variant: "destructive",
+    //   });
+    // })();
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [isFinish]);
 
@@ -109,8 +107,15 @@ export default function ChatLists({ children }: ChatListPros) {
           <div className="mx-auto flex w-full flex-col items-center gap-4">
             {children}
 
-            {messages?.map(({ content }, index) => {
-              return <p key={index}>{content}</p>;
+            {messages?.map(({ content, role }, index) => {
+              return (
+                <RenderActiveChat
+                  key={index}
+                  content={content}
+                  isLoading={false}
+                  role={role === "user" ? "user" : "system"}
+                />
+              );
             })}
           </div>
         </div>

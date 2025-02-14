@@ -1,6 +1,6 @@
 "use client";
 import { cn } from "@/lib/utils";
-import Image from "next/image";
+import { ArrowUp } from "lucide-react";
 import { useEffect, useRef } from "react";
 
 interface ChatInputProps {
@@ -42,6 +42,12 @@ export default function ChatInput({
         )}
       >
         <textarea
+          onKeyDown={(e) => {
+            if (e.code === "Enter" && !e.shiftKey) {
+              e.preventDefault();
+              handleFormSubmit(e);
+            }
+          }}
           disabled={isLoading}
           ref={ref}
           value={inputValue}
@@ -57,17 +63,15 @@ export default function ChatInput({
         <button
           disabled={isLoading}
           type="submit"
-          className="ml-auto cursor-pointer transition-all duration-200 hover:scale-[1.2]"
+          className="ml-auto cursor-pointer transition-all duration-200 hover:scale-[1.1]"
         >
-          <Image
-            src={"/icons/send.svg"}
-            alt="send icon"
-            width={20}
-            height={20}
-            loading="eager"
-            quality={90}
-            className="object-contain"
-          />
+          <div className="rounded-full bg-white/50 p-2">
+            {isLoading ? (
+              <div className="bg-dark-gray size-4 animate-pulse rounded-md p-1" />
+            ) : (
+              <ArrowUp className="text-darker" />
+            )}
+          </div>
         </button>
       </form>
     </div>

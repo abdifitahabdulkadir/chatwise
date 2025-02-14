@@ -1,5 +1,5 @@
-import { RenderPreviousChat } from "@/components/ChatItem";
 import Main from "@/components/Main";
+import { RenderPreviousChat } from "@/components/RenderPreviousChat";
 import { getChats } from "@/lib/actions/chat.action";
 
 export default async function ChatHome({ params }: PageRouteParams) {

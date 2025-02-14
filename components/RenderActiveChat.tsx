@@ -1,6 +1,11 @@
-import SystemChatItem from "./SystemChatItem";
+import SystemChatClient from "./SystemChatClient";
 import UserChatItem from "./UserChatItem";
 
+type RenderActiveProps = {
+  content: string;
+  isLoading: boolean;
+  role: "system" | "user";
+};
 export default function RenderActiveChat({
   content,
   isLoading,
@@ -8,5 +13,5 @@ export default function RenderActiveChat({
 }: RenderActiveProps) {
   if (role == "user") return <UserChatItem content={content} />;
 
-  return <SystemChatItem isLoading={isLoading} content={content} />;
+  return <SystemChatClient isLoading={isLoading} content={content} />;
 }

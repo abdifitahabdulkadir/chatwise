@@ -1,4 +1,4 @@
-import { cn } from "@/lib/utils";
+import { cn, formatContent } from "@/lib/utils";
 import { Code } from "bright";
 import { MDXRemote } from "next-mdx-remote/rsc";
 Code.theme = {
@@ -8,10 +8,7 @@ Code.theme = {
 };
 
 export default function ChatMessageFormatter({ content }: { content: string }) {
-  const formattedContent = content
-    .replace(/\\/g, "")
-    .replace(/&#x20;/g, "")
-    .replace(/^\s*\n/gm, "");
+  const formattedContent = formatContent(content);
   return (
     <section
       className={cn(
