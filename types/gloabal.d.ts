@@ -12,6 +12,7 @@ interface UserI {
 }
 interface ChatTitleI {
   _id: Schema.Types.ObjectId;
+  chatId: string;
   title: string;
   userId: Schema.Types.ObjectId;
 }
@@ -29,7 +30,7 @@ interface StoreChatParams {
   question: string;
   answer: string;
   role: "system" | "user";
-  titleId?: string;
+  chatId?: string;
 }
 
 interface PageRouteParams {

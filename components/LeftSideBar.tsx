@@ -7,6 +7,7 @@ import { useSideBarToogle } from "./SidBarToggleProvider";
 export default function LeftSideBar() {
   const { isSidebarOpen } = useSideBarToogle();
   if (isSidebarOpen) return null;
+
   return (
     <section
       className={cn(

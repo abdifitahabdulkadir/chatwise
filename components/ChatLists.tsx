@@ -3,11 +3,11 @@ import { toast } from "@/hooks/use-toast";
 import { storeChat } from "@/lib/actions/chat.action";
 import { cn } from "@/lib/utils";
 import { useChat } from "ai/react";
-import { useParams, useRouter } from "next/navigation";
+import { useParams } from "next/navigation";
 import { ReactNode, useEffect, useRef, useState } from "react";
 import ChatInput from "./ChatInput";
+import RenderContent from "./ChatItems";
 import EmptyChats from "./EmptyChats";
-import RenderActiveChat from "./RenderActiveChat";
 import { useSideBarToogle } from "./SidBarToggleProvider";
 
 interface ChatListPros {
@@ -18,7 +18,6 @@ export default function ChatLists({ children }: ChatListPros) {
   const [, setIsLoading] = useState(0);
   const { isSidebarOpen } = useSideBarToogle();
   const params = useParams();
-  const router = useRouter();
   const [isFinish, setIsFinish] = useState(false);
 
   const {
@@ -71,7 +70,7 @@ export default function ChatLists({ children }: ChatListPros) {
     (async function saveData() {
       const result = await storeChat({
         question: message.question,
-        titleId: message.titleId,
+        chatId: message.titleId,
         answer: message.content,
         role: message.role == "user" ? "user" : "system",
       });
@@ -81,10 +80,8 @@ export default function ChatLists({ children }: ChatListPros) {
           title: "Chat saved successfully",
           description: "Chat has been saved successfully",
         });
-        router.replace(`/chat/${result.data?._id}`, { scroll: false });
         return;
       }
-      console.log(result);
       toast({
         title: "Failed to Store Chat",
         description: "Failed to store chat, try again",
@@ -93,7 +90,6 @@ export default function ChatLists({ children }: ChatListPros) {
     })();
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [isFinish]);
-
   return (
     <div
       className={cn(
@@ -111,16 +107,17 @@ export default function ChatLists({ children }: ChatListPros) {
           <div className="mx-auto flex w-full flex-col items-center gap-4">
             {children}
 
-            {messages?.map(({ content, role }, index) => {
-              return (
-                <RenderActiveChat
-                  key={index}
-                  content={content}
-                  isLoading={false}
-                  role={role === "user" ? "user" : "system"}
-                />
-              );
-            })}
+            {messages.length > 0 &&
+              messages?.map(({ content, role }, index) => {
+                return (
+                  <RenderContent
+                    key={index}
+                    content={content}
+                    isLoading={false}
+                    role={role === "user" ? "user" : "system"}
+                  />
+                );
+              })}
           </div>
         </div>
       </div>

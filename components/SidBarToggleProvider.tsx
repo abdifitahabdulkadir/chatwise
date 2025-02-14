@@ -11,9 +11,11 @@ const SideBarToggleContext = createContext<SideBarToggleContextType>({
   toggle: () => {},
 });
 
-import React from "react";
-
-export default function SideBarToggleProvider({ children }: { children: ReactNode }) {
+export default function SideBarToggleProvider({
+  children,
+}: {
+  children: ReactNode;
+}) {
   const [isSidebarOpen, setIsSidebarOpen] = useState<boolean>(false);
   const toggle = () => setIsSidebarOpen((prev) => !prev);
   return (

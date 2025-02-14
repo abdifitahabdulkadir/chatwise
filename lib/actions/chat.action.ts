@@ -7,6 +7,7 @@ import { z } from "zod";
 import { actionHandler } from "../action-handler";
 import handleError from "../error-handler";
 import { GetAllChatsSchema, StoreChatSchema } from "../validations";
+
 export async function storeChat(
   params: StoreChatParams,
 ): Promise<ActionResponse<ChatTitleI>> {
@@ -23,41 +24,42 @@ export async function storeChat(
   const session = await mongoose.startSession();
   session.startTransaction();
 
-  const { question, answer, titleId } = params;
+  const { question, answer, chatId } = params;
   const userId = validateResult.session?.user?.id;
   try {
-    let currentTitle;
-    if (titleId)
-      currentTitle = await ChatTitleModel.findById(titleId).session(session);
-    else
-      [currentTitle] = await ChatTitleModel.create(
-        [
-          {
-            userId,
-            title: question,
-          },
-        ],
-        { session },
-      );
-
-    if (!currentTitle) throw new Error("Failed to store title");
-
+    let currentTitle = await ChatTitleModel.findOne({ chatId }).session(
+      session,
+    );
     const message = [
       {
         content: question,
         role: "user",
-        titleId: currentTitle._id,
+        chatId,
       },
       {
         content: answer,
         role: "system",
-        titleId: currentTitle._id,
+        chatId,
       },
     ];
-
-    const chatMessage = await ChatsModel.create([...message], { session });
-
-    if (!chatMessage) throw new Error("Failed to store chat message");
+    if (!currentTitle) {
+      [currentTitle, ,] = await Promise.all([
+        ChatTitleModel.create(
+          [
+            {
+              userId,
+              title: question,
+              chatId,
+            },
+          ],
+          { session },
+        ),
+        ChatsModel.create([...message], { session }),
+      ]);
+    } else {
+      const chatMessage = await ChatsModel.create([...message], { session });
+      if (!chatMessage) throw new Error("Failed to store chat message");
+    }
 
     await session.commitTransaction();
 
@@ -105,11 +107,11 @@ export async function getChats(
     return handleError("server", validationResult) as ErrorResponse;
 
   try {
-    const { titleId } = params ?? {};
+    const { chatId } = params ?? {};
 
-    if (!titleId) return { success: true, data: undefined };
-    const chats = await ChatsModel.find({ titleId }).sort({ _id: 1 });
+    if (!chatId) return { success: true, data: undefined };
 
+    const chats = await ChatsModel.find({ chatId }).sort({ _id: 1 });
     if (!chats) throw new Error("Failed to get chats");
     return { success: true, data: JSON.parse(JSON.stringify(chats)) };
   } catch (error) {

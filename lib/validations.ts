@@ -66,9 +66,9 @@ export const StoreChatSchema = z.object({
   answer: z.string().min(1, "Answer field is required"),
   role: z.enum(["system", "user"]),
   question: z.string().min(1, "Question field is required").optional(),
-  titleId: z.string().min(1, "Title Id is required").optional(),
+  chatId: z.string().min(1, "Title Id is required").optional(),
 });
 
 export const GetAllChatsSchema = z.object({
-  titleId: z.string().min(1, "Title Id is required"),
+  chatId: z.string().min(1, "Title Id is required"),
 });

@@ -11,9 +11,10 @@ import ImageIcon from "./shared/ImageIcon";
 interface SideBarItemPros {
   text: string;
   id: string;
+  chatId: string;
 }
 
-export default function SidebarItem({ text, id }: SideBarItemPros) {
+export default function SidebarItem({ chatId, text, id }: SideBarItemPros) {
   const [isEditing, setIsEditing] = useState(false);
   const [input, setInput] = useState(text);
   const router = useRouter();
@@ -29,12 +30,12 @@ export default function SidebarItem({ text, id }: SideBarItemPros) {
 
   function hanleSelectedSidebar() {
     const current = localStorage.getItem("selectedSidebarItem");
-    if (current === String(id) && String(params?.id) === id) {
+    if (current === chatId && String(params?.id) === chatId) {
       return;
     }
     localStorage.removeItem("selectedSidebarItem");
-    localStorage.setItem("selectedSidebarItem", String(id));
-    router.replace(`/chat/${id}`, { scroll: false });
+    localStorage.setItem("selectedSidebarItem", chatId);
+    router.replace(`/chat/${chatId}`, { scroll: false });
   }
 
   return (
@@ -43,7 +44,7 @@ export default function SidebarItem({ text, id }: SideBarItemPros) {
       className={cn(
         "bg-light-darker/4 hover:bg-opacity-90 grid h-fit w-full cursor-pointer grid-cols-[1fr_8fr_1fr_1fr] items-center gap-1.5 rounded-md border-none px-1 py-3 pl-2 text-white transition-all duration-300",
         !isEditing && "hover:bg-light-gray/30",
-        currentActive === id && "bg-light-gray/30",
+        currentActive === chatId && "bg-light-gray/30",
       )}
     >
       {!isEditing && (
@@ -85,23 +86,17 @@ export default function SidebarItem({ text, id }: SideBarItemPros) {
       )}
       {!isEditing && (
         <DropDownMenu
-          label="Settings"
+          label="Actions"
           trigger={<Ellipsis className="ml-auto cursor-pointer" />}
         >
           <DropdownMenuItem
             onClick={toggle}
-            className="hover:bg-medium-gray/50 flex cursor-pointer items-center gap-2 rounded-sm px-2 py-1 transition-all duration-200 hover:border-none hover:outline-hidden"
+            className="hover:bg-medium-gray/50 flex cursor-pointer items-center gap-2 rounded-sm px-2 py-2 transition-all duration-200 hover:border-none hover:outline-hidden"
           >
-            <ImageIcon iconUrl={"/icons/pen.svg"} alt="edit icon" />
-            <span className="text-sm font-normal">Edit</span>
+            <span className="text-sm font-normal">Edit the Title</span>
           </DropdownMenuItem>
-          <DropdownMenuItem className="hover:bg-medium-gray/50 mt-5 flex cursor-pointer items-center gap-2 rounded-sm px-2 py-1 transition-all duration-200 hover:border-none hover:outline-hidden">
-            <ImageIcon
-              iconUrl={"/icons/delete.svg"}
-              alt="delete icon"
-              imageStyle="hover:scale-[1.4] transition-all  duration-400 "
-            />
-            <span className="text-sm font-normal">Delete</span>
+          <DropdownMenuItem className="hover:bg-medium-gray/50 flex cursor-pointer items-center gap-2 rounded-sm px-2 py-2 transition-all duration-200 hover:border-none hover:outline-hidden">
+            <span className="text-sm font-normal">Delete The Chat</span>
           </DropdownMenuItem>
         </DropDownMenu>
       )}

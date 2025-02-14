@@ -81,7 +81,6 @@ export const { handlers, auth, signIn, signOut } = NextAuth({
         providerAccountId: account.providerAccountId,
       });
 
-      console.log(success);
       if (!success) return false;
       return true;
     },

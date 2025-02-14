@@ -3,11 +3,16 @@ import UserModel from "./user.model";
 
 interface ChatTileI {
   title: string;
+  chatId: string;
   userId: Types.ObjectId;
 }
 
 const ChatTtitleSchema = new Schema<ChatTileI>({
   title: {
+    type: String,
+    required: true,
+  },
+  chatId: {
     type: String,
     required: true,
   },
