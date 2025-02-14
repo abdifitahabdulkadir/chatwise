@@ -4,7 +4,7 @@ import { DropdownMenuItem } from "@radix-ui/react-dropdown-menu";
 import { motion } from "framer-motion";
 import { Ellipsis } from "lucide-react";
 import { useParams, useRouter } from "next/navigation";
-import React, { useEffect, useState } from "react";
+import React, { useState } from "react";
 import DropDownMenu from "./DropDownMenu";
 import ImageIcon from "./shared/ImageIcon";
 
@@ -18,6 +18,7 @@ export default function SidebarItem({ text, id }: SideBarItemPros) {
   const [input, setInput] = useState(text);
   const router = useRouter();
   const params = useParams();
+  const currentActive = localStorage.getItem("selectedSidebarItem");
   const toggle = () => setIsEditing((prev) => !prev);
   const changeText = (value: React.ChangeEvent<HTMLInputElement>) =>
     setInput(value.target.value);
@@ -25,10 +26,6 @@ export default function SidebarItem({ text, id }: SideBarItemPros) {
     e.preventDefault();
     toggle();
   };
-  const textFormat = (input || text).substring(
-    0,
-    input.length > 20 ? 20 : input.length,
-  );
 
   function hanleSelectedSidebar() {
     const current = localStorage.getItem("selectedSidebarItem");
@@ -40,19 +37,13 @@ export default function SidebarItem({ text, id }: SideBarItemPros) {
     router.replace(`/chat/${id}`, { scroll: false });
   }
 
-  useEffect(() => {
-    const current = localStorage.getItem("selectedSidebarItem");
-    if (current) {
-      router.replace(`/chat/${id}`, { scroll: false });
-    }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
   return (
     <div
       onClick={hanleSelectedSidebar}
       className={cn(
-        "bg-light-darker/4 hover:bg-opacity-90 grid h-fit w-full cursor-pointer grid-cols-[1fr_8fr_1fr_1fr] items-center gap-1.5 border-none px-1 py-3 pl-2 text-white transition-all duration-300",
+        "bg-light-darker/4 hover:bg-opacity-90 grid h-fit w-full cursor-pointer grid-cols-[1fr_8fr_1fr_1fr] items-center gap-1.5 rounded-md border-none px-1 py-3 pl-2 text-white transition-all duration-300",
         !isEditing && "hover:bg-light-gray/30",
+        currentActive === id && "bg-light-gray/30",
       )}
     >
       {!isEditing && (
@@ -88,8 +79,8 @@ export default function SidebarItem({ text, id }: SideBarItemPros) {
         </motion.form>
       )}
       {!isEditing && (
-        <p className="line-clamp-4 h-fit text-xs font-normal text-wrap">
-          {textFormat}
+        <p className="line-clamp-1 h-fit text-[0.8rem] font-normal text-wrap">
+          {text}
         </p>
       )}
       {!isEditing && (

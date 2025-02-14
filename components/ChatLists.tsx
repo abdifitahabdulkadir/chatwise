@@ -1,7 +1,9 @@
 "use client";
+import { toast } from "@/hooks/use-toast";
+import { storeChat } from "@/lib/actions/chat.action";
 import { cn } from "@/lib/utils";
 import { useChat } from "ai/react";
-import { useParams } from "next/navigation";
+import { useParams, useRouter } from "next/navigation";
 import { ReactNode, useEffect, useRef, useState } from "react";
 import ChatInput from "./ChatInput";
 import EmptyChats from "./EmptyChats";
@@ -16,6 +18,7 @@ export default function ChatLists({ children }: ChatListPros) {
   const [, setIsLoading] = useState(0);
   const { isSidebarOpen } = useSideBarToogle();
   const params = useParams();
+  const router = useRouter();
   const [isFinish, setIsFinish] = useState(false);
 
   const {
@@ -65,28 +68,29 @@ export default function ChatLists({ children }: ChatListPros) {
 
   useEffect(() => {
     if (!isFinish) return;
-    // (async function saveData() {
-    //   const result = await storeChat({
-    //     question: message.question,
-    //     titleId: message.titleId,
-    //     answer: message.content,
-    //     role: message.role == "user" ? "user" : "system",
-    //   });
+    (async function saveData() {
+      const result = await storeChat({
+        question: message.question,
+        titleId: message.titleId,
+        answer: message.content,
+        role: message.role == "user" ? "user" : "system",
+      });
 
-    //   if (result.success) {
-    //     toast({
-    //       title: "Chat saved successfully",
-    //       description: "Chat has been saved successfully",
-    //     });
-    //     return;
-    //   }
-    //   console.log(result);
-    //   toast({
-    //     title: "Failed to Store Chat",
-    //     description: "Failed to store chat, try again",
-    //     variant: "destructive",
-    //   });
-    // })();
+      if (result.success) {
+        toast({
+          title: "Chat saved successfully",
+          description: "Chat has been saved successfully",
+        });
+        router.replace(`/chat/${result.data?._id}`, { scroll: false });
+        return;
+      }
+      console.log(result);
+      toast({
+        title: "Failed to Store Chat",
+        description: "Failed to store chat, try again",
+        variant: "destructive",
+      });
+    })();
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [isFinish]);
 

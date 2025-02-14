@@ -9,14 +9,12 @@ import handleError from "../error-handler";
 import { GetAllChatsSchema, StoreChatSchema } from "../validations";
 export async function storeChat(
   params: StoreChatParams,
-): Promise<ActionResponse> {
+): Promise<ActionResponse<ChatTitleI>> {
   const validateResult = await actionHandler({
     schema: StoreChatSchema,
     params,
     authorize: true,
   });
-
-  console.log(params);
 
   if (validateResult instanceof Error) {
     return handleError("server", validateResult) as ErrorResponse;
@@ -63,7 +61,7 @@ export async function storeChat(
 
     await session.commitTransaction();
 
-    return { success: true };
+    return { success: true, data: JSON.parse(JSON.stringify(currentTitle)) };
   } catch (error) {
     await session.abortTransaction();
     return handleError("server", error) as ErrorResponse;
@@ -84,7 +82,9 @@ export async function getChatSidebarTitles(): Promise<
 
   try {
     const userId = validateResult.session?.user?.id;
-    const titles = await ChatTitleModel.find({ userId });
+    const titles = await ChatTitleModel.find({ userId }).sort({
+      _id: -1,
+    });
 
     return { success: true, data: JSON.parse(JSON.stringify(titles)) };
   } catch (error) {
