@@ -4,7 +4,7 @@ import { DropdownMenuItem } from "@radix-ui/react-dropdown-menu";
 import { motion } from "framer-motion";
 import { Ellipsis } from "lucide-react";
 import { useParams, useRouter } from "next/navigation";
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import DropDownMenu from "./DropDownMenu";
 import ImageIcon from "./shared/ImageIcon";
 
@@ -32,13 +32,21 @@ export default function SidebarItem({ text, id }: SideBarItemPros) {
 
   function hanleSelectedSidebar() {
     const current = localStorage.getItem("selectedSidebarItem");
-    if (current === String(id) && params?.id === id) {
+    if (current === String(id) && String(params?.id) === id) {
       return;
     }
-    localStorage.removeItem("sselectedSidebarItemele");
+    localStorage.removeItem("selectedSidebarItem");
     localStorage.setItem("selectedSidebarItem", String(id));
     router.replace(`/chat/${id}`, { scroll: false });
   }
+
+  useEffect(() => {
+    const current = localStorage.getItem("selectedSidebarItem");
+    if (current) {
+      router.replace(`/chat/${id}`, { scroll: false });
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
   return (
     <div
       onClick={hanleSelectedSidebar}

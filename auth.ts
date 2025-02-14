@@ -80,6 +80,8 @@ export const { handlers, auth, signIn, signOut } = NextAuth({
         provider: account.provider as "github" | "google",
         providerAccountId: account.providerAccountId,
       });
+
+      console.log(success);
       if (!success) return false;
       return true;
     },

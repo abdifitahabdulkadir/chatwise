@@ -6,10 +6,15 @@ import { useChat } from "ai/react";
 import { useParams } from "next/navigation";
 import { ReactNode, useEffect, useRef, useState } from "react";
 import ChatInput from "./ChatInput";
+import EmptyChats from "./EmptyChats";
 import { useSideBarToogle } from "./SidBarToggleProvider";
-export default function ChatLists({ children }: { children: ReactNode }) {
+
+interface ChatListPros {
+  children: ReactNode | undefined;
+}
+export default function ChatLists({ children }: ChatListPros) {
   const messageParentRef = useRef<HTMLDivElement | null>(null);
-  const [isLoading, setIsLoading] = useState(0);
+  const [, setIsLoading] = useState(0);
   const { isSidebarOpen } = useSideBarToogle();
   const params = useParams();
   const [isFinish, setIsFinish] = useState(false);
@@ -99,7 +104,7 @@ export default function ChatLists({ children }: { children: ReactNode }) {
         className="max-h-[90%] w-full overflow-x-clip overflow-y-auto"
       >
         <div className="mx-auto h-full w-full max-w-5xl md:max-w-[80rem] md:px-20">
-          {/* {!chats?.length && <EmptyChats />} */}
+          {!children && !messages.length && <EmptyChats />}
 
           <div className="mx-auto flex w-full flex-col items-center gap-4">
             {children}
