@@ -1,6 +1,6 @@
 "use client";
 import { cn } from "@/lib/utils";
-import { ArrowUp } from "lucide-react";
+import { ArrowUp, Paperclip } from "lucide-react";
 import { useEffect, useRef } from "react";
 
 interface ChatInputProps {
@@ -59,20 +59,30 @@ export default function ChatInput({
             "min-h-[2.5rem ] overflow-y-auto",
           )}
         />
-
-        <button
-          disabled={isLoading}
-          type="submit"
-          className="ml-auto cursor-pointer transition-all duration-200 hover:scale-[1.1]"
-        >
-          <div className="rounded-full bg-white/50 p-2">
-            {isLoading ? (
-              <div className="bg-dark-gray size-4 animate-pulse rounded-md p-1" />
-            ) : (
-              <ArrowUp className="text-darker" />
-            )}
+        <div className="flex w-fit items-center justify-end gap-x-2 self-end">
+          <div className="flex size-[2.3rem] items-center justify-center rounded-full bg-white/50 p-1 transition-all duration-200 hover:scale-[1.1]">
+            <input type="file" id="fileInput" className="hidden" />
+            <button
+              className="cursor-pointer"
+              onClick={() => document.getElementById("fileInput")?.click()}
+            >
+              <Paperclip className="text-darker size-4" />
+            </button>
           </div>
-        </button>
+          <button
+            disabled={isLoading}
+            type="submit"
+            className="ml-auto cursor-pointer"
+          >
+            <div className="flex size-[2.3rem] items-center justify-center rounded-full bg-white/50 p-1 transition-all duration-200 hover:scale-[1.1]">
+              {isLoading ? (
+                <div className="bg-dark-gray size-4 animate-pulse rounded-md p-1" />
+              ) : (
+                <ArrowUp className="text-darker" />
+              )}
+            </div>
+          </button>
+        </div>
       </form>
     </div>
   );

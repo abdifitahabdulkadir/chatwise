@@ -15,7 +15,6 @@ interface ChatListPros {
 }
 export default function ChatLists({ children }: ChatListPros) {
   const messageParentRef = useRef<HTMLDivElement | null>(null);
-  const [, setIsLoading] = useState(0);
   const { isSidebarOpen } = useSideBarToogle();
   const params = useParams();
   const [isFinish, setIsFinish] = useState(false);
@@ -28,10 +27,6 @@ export default function ChatLists({ children }: ChatListPros) {
     input,
   } = useChat({
     api: "/api/chat",
-    onResponse: () => {
-      setIsLoading(2);
-    },
-
     onFinish(message) {
       setIsFinish(true);
       setMessage({
@@ -60,7 +55,6 @@ export default function ChatLists({ children }: ChatListPros) {
   function formSubmitHandler(
     event?: { preventDefault?: (() => void) | undefined } | undefined,
   ) {
-    setIsLoading(1);
     setIsFinish(false);
     handleSubmit(event);
   }
@@ -99,7 +93,7 @@ export default function ChatLists({ children }: ChatListPros) {
     >
       <div
         ref={messageParentRef}
-        className="max-h-[90%] w-full overflow-x-clip overflow-y-auto"
+        className="max-h-full w-full overflow-x-clip overflow-y-auto"
       >
         <div className="mx-auto h-full w-full max-w-5xl md:max-w-[80rem] md:px-20">
           {!children && !messages.length && <EmptyChats />}
@@ -113,7 +107,7 @@ export default function ChatLists({ children }: ChatListPros) {
                   <RenderContent
                     key={index}
                     content={content}
-                    isLoading={false}
+                    isLoading={!isFinish}
                     role={role === "user" ? "user" : "system"}
                   />
                 );

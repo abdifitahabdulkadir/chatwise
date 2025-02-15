@@ -5,7 +5,7 @@ import { redirect } from "next/navigation";
 export const metadata: Metadata = {
   title: "ChatWise - Your AI Conversation Hub",
   description:
-    "ThinkSphere is an intelligent AI-powered platform for seamless conversations, brainstorming, and problem-solving. Explore ideas, ask questions, and get insights instantly.",
+    "ChatWise is an intelligent AI-powered platform for seamless conversations, brainstorming, and problem-solving. Explore ideas, ask questions, and get insights instantly.",
 };
 
 export default async function Home() {

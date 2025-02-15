@@ -1,12 +1,11 @@
 "use client";
 
-import * as React from "react";
+import { cn } from "@/lib/utils";
 import * as SheetPrimitive from "@radix-ui/react-dialog";
 import { cva, type VariantProps } from "class-variance-authority";
 import { X } from "lucide-react";
-
-import { cn } from "@/lib/utils";
 import Image from "next/image";
+import * as React from "react";
 
 const Sheet = SheetPrimitive.Root;
 
@@ -67,14 +66,14 @@ const SheetContent = React.forwardRef<
     >
       <div className="border-light-gray flex flex-col items-center gap-2 border-b pb-3">
         <Image
-          src={"icons/logo.svg"}
+          src={"/icons/logo.svg"}
           height={50}
           width={50}
           loading="eager"
           alt="logo icon"
           className="object-contain"
         />
-        <h2 className="text-xl font-bold text-white">ThinkSphere</h2>
+        <h2 className="text-xl font-bold text-white">ChatWise</h2>
       </div>
       <SheetPrimitive.Close className="absolute top-4 right-4 z-50 rounded-xs opacity-70 ring-offset-white transition-opacity hover:opacity-100 focus:ring-2 focus:ring-neutral-950 focus:ring-offset-2 focus:outline-hidden disabled:pointer-events-none data-[state=open]:bg-neutral-100 dark:ring-offset-neutral-950 dark:focus:ring-neutral-300 dark:data-[state=open]:bg-neutral-800">
         <X className="h-6 w-6 text-white" />
@@ -143,13 +142,13 @@ SheetDescription.displayName = SheetPrimitive.Description.displayName;
 
 export {
   Sheet,
-  SheetPortal,
-  SheetOverlay,
-  SheetTrigger,
   SheetClose,
   SheetContent,
-  SheetHeader,
-  SheetFooter,
-  SheetTitle,
   SheetDescription,
+  SheetFooter,
+  SheetHeader,
+  SheetOverlay,
+  SheetPortal,
+  SheetTitle,
+  SheetTrigger,
 };
