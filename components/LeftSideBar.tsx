@@ -2,10 +2,15 @@
 
 import { cn } from "@/lib/utils";
 import NavLinks from "./NavLinks";
-import { useSideBarToogle } from "./SidBarToggleProvider";
+import { useSidebarProvider } from "./SidBarToggleProvider";
 
-export default function LeftSideBar() {
-  const { isSidebarOpen } = useSideBarToogle();
+export default function LeftSideBar({
+  sidebarLists,
+}: {
+  sidebarLists?: ChatTitleI[];
+}) {
+  const { isSidebarOpen } = useSidebarProvider();
+
   if (isSidebarOpen) return null;
 
   return (
@@ -14,7 +19,7 @@ export default function LeftSideBar() {
         "custom-scrollbar h-screen w-full overflow-y-auto max-md:hidden",
       )}
     >
-      <NavLinks />
+      <NavLinks sidebarLists={sidebarLists} />
     </section>
   );
 }

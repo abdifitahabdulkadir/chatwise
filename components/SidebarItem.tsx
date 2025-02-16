@@ -10,11 +10,10 @@ import ImageIcon from "./shared/ImageIcon";
 
 interface SideBarItemPros {
   text: string;
-  id: string;
   chatId: string;
 }
 
-export default function SidebarItem({ chatId, text, id }: SideBarItemPros) {
+export default function SidebarItem({ chatId, text }: SideBarItemPros) {
   const [isEditing, setIsEditing] = useState(false);
   const [input, setInput] = useState(text);
   const router = useRouter();
@@ -35,7 +34,7 @@ export default function SidebarItem({ chatId, text, id }: SideBarItemPros) {
     }
     localStorage.removeItem("selectedSidebarItem");
     localStorage.setItem("selectedSidebarItem", chatId);
-    router.replace(`/chat/${chatId}`, { scroll: false });
+    router.push(`/chat/${chatId}`);
   }
 
   return (

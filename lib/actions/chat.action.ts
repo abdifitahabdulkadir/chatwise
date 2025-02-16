@@ -112,7 +112,7 @@ export async function getChats(
     if (!chatId) return { success: true, data: undefined };
 
     const chats = await ChatsModel.find({ chatId }).sort({ _id: 1 });
-    if (!chats) throw new Error("Failed to get chats");
+    if (!chats || chats.length === 0) return { success: true, data: undefined };
     return { success: true, data: JSON.parse(JSON.stringify(chats)) };
   } catch (error) {
     return handleError("server", error) as ErrorResponse;

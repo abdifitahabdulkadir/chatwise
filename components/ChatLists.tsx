@@ -3,21 +3,24 @@ import { toast } from "@/hooks/use-toast";
 import { storeChat } from "@/lib/actions/chat.action";
 import { cn } from "@/lib/utils";
 import { useChat } from "ai/react";
+import { useSession } from "next-auth/react";
 import { useParams } from "next/navigation";
 import { ReactNode, useEffect, useRef, useState } from "react";
 import ChatInput from "./ChatInput";
 import RenderContent from "./ChatItems";
 import EmptyChats from "./EmptyChats";
-import { useSideBarToogle } from "./SidBarToggleProvider";
+import { useSidebarProvider } from "./SidBarToggleProvider";
 
 interface ChatListPros {
   children: ReactNode | undefined;
 }
+
 export default function ChatLists({ children }: ChatListPros) {
   const messageParentRef = useRef<HTMLDivElement | null>(null);
-  const { isSidebarOpen } = useSideBarToogle();
+  const { isSidebarOpen, addToSidebar } = useSidebarProvider();
   const params = useParams();
   const [isFinish, setIsFinish] = useState(false);
+  const session = useSession();
 
   const {
     messages,
@@ -27,6 +30,15 @@ export default function ChatLists({ children }: ChatListPros) {
     input,
   } = useChat({
     api: "/api/chat",
+    onResponse() {
+      addToSidebar([
+        {
+          title: input,
+          chatId: String(params.id),
+          userId: session.data?.user?.id,
+        },
+      ]);
+    },
     onFinish(message) {
       setIsFinish(true);
       setMessage({
@@ -84,10 +96,11 @@ export default function ChatLists({ children }: ChatListPros) {
     })();
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [isFinish]);
+
   return (
     <div
       className={cn(
-        "mt-20 grid h-full max-h-[86vh] w-full grid-rows-[1fr_auto] pb-[1.3rem]",
+        "mt-20 grid h-full max-h-[88vh] w-full grid-rows-[1fr_auto] pb-[1.3rem]",
         isSidebarOpen ? "col-span-full" : "cols-span-1",
       )}
     >
@@ -98,7 +111,7 @@ export default function ChatLists({ children }: ChatListPros) {
         <div className="mx-auto h-full w-full max-w-5xl md:max-w-[80rem] md:px-20">
           {!children && !messages.length && <EmptyChats />}
 
-          <div className="mx-auto flex w-full flex-col items-center gap-4">
+          <div className="mx-auto mb-6 flex w-full flex-col items-center gap-4">
             {children}
 
             {messages.length > 0 &&

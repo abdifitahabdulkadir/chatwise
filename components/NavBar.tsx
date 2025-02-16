@@ -2,10 +2,10 @@
 
 import { PanelLeft } from "lucide-react";
 import MobileSidebar from "./MobileSidebar";
-import { useSideBarToogle } from "./SidBarToggleProvider";
+import { useSidebarProvider } from "./SidBarToggleProvider";
 
 export default function NavBar() {
-  const { toggle } = useSideBarToogle();
+  const { toggle } = useSidebarProvider();
   return (
     <div className="fixed top-0 z-50 flex h-[6vh] w-full items-center justify-between gap-2 bg-transparent px-2 py-6 pb-2">
       <MobileSidebar />

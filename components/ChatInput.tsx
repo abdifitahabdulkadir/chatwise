@@ -34,7 +34,7 @@ export default function ChatInput({
   );
 
   return (
-    <div className="flex h-full w-full items-center justify-center px-10">
+    <div className="mt-6 flex h-full w-full items-center justify-center px-10">
       <form
         onSubmit={(e) => handleFormSubmit(e)}
         className={cn(

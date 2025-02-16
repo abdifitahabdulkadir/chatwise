@@ -1,33 +1,21 @@
-import { toast } from "@/hooks/use-toast";
-import { getChatSidebarTitles } from "@/lib/actions/chat.action";
 import { cn } from "@/lib/utils";
 import Image from "next/image";
 import { useRouter } from "next/navigation";
-import { useEffect, useState } from "react";
 import { v4 as uuid } from "uuid";
 import UserProfile from "./shared/UserProfile";
+import { useSidebarProvider } from "./SidBarToggleProvider";
 import SidebarItem from "./SidebarItem";
 import { SheetClose } from "./ui/sheet";
 interface NavLinksProps {
   isMobile?: boolean;
+  sidebarLists?: ChatTitleI[];
 }
 
-export default function NavLinks({ isMobile = false }: NavLinksProps) {
-  const [data, setData] = useState<ChatTitleI[] | undefined>();
-  useEffect(function () {
-    (async () => {
-      const { data: sidebarTitles, success } = await getChatSidebarTitles();
-      if (success) {
-        setData(sidebarTitles);
-        return;
-      }
-      toast({
-        title: "Failed to fetch sidebar titles",
-        description: "Please try again later",
-        variant: "destructive",
-      });
-    })();
-  }, []);
+export default function NavLinks({
+  sidebarLists,
+  isMobile = false,
+}: NavLinksProps) {
+  const { sideBarLists: currentSidebar } = useSidebarProvider();
   const router = useRouter();
 
   return (
@@ -41,7 +29,7 @@ export default function NavLinks({ isMobile = false }: NavLinksProps) {
           onClick={() => {
             const id = uuid();
             localStorage.removeItem("selectedSidebarItem");
-            router.push(`/chat/${id}`, { scroll: false });
+            router.push(`/chat/${id}`);
           }}
           className="border-light-gray hover:!bg-light-darker hover:bg-opacity-90 transtion-colors flex h-fit w-full cursor-pointer items-center justify-start gap-4 rounded-[6px] border bg-transparent px-5 py-3 text-white outline-hidden duration-200"
         >
@@ -55,23 +43,20 @@ export default function NavLinks({ isMobile = false }: NavLinksProps) {
           <span className="text-xs lg:text-sm">New chat</span>
         </button>
         <div className="flex w-full flex-col gap-1 py-5">
-          {data?.map(({ title, chatId, _id }, index) => {
-            const contnet = (
-              <SidebarItem
-                chatId={chatId}
-                id={String(_id)}
-                key={index}
-                text={title}
-              />
-            );
-            return isMobile ? (
-              <SheetClose asChild key={index}>
-                {contnet}
-              </SheetClose>
-            ) : (
-              contnet
-            );
-          })}
+          {[...currentSidebar, ...(sidebarLists || [])]?.map(
+            ({ title, chatId }, index) => {
+              const contnet = (
+                <SidebarItem chatId={chatId} key={index} text={title} />
+              );
+              return isMobile ? (
+                <SheetClose asChild key={index}>
+                  {contnet}
+                </SheetClose>
+              ) : (
+                contnet
+              );
+            },
+          )}
         </div>
       </div>
       <div className="border-light-gray flex w-full flex-col gap-y-2 border-t px-3 py-4">

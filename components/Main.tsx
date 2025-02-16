@@ -5,8 +5,13 @@ import { ReactNode, useEffect } from "react";
 import ChatLists from "./ChatLists";
 import LeftSideBar from "./LeftSideBar";
 import NavBar from "./NavBar";
-import SideBarToggleProvider from "./SidBarToggleProvider";
-export default function Main({ children }: { children: ReactNode }) {
+import SideBarProvider from "./SidBarToggleProvider";
+
+interface MainProps {
+  children: ReactNode;
+  sidebarLists: ChatTitleI[];
+}
+export default function Main({ children, sidebarLists }: MainProps) {
   const router = useRouter();
   useEffect(() => {
     const current = localStorage.getItem("selectedSidebarItem");
@@ -15,8 +20,9 @@ export default function Main({ children }: { children: ReactNode }) {
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
+
   return (
-    <SideBarToggleProvider>
+    <SideBarProvider>
       <main className="bg-medium-gray min-h-screen w-full">
         <NavBar />
         <section
@@ -24,10 +30,10 @@ export default function Main({ children }: { children: ReactNode }) {
             "grid w-full flex-1 grid-cols-[15rem_1fr] overflow-hidden max-md:grid-cols-1",
           )}
         >
-          <LeftSideBar />
+          <LeftSideBar sidebarLists={sidebarLists} />
           <ChatLists>{children}</ChatLists>
         </section>
       </main>
-    </SideBarToggleProvider>
+    </SideBarProvider>
   );
 }
