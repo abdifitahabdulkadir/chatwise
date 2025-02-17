@@ -1,6 +1,6 @@
 "use client";
 import { cn } from "@/lib/utils";
-import { ArrowUp, Paperclip } from "lucide-react";
+import { Mic, Paperclip } from "lucide-react";
 import { useEffect, useRef } from "react";
 
 interface ChatInputProps {
@@ -12,12 +12,14 @@ interface ChatInputProps {
   ) => void;
   handleFormSubmit: (event?: { preventDefault?: () => void }) => void;
   inputValue: string;
+  handleRecordVoice: () => void;
 }
 export default function ChatInput({
   handleFormSubmit,
   hanldeOnChange,
   inputValue,
   isLoading,
+  handleRecordVoice,
 }: ChatInputProps) {
   const ref = useRef<HTMLTextAreaElement | null>(null);
 
@@ -69,19 +71,12 @@ export default function ChatInput({
               <Paperclip className="text-darker size-4" />
             </button>
           </div>
-          <button
-            disabled={isLoading}
-            type="submit"
-            className="ml-auto cursor-pointer"
-          >
-            <div className="flex size-[2.3rem] items-center justify-center rounded-full bg-white/50 p-1 transition-all duration-200 hover:scale-[1.1]">
-              {isLoading ? (
-                <div className="bg-dark-gray size-4 animate-pulse rounded-md p-1" />
-              ) : (
-                <ArrowUp className="text-darker" />
-              )}
-            </div>
-          </button>
+          {isLoading && (
+            <div className="bg-dark-gray size-4 animate-pulse rounded-md p-1" />
+          )}
+          <div className="flex size-[2.3rem] cursor-pointer items-center justify-center rounded-full bg-white/50 p-1 transition-all duration-200 hover:scale-[1.1]">
+            <Mic onClick={handleRecordVoice} className="text-darker" />
+          </div>
         </div>
       </form>
     </div>

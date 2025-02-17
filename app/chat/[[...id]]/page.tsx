@@ -1,6 +1,6 @@
 import RenderContent from "@/components/ChatItems";
 import Main from "@/components/Main";
-import { getChats, getChatSidebarTitles } from "@/lib/actions/chat.action";
+import { getChatSidebarTitles, getChats } from "@/lib/actions/chat.action";
 
 export default async function ChatHome({ params }: PageRouteParams) {
   const { id } = await params;
