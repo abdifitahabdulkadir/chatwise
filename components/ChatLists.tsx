@@ -1,8 +1,9 @@
 "use client";
 import { toast } from "@/hooks/use-toast";
+import { storeChat } from "@/lib/actions/chat.action";
 import { cn } from "@/lib/utils";
 import { useChat } from "ai/react";
-import { Mic, MicOff, X } from "lucide-react";
+import { ChevronDown, Mic, MicOff, X } from "lucide-react";
 import { useSession } from "next-auth/react";
 import { useParams } from "next/navigation";
 import { ReactNode, useEffect, useRef, useState } from "react";
@@ -28,9 +29,8 @@ export default function ChatLists({ children }: ChatListPros) {
   const [micMute, setMicMute] = useState(false);
   const [isUserTalking, setIsUserTalking] = useState(false);
   const [isAIAnswering, setIsAIAnswering] = useState(false);
-  const [notCaputured, setNotCaptured] = useState(false);
   const session = useSession();
-
+  const [showScrollToBottomIcon, setShowScrollToBottomIcon] = useState(false);
   const {
     messages,
     handleInputChange,
@@ -104,6 +104,7 @@ export default function ChatLists({ children }: ChatListPros) {
     },
     [isAIAnswering, message.content, startVoice],
   );
+
   useEffect(
     function () {
       if (micMute) {
@@ -127,8 +128,6 @@ export default function ChatLists({ children }: ChatListPros) {
             recognition.stop();
             handleSubmit();
             setMicMute(false);
-          } else {
-            setNotCaptured(true);
           }
         };
       }
@@ -136,42 +135,54 @@ export default function ChatLists({ children }: ChatListPros) {
     [micMute, handleSubmit, setInput],
   );
 
-  // useEffect(() => {
-  //   if (!isFinish) return;
-  //   (async function saveData() {
-  //     const result = await storeChat({
-  //       question: message.question,
-  //       chatId: message.titleId,
-  //       answer: message.content,
-  //       role: message.role == "user" ? "user" : "system",
-  //     });
+  function hanldeOnScroll(e: React.UIEvent<HTMLDivElement> | undefined) {
+    const scrolHeight = Number(e?.currentTarget.scrollHeight);
+    const scrollTop = Number(e?.currentTarget.scrollTop);
+    if (scrolHeight - scrollTop > 1000) {
+      setShowScrollToBottomIcon(true);
+      return;
+    }
+    setShowScrollToBottomIcon(false);
+  }
 
-  //     if (result.success) {
-  //       toast({
-  //         title: "Chat saved successfully",
-  //         description: "Chat has been saved successfully",
-  //       });
-  //       return;
-  //     }
-  //     toast({
-  //       title: "Failed to Store Chat",
-  //       description: "Failed to store chat, try again",
-  //       variant: "destructive",
-  //     });
-  //   })();
-  //   // eslint-disable-next-line react-hooks/exhaustive-deps
-  // }, [isFinish]);
+  useEffect(() => {
+    if (!isFinish) return;
+    if (startVoice) return;
+    (async function saveData() {
+      const result = await storeChat({
+        question: message.question,
+        chatId: message.titleId,
+        answer: message.content,
+        role: message.role == "user" ? "user" : "system",
+      });
+
+      if (result.success) {
+        toast({
+          title: "Chat saved successfully",
+          description: "Chat has been saved successfully",
+        });
+        return;
+      }
+      toast({
+        title: "Failed to Store Chat",
+        description: "Failed to store chat, try again",
+        variant: "destructive",
+      });
+    })();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [isFinish]);
 
   return (
     <div
       className={cn(
-        "mt-20 grid h-[88vh] w-full grid-rows-[1fr_auto] pb-[1.3rem]",
+        "relative mt-20 grid h-[88vh] w-full grid-rows-[1fr_auto] pb-[1.3rem]",
         isSidebarOpen ? "col-span-full" : "cols-span-1",
       )}
     >
       <div
+        onScroll={hanldeOnScroll}
         ref={messageParentRef}
-        className="max-h-full w-full overflow-x-clip overflow-y-auto"
+        className="main-scrollbar max-h-full w-full overflow-x-clip overflow-y-auto"
       >
         <div className="mx-auto h-full w-full max-w-5xl md:max-w-[80rem] md:px-20">
           {!startVoice && !children && !messages.length && <EmptyChats />}
@@ -204,13 +215,8 @@ export default function ChatLists({ children }: ChatListPros) {
                 {isAIAnswering && (
                   <ScaleLoader color="#00897b" height={100} width={7} />
                 )}
-
-                {notCaputured && (
-                  <p className="text-white/50 italic">Not Captured</p>
-                )}
               </div>
 
-              <p>{input}</p>
               <div className="flex w-full items-center justify-center gap-6">
                 <Button
                   title={micMute ? "Unmute Mic" : "Mute Mic"}
@@ -248,7 +254,6 @@ export default function ChatLists({ children }: ChatListPros) {
           )}
         </div>
       </div>
-
       {!startVoice && (
         <ChatInput
           handleRecordVoice={handlestartVoice}
@@ -257,6 +262,21 @@ export default function ChatLists({ children }: ChatListPros) {
           hanldeOnChange={handleInputChange}
           inputValue={input}
         />
+      )}
+
+      {showScrollToBottomIcon && !startVoice && (
+        <div className="fixed right-[5%] bottom-[10rem] flex size-[2.3rem] cursor-pointer items-center justify-center rounded-full bg-white/50 p-1 transition-all duration-200 hover:scale-[1.1]">
+          <ChevronDown
+            onClick={() => {
+              const current = messageParentRef.current;
+              if (current) {
+                current.style.height = "auto";
+                current.scrollTop = current.scrollHeight;
+              }
+            }}
+            className="text-darker scale-[1.3] font-bold"
+          />
+        </div>
       )}
     </div>
   );

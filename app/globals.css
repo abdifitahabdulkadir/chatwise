@@ -15,6 +15,10 @@
   --color-light-green: #8dcdb8;
   --color-purple: #5536da;
 }
+
+body {
+  scroll-behavior: smooth;
+}
 @layer base {
   /* leftsider bar scroll style */
   .custom-scrollbar {
@@ -22,7 +26,6 @@
     scrollbar-color: #888 #222;
   }
 
-  /* WebKit-based styling */
   .custom-scrollbar::-webkit-scrollbar {
     width: 8px;
   }
@@ -41,6 +44,32 @@
   }
 
   .custom-scrollbar::-webkit-scrollbar-corner {
+    background: transparent;
+  }
+
+  /* main bar scroll style */
+  .main-scrollbar {
+    scrollbar-color: #888 #222;
+  }
+
+  .main-scrollbar::-webkit-scrollbar {
+    width: 20px;
+  }
+
+  .main-scrollbar::-webkit-scrollbar-track {
+    background: #222;
+  }
+
+  .main-scrollbar::-webkit-scrollbar-thumb {
+    background: #888;
+    border-radius: 50px;
+  }
+
+  .main-scrollbar::-webkit-scrollbar-thumb:hover {
+    background: #555;
+  }
+
+  .main-scrollbar::-webkit-scrollbar-corner {
     background: transparent;
   }
 }

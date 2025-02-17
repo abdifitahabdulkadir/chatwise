@@ -3,7 +3,7 @@ import {
   voiceToVoiceInstructions,
 } from "@/constants";
 import { createGoogleGenerativeAI } from "@ai-sdk/google";
-import { streamText } from "ai";
+import { smoothStream, streamText } from "ai";
 export const runtime = "edge";
 
 const google = createGoogleGenerativeAI({
@@ -18,6 +18,7 @@ export async function POST(request: Request) {
       model: google("gemini-1.5-pro"),
       temperature: 0.6,
       system: voiceToVoiceInstructions,
+      experimental_transform: smoothStream(),
     });
     return stream.toDataStreamResponse();
   }
@@ -27,6 +28,7 @@ export async function POST(request: Request) {
     model: google("gemini-1.5-pro"),
     temperature: 0.6,
     system: textToTextSystemInstructions,
+    experimental_transform: smoothStream(),
   });
   return stream.toDataStreamResponse();
 }
