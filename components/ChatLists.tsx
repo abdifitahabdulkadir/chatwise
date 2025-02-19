@@ -1,20 +1,24 @@
 "use client";
+
 import { toast } from "@/hooks/use-toast";
 import { storeChat } from "@/lib/actions/chat.action";
 import { cn } from "@/lib/utils";
-import { useChat } from "ai/react";
-import { ChevronDown, Mic, MicOff, X } from "lucide-react";
+import { useChat } from "@ai-sdk/react";
+import { Mic, MicOff, Trash2, X } from "lucide-react";
 import { useSession } from "next-auth/react";
 import { useParams } from "next/navigation";
 import { ReactNode, useEffect, useRef, useState } from "react";
+import useSpeechToText from "react-hook-speech-to-text";
 import BeatLoader from "react-spinners/BeatLoader";
 import BounceLoader from "react-spinners/BounceLoader";
 import ScaleLoader from "react-spinners/ScaleLoader";
+import ActionButton from "./ActionButton";
 import ChatInput from "./ChatInput";
 import RenderContent from "./ChatItems";
 import EmptyChats from "./EmptyChats";
+import RenderInfo from "./RenderInfo";
+import ScrollToDownButton from "./ScrollToDownButton";
 import { useSidebarProvider } from "./SidBarToggleProvider";
-import { Button } from "./ui/button";
 
 interface ChatListPros {
   children: ReactNode | undefined;
@@ -26,11 +30,14 @@ export default function ChatLists({ children }: ChatListPros) {
   const params = useParams();
   const [isFinish, setIsFinish] = useState(false);
   const [startVoice, setStartVoice] = useState(false);
-  const [micMute, setMicMute] = useState(false);
-  const [isUserTalking, setIsUserTalking] = useState(false);
   const [isAIAnswering, setIsAIAnswering] = useState(false);
   const session = useSession();
   const [showScrollToBottomIcon, setShowScrollToBottomIcon] = useState(false);
+  const { isRecording, results, startSpeechToText, stopSpeechToText } =
+    useSpeechToText({
+      continuous: false,
+      useLegacyResults: false,
+    });
   const {
     messages,
     handleInputChange,
@@ -79,6 +86,7 @@ export default function ChatLists({ children }: ChatListPros) {
     },
     [messages],
   );
+
   function formSubmitHandler(
     event?: { preventDefault?: (() => void) | undefined } | undefined,
   ) {
@@ -94,45 +102,16 @@ export default function ChatLists({ children }: ChatListPros) {
 
   useEffect(
     function () {
-      if (isAIAnswering && startVoice && message.content) {
-        const text = new SpeechSynthesisUtterance(message.content);
-        speechSynthesis.speak(text);
-        text.onend = function () {
+      if (isAIAnswering && startVoice) {
+        const utterance = new SpeechSynthesisUtterance(message.content);
+        utterance.voice = speechSynthesis.getVoices()[5];
+        speechSynthesis.speak(utterance);
+        utterance.onend = function () {
           setIsAIAnswering(false);
         };
       }
     },
     [isAIAnswering, message.content, startVoice],
-  );
-
-  useEffect(
-    function () {
-      if (micMute) {
-        setIsUserTalking(true);
-        const speechRecognition =
-          window.SpeechRecognition || window.webkitSpeechRecognition;
-        const recognition = new speechRecognition();
-        recognition.start();
-        recognition.lang = "en-US";
-        recognition.onnomatch = function () {
-          toast({
-            title: "Speech Recongnition Failed",
-            description: "We couldn't recognize your speech try again",
-          });
-        };
-        recognition.onresult = async function (event) {
-          if (event.results[0].isFinal) {
-            console.log("finalized");
-            setInput(event.results[0][0].transcript);
-            setIsUserTalking(false);
-            recognition.stop();
-            handleSubmit();
-            setMicMute(false);
-          }
-        };
-      }
-    },
-    [micMute, handleSubmit, setInput],
   );
 
   function hanldeOnScroll(e: React.UIEvent<HTMLDivElement> | undefined) {
@@ -172,6 +151,20 @@ export default function ChatLists({ children }: ChatListPros) {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [isFinish]);
 
+  useEffect(
+    function () {
+      if (results.length > 0) {
+        setInput(
+          results
+            .map((result) =>
+              typeof result == "string" ? result : result.transcript,
+            )
+            .join(" "),
+        );
+      }
+    },
+    [results, setInput],
+  );
   return (
     <div
       className={cn(
@@ -186,7 +179,6 @@ export default function ChatLists({ children }: ChatListPros) {
       >
         <div className="mx-auto h-full w-full max-w-5xl md:max-w-[80rem] md:px-20">
           {!startVoice && !children && !messages.length && <EmptyChats />}
-
           <div className="mx-auto mb-6 flex w-full flex-col items-center gap-4">
             {!startVoice && children}
             {!startVoice &&
@@ -204,8 +196,12 @@ export default function ChatLists({ children }: ChatListPros) {
           </div>
           {startVoice && (
             <div className="flex h-[95%] w-full flex-col items-center justify-between">
-              <div className="flex h-[50%] w-full items-center justify-center">
-                {isUserTalking && <BounceLoader color="#00897b" />}
+              <div className="flex h-[50%] w-full flex-col items-center justify-center">
+                {isRecording ? (
+                  <BounceLoader color="#00897b" />
+                ) : isAIGenerating || isAIAnswering ? null : (
+                  <EmptyChats />
+                )}
                 {isAIGenerating && (
                   <div className="flex w-fit flex-col items-center justify-center gap-y-1">
                     <BeatLoader color="#00897b" size={30} />
@@ -215,22 +211,45 @@ export default function ChatLists({ children }: ChatListPros) {
                 {isAIAnswering && (
                   <ScaleLoader color="#00897b" height={100} width={7} />
                 )}
+                {!isAIAnswering && !isRecording && !isAIGenerating && (
+                  <RenderInfo />
+                )}
+              </div>
+
+              <div className="flex h-[40%] w-full flex-col items-center justify-center">
+                <ChatInput
+                  isVoicetoVoice={startVoice}
+                  handleRecordVoice={handlestartVoice}
+                  isLoading={isAIGenerating}
+                  handleFormSubmit={formSubmitHandler}
+                  hanldeOnChange={handleInputChange}
+                  inputValue={input}
+                />
               </div>
 
               <div className="flex w-full items-center justify-center gap-6">
-                <Button
-                  title={micMute ? "Unmute Mic" : "Mute Mic"}
-                  type="button"
-                  onClick={() => setMicMute(!micMute)}
-                  className="flex size-[4rem] cursor-pointer items-center justify-center rounded-full bg-white/50 transition-all duration-200 hover:scale-[1.1]"
+                <ActionButton
+                  title={isRecording ? "Unmute Mic" : "Mute Mic"}
+                  isRecording={isRecording}
+                  onClick={isRecording ? stopSpeechToText : startSpeechToText}
                 >
-                  {!micMute ? (
+                  {!isRecording ? (
                     <MicOff className="scale-[1.4] text-red-500" />
                   ) : (
                     <Mic className="text-darker scale-[1.4]" />
                   )}
-                </Button>
-                <Button
+                </ActionButton>
+
+                <ActionButton
+                  title={"clear transcript"}
+                  isRecording={isRecording}
+                  onClick={() => setInput("")}
+                >
+                  <Trash2 className="scale-[1.4] text-red-500" />
+                </ActionButton>
+                <ActionButton
+                  title="Close Voice"
+                  isRecording={isRecording}
                   onClick={() => {
                     speechSynthesis.cancel();
                     setMessage({
@@ -243,12 +262,9 @@ export default function ChatLists({ children }: ChatListPros) {
                     setInput("");
                     setStartVoice(false);
                   }}
-                  title="Close Voice"
-                  type="button"
-                  className="text-darker flex size-[4rem] cursor-pointer items-center justify-center rounded-full bg-white/50 transition-all duration-200 hover:scale-[1.1] hover:!bg-red-300 hover:!text-white"
                 >
                   <X className="scale-[1.5]" />
-                </Button>
+                </ActionButton>
               </div>
             </div>
           )}
@@ -256,6 +272,7 @@ export default function ChatLists({ children }: ChatListPros) {
       </div>
       {!startVoice && (
         <ChatInput
+          isVoicetoVoice={startVoice}
           handleRecordVoice={handlestartVoice}
           isLoading={isAIGenerating}
           handleFormSubmit={formSubmitHandler}
@@ -265,18 +282,15 @@ export default function ChatLists({ children }: ChatListPros) {
       )}
 
       {showScrollToBottomIcon && !startVoice && (
-        <div className="fixed right-[5%] bottom-[10rem] flex size-[2.3rem] cursor-pointer items-center justify-center rounded-full bg-white/50 p-1 transition-all duration-200 hover:scale-[1.1]">
-          <ChevronDown
-            onClick={() => {
-              const current = messageParentRef.current;
-              if (current) {
-                current.style.height = "auto";
-                current.scrollTop = current.scrollHeight;
-              }
-            }}
-            className="text-darker scale-[1.3] font-bold"
-          />
-        </div>
+        <ScrollToDownButton
+          onClick={() => {
+            const current = messageParentRef.current;
+            if (current) {
+              current.style.height = "auto";
+              current.scrollTop = current.scrollHeight;
+            }
+          }}
+        />
       )}
     </div>
   );

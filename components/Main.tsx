@@ -2,11 +2,11 @@
 import { cn } from "@/lib/utils";
 import { useRouter } from "next/navigation";
 import { ReactNode, useEffect } from "react";
+import "regenerator-runtime/runtime";
 import ChatLists from "./ChatLists";
 import LeftSideBar from "./LeftSideBar";
 import NavBar from "./NavBar";
 import SideBarProvider from "./SidBarToggleProvider";
-
 interface MainProps {
   children: ReactNode;
   sidebarLists: ChatTitleI[];
@@ -23,7 +23,7 @@ export default function Main({ children, sidebarLists }: MainProps) {
 
   return (
     <SideBarProvider>
-      <main className="bg-medium-gray min-h-screen w-full">
+      <main className="bg-medium-gray flex min-h-screen w-full items-center justify-center">
         <NavBar />
         <section
           className={cn(
@@ -32,6 +32,7 @@ export default function Main({ children, sidebarLists }: MainProps) {
         >
           <LeftSideBar sidebarLists={sidebarLists} />
           <ChatLists>{children}</ChatLists>
+          {/* <RecorderComponent /> */}
         </section>
       </main>
     </SideBarProvider>

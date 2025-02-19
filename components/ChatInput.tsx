@@ -13,11 +13,13 @@ interface ChatInputProps {
   handleFormSubmit: (event?: { preventDefault?: () => void }) => void;
   inputValue: string;
   handleRecordVoice: () => void;
+  isVoicetoVoice: boolean;
 }
 export default function ChatInput({
   handleFormSubmit,
   hanldeOnChange,
   inputValue,
+  isVoicetoVoice,
   isLoading,
   handleRecordVoice,
 }: ChatInputProps) {
@@ -61,23 +63,25 @@ export default function ChatInput({
             "min-h-[2.5rem ] overflow-y-auto",
           )}
         />
-        <div className="flex w-fit items-center justify-end gap-x-2 self-end">
-          <div className="flex size-[2.3rem] items-center justify-center rounded-full bg-white/50 p-1 transition-all duration-200 hover:scale-[1.1]">
-            <input type="file" id="fileInput" className="hidden" />
-            <button
-              className="cursor-pointer"
-              onClick={() => document.getElementById("fileInput")?.click()}
-            >
-              <Paperclip className="text-darker size-4" />
-            </button>
+        {!isVoicetoVoice && (
+          <div className="flex w-fit items-center justify-end gap-x-2 self-end">
+            <div className="flex size-[2.3rem] items-center justify-center rounded-full bg-white/50 p-1 transition-all duration-200 hover:scale-[1.1]">
+              <input type="file" id="fileInput" className="hidden" />
+              <button
+                className="cursor-pointer"
+                onClick={() => document.getElementById("fileInput")?.click()}
+              >
+                <Paperclip className="text-darker size-4" />
+              </button>
+            </div>
+            {isLoading && (
+              <div className="bg-dark-gray size-4 animate-pulse rounded-md p-1" />
+            )}
+            <div className="flex size-[2.3rem] cursor-pointer items-center justify-center rounded-full bg-white/50 p-1 transition-all duration-200 hover:scale-[1.1]">
+              <Mic onClick={handleRecordVoice} className="text-darker" />
+            </div>
           </div>
-          {isLoading && (
-            <div className="bg-dark-gray size-4 animate-pulse rounded-md p-1" />
-          )}
-          <div className="flex size-[2.3rem] cursor-pointer items-center justify-center rounded-full bg-white/50 p-1 transition-all duration-200 hover:scale-[1.1]">
-            <Mic onClick={handleRecordVoice} className="text-darker" />
-          </div>
-        </div>
+        )}
       </form>
     </div>
   );

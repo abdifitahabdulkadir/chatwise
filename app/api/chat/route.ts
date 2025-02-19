@@ -12,10 +12,11 @@ const google = createGoogleGenerativeAI({
 
 export async function POST(request: Request) {
   const { messages, isVoiceToVoice } = await request.json();
+  console.log(messages);
   if (isVoiceToVoice) {
     const stream = streamText({
       messages: [...messages],
-      model: google("gemini-1.5-pro"),
+      model: google("gemini-1.5-flash-latest"),
       temperature: 0.6,
       system: voiceToVoiceInstructions,
       experimental_transform: smoothStream(),

@@ -29,6 +29,7 @@ export default async function ChatHome({ params }: PageRouteParams) {
             );
           })
         : undefined}
+      {undefined}
     </Main>
   );
 }
