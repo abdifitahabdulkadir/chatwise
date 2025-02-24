@@ -168,16 +168,16 @@ export default function ChatLists({ children }: ChatListPros) {
   return (
     <div
       className={cn(
-        "relative mt-20 grid h-[88vh] w-full grid-rows-[1fr_auto] pb-[1.3rem]",
+        "relative mt-20 grid h-[90vh] w-full grid-rows-[1fr_auto] pb-[1.3rem]",
         isSidebarOpen ? "col-span-full" : "cols-span-1",
       )}
     >
       <div
         onScroll={hanldeOnScroll}
         ref={messageParentRef}
-        className="main-scrollbar max-h-full w-full overflow-x-clip overflow-y-auto"
+        className="main-scrollbar w-full overflow-x-clip overflow-y-auto pb-[7rem]"
       >
-        <div className="mx-auto h-full w-full max-w-5xl md:max-w-[80rem] md:px-20">
+        <div className="mx-auto w-full max-w-5xl md:max-w-[80rem] md:px-20">
           {!startVoice && !children && !messages.length && <EmptyChats />}
           <div className="mx-auto mb-6 flex w-full flex-col items-center gap-4">
             {!startVoice && children}
@@ -272,6 +272,7 @@ export default function ChatLists({ children }: ChatListPros) {
       </div>
       {!startVoice && (
         <ChatInput
+          otherClasses="absolute bottom-5 left-[50%] z-40 -translate-x-[50%] transform"
           isVoicetoVoice={startVoice}
           handleRecordVoice={handlestartVoice}
           isLoading={isAIGenerating}

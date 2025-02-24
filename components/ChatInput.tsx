@@ -14,6 +14,7 @@ interface ChatInputProps {
   inputValue: string;
   handleRecordVoice: () => void;
   isVoicetoVoice: boolean;
+  otherClasses?: string;
 }
 export default function ChatInput({
   handleFormSubmit,
@@ -22,6 +23,7 @@ export default function ChatInput({
   isVoicetoVoice,
   isLoading,
   handleRecordVoice,
+  otherClasses,
 }: ChatInputProps) {
   const ref = useRef<HTMLTextAreaElement | null>(null);
 
@@ -38,7 +40,12 @@ export default function ChatInput({
   );
 
   return (
-    <div className="mt-6 flex h-full w-full items-center justify-center px-10">
+    <div
+      className={cn(
+        "bg-medium-gray mt-6 flex h-fit w-[90%] items-center justify-center",
+        otherClasses,
+      )}
+    >
       <form
         onSubmit={(e) => handleFormSubmit(e)}
         className={cn(
