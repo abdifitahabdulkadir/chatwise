@@ -4,7 +4,7 @@ import { Button } from "./ui/button";
 
 interface ActionProps {
   onClick: () => void;
-  isRecording: boolean;
+  isRecording?: boolean;
   classNames?: string;
   children: ReactNode;
   title: string;

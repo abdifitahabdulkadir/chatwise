@@ -17,9 +17,8 @@ export default async function ChatHome({ params }: PageRouteParams) {
         titles.status === "fulfilled" ? titles.value.data || [] : []
       }
     >
-      {chats.status === "fulfilled"
-        ? chats.value.data &&
-          chats.value.data.map(({ content, role }, index) => {
+      {chats.status === "fulfilled" && chats.value.data !== undefined
+        ? chats?.value?.data.map(({ content, role }, index) => {
             return (
               <RenderContent
                 key={index}
@@ -29,7 +28,6 @@ export default async function ChatHome({ params }: PageRouteParams) {
             );
           })
         : undefined}
-      {undefined}
     </Main>
   );
 }

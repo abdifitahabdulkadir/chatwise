@@ -1,8 +1,14 @@
+import { cn } from "@/lib/utils";
 import Image from "next/image";
 
-export default function EmptyChats() {
+export default function EmptyChats({ className }: { className: string }) {
   return (
-    <div className="flex h-screen max-h-[50vh] flex-grow flex-col items-center justify-center gap-y-3">
+    <div
+      className={cn(
+        "flex flex-grow flex-col items-center justify-center gap-y-3",
+        className,
+      )}
+    >
       <Image
         src="/icons/logo.svg"
         alt="logo image"

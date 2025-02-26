@@ -7,6 +7,7 @@ type RenderActiveProps = {
   isLoading?: boolean;
   role: "system" | "user";
 };
+
 export default function RenderContent({
   content,
   isLoading,
@@ -20,18 +21,20 @@ export default function RenderContent({
 export function UserChatItem({ content }: { content: string }) {
   return (
     <div className="flex w-full items-center justify-end">
-      <div className="bg-dark-gray/50 mx-4 grid w-full grid-cols-[5%_1fr] items-center gap-2 rounded-3xl px-5 py-5 pl-5 md:w-[60%]">
-        <Image
-          src={"/icons/user.svg"}
-          alt="user icon"
-          width={30}
-          height={30}
-          quality={100}
-          className="object-contain"
-        />
-        <p className="text-md leading-6 font-normal text-wrap text-white">
-          {content}
-        </p>
+      <div className="mx-4 flex w-full items-center justify-end md:w-[70%]">
+        <div className="bg-dark-gray/50 grid w-fit grid-cols-[5%_1fr] items-center gap-2 rounded-3xl px-5 py-5 pl-5">
+          <Image
+            src={"/icons/user.svg"}
+            alt="user icon"
+            width={30}
+            height={30}
+            quality={100}
+            className="object-contain"
+          />
+          <p className="text-md leading-6 font-normal text-wrap text-white">
+            {content}
+          </p>
+        </div>
       </div>
     </div>
   );
@@ -41,6 +44,7 @@ type SystemPros = {
   isLoading?: boolean;
   content: string;
 };
+
 export function SystemChatItem({ content, isLoading }: SystemPros) {
   const formattedContent = formatContent(content);
   return (
@@ -63,7 +67,7 @@ export function SystemChatItem({ content, isLoading }: SystemPros) {
           <>
             <div className="border-darker col-span-full my-2 border-t-2" />
             <div className="col-span-4 ml-10 flex w-full items-center gap-2">
-              <button className="hover:bg-dark-gray group rounded-md px-3 py-2 transition-all duration-200">
+              <button className="hover:bg-dark-gray group cursor-pointer rounded-md px-3 py-2 transition-all duration-200">
                 <Image
                   src={"/icons/like.svg"}
                   alt="like button svg icon"

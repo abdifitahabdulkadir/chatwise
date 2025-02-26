@@ -14,7 +14,6 @@ interface ChatInputProps {
   inputValue: string;
   handleRecordVoice: () => void;
   isVoicetoVoice: boolean;
-  otherClasses?: string;
 }
 export default function ChatInput({
   handleFormSubmit,
@@ -23,7 +22,6 @@ export default function ChatInput({
   isVoicetoVoice,
   isLoading,
   handleRecordVoice,
-  otherClasses,
 }: ChatInputProps) {
   const ref = useRef<HTMLTextAreaElement | null>(null);
 
@@ -31,7 +29,6 @@ export default function ChatInput({
     function () {
       const textarea = ref.current;
       if (textarea) {
-        // Reset height to auto to calculate new height
         textarea.style.height = "auto";
         textarea.style.height = `${textarea.scrollHeight}px`;
       }
@@ -42,8 +39,7 @@ export default function ChatInput({
   return (
     <div
       className={cn(
-        "bg-medium-gray mt-6 flex h-fit w-[90%] items-center justify-center",
-        otherClasses,
+        "bg-medium-gray absolute bottom-5 left-[50%] z-40 mt-6 flex h-fit w-[90%] -translate-x-[50%] transform items-center justify-center",
       )}
     >
       <form
@@ -72,21 +68,25 @@ export default function ChatInput({
         />
         {!isVoicetoVoice && (
           <div className="flex w-fit items-center justify-end gap-x-2 self-end">
-            <div className="flex size-[2.3rem] items-center justify-center rounded-full bg-white/50 p-1 transition-all duration-200 hover:scale-[1.1]">
-              <input type="file" id="fileInput" className="hidden" />
-              <button
-                className="cursor-pointer"
-                onClick={() => document.getElementById("fileInput")?.click()}
-              >
-                <Paperclip className="text-darker size-4" />
-              </button>
-            </div>
-            {isLoading && (
-              <div className="bg-dark-gray size-4 animate-pulse rounded-md p-1" />
+            {!isLoading && (
+              <div className="flex size-[2.3rem] items-center justify-center rounded-full bg-white/50 p-1 transition-all duration-200 hover:scale-[1.1]">
+                <input type="file" id="fileInput" className="hidden" />
+                <button
+                  className="cursor-pointer"
+                  onClick={() => document.getElementById("fileInput")?.click()}
+                >
+                  <Paperclip className="text-darker size-4" />
+                </button>
+              </div>
             )}
-            <div className="flex size-[2.3rem] cursor-pointer items-center justify-center rounded-full bg-white/50 p-1 transition-all duration-200 hover:scale-[1.1]">
-              <Mic onClick={handleRecordVoice} className="text-darker" />
-            </div>
+            {isLoading && (
+              <div className="bg-dark-green size-4 animate-pulse rounded-md p-1" />
+            )}
+            {!isLoading && (
+              <div className="flex size-[2.3rem] cursor-pointer items-center justify-center rounded-full bg-white/50 p-1 transition-all duration-200 hover:scale-[1.1]">
+                <Mic onClick={handleRecordVoice} className="text-darker" />
+              </div>
+            )}
           </div>
         )}
       </form>
