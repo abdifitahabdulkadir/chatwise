@@ -8,9 +8,10 @@ export default async function ChatHome({ params }: PageRouteParams) {
   const [titles, chats] = await Promise.allSettled([
     getChatSidebarTitles(),
     getChats({
-      chatId: String(id),
+      chatId: String(id?.length > 1 ? id[id?.length - 1] : id),
     }),
   ]);
+
   return (
     <Main
       sidebarLists={

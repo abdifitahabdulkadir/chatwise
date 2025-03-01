@@ -26,7 +26,6 @@ export default function ChatLists({ children }: ChatListPros) {
   const [startVoice, setStartVoice] = useState(false);
   const session = useSession();
   const [showScrollToBottomIcon, setShowScrollToBottomIcon] = useState(false);
-
   const {
     messages,
     handleInputChange,
@@ -39,7 +38,7 @@ export default function ChatLists({ children }: ChatListPros) {
       addToSidebar([
         {
           title: input,
-          chatId: String(params.id),
+          chatId: String(Array.isArray(params.id) ? params.id[1] : params.id),
           userId: session.data?.user?.id,
         },
       ]);
@@ -49,7 +48,7 @@ export default function ChatLists({ children }: ChatListPros) {
       setMessage({
         content: message.content,
         role: message.role,
-        titleId: String(params.id ?? ""),
+        titleId: String(Array.isArray(params.id) ? params.id[1] : params.id),
         question: input,
       });
     },

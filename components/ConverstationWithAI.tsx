@@ -17,7 +17,6 @@ export default function ConverstationWithAI({
 }: ConversationPros) {
   const { isSpeaking, status, endSession, startSession } = useConversation();
   const [hasSetMicPermission, setHasMicPermission] = useState("");
-
   async function handleStartConversation() {
     try {
       await navigator.mediaDevices.getUserMedia({ audio: true });
@@ -54,7 +53,6 @@ export default function ConverstationWithAI({
     [status],
   );
 
-  console.log(status);
   return (
     <div className="flex h-full w-full flex-col items-center justify-between py-20">
       <div className="mb-[20rem] flex w-full grow flex-col items-center justify-center pb-20">
@@ -74,10 +72,10 @@ export default function ConverstationWithAI({
       <div className="mt-auto flex w-full items-center justify-center gap-6">
         <ActionButton
           title="Start Conversation"
-          isRecording={isSpeaking}
+          isRecording={status === "connected"}
           onClick={handleStartConversation}
         >
-          {!isSpeaking ? (
+          {status !== "connected" ? (
             <MicOff className="scale-[1.4] text-red-500" />
           ) : (
             <Mic className="text-darker scale-[1.4]" />

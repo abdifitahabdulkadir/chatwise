@@ -3,10 +3,16 @@
 import ChatsModel from "@/database/chat.model";
 import ChatTitleModel from "@/database/chatttile.model";
 import mongoose from "mongoose";
+import { revalidatePath } from "next/cache";
 import { z } from "zod";
 import { actionHandler } from "../action-handler";
 import handleError from "../error-handler";
-import { GetAllChatsSchema, StoreChatSchema } from "../validations";
+import {
+  DeleteChatTitleShcema,
+  GetAllChatsSchema,
+  RenameChatTitleSchema,
+  StoreChatSchema,
+} from "../validations";
 
 export async function storeChat(
   params: StoreChatParams,
@@ -116,5 +122,81 @@ export async function getChats(
     return { success: true, data: JSON.parse(JSON.stringify(chats)) };
   } catch (error) {
     return handleError("server", error) as ErrorResponse;
+  }
+}
+
+export async function renameChatTitle(params: RenameChatTitleParams) {
+  const validationResult = await actionHandler({
+    params: params,
+    schema: RenameChatTitleSchema,
+    authorize: true,
+  });
+
+  if (validationResult instanceof Error)
+    return handleError("server", validationResult) as ErrorResponse;
+
+  const { chatTitleId, newTitile, currentPath } = params;
+  const userId = validationResult?.session?.user?.id;
+
+  try {
+    const updatedTittle = await ChatTitleModel.findOneAndUpdate(
+      {
+        userId,
+        chatId: chatTitleId,
+      },
+      {
+        title: newTitile,
+      },
+    );
+    if (!updatedTittle)
+      throw new Error("Failed to update the title try again.");
+    revalidatePath(currentPath);
+    return {
+      success: true,
+    };
+  } catch (error) {
+    return handleError("server", error) as ErrorResponse;
+  }
+}
+
+// deleting the chat seessin
+export async function deleteChatSession(params: DeleteChatTitleParams) {
+  const validationResult = await actionHandler({
+    params: params,
+    schema: DeleteChatTitleShcema,
+    authorize: true,
+  });
+
+  if (validationResult instanceof Error)
+    return handleError("server", validationResult) as ErrorResponse;
+
+  const { chatTitleId, currentPath } = params;
+  const userId = validationResult?.session?.user?.id;
+  const session = await mongoose.startSession();
+  session.startTransaction();
+
+  try {
+    const title = await ChatTitleModel.deleteOne(
+      {
+        userId,
+        chatId: chatTitleId,
+      },
+      { session },
+    );
+
+    // delete all titles
+    await ChatsModel.deleteMany({
+      chatId: chatTitleId,
+    });
+    await session.commitTransaction();
+    revalidatePath(currentPath);
+    return {
+      success: true,
+    };
+  } catch (error) {
+    await session.abortTransaction();
+    return handleError("server", error) as ErrorResponse;
+  } finally {
+    await session.endSession();
   }
 }

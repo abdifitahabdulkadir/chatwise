@@ -39,7 +39,7 @@ export default function ChatInput({
   return (
     <div
       className={cn(
-        "bg-medium-gray absolute bottom-5 left-[50%] z-40 mt-6 flex h-fit w-[90%] -translate-x-[50%] transform items-center justify-center",
+        "bg-medium-gray absolute bottom-0 left-[50%] z-40 mt-6 flex h-fit w-[90%] -translate-x-[50%] transform items-center justify-center py-5",
       )}
     >
       <form

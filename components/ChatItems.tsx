@@ -21,15 +21,15 @@ export default function RenderContent({
 export function UserChatItem({ content }: { content: string }) {
   return (
     <div className="flex w-full items-center justify-end">
-      <div className="mx-4 flex w-full items-center justify-end md:w-[70%]">
-        <div className="bg-dark-gray/50 grid w-fit grid-cols-[5%_1fr] items-center gap-2 rounded-3xl px-5 py-5 pl-5">
+      <div className="mx-4 flex w-full items-center justify-end">
+        <div className="bg-dark-gray/50 inline-flex items-center gap-x-4 rounded-3xl px-4 py-5">
           <Image
             src={"/icons/user.svg"}
             alt="user icon"
             width={30}
             height={30}
             quality={100}
-            className="object-contain"
+            className="h-[30px] w-[30px] object-contain"
           />
           <p className="text-md leading-6 font-normal text-wrap text-white">
             {content}

@@ -72,3 +72,14 @@ export const StoreChatSchema = z.object({
 export const GetAllChatsSchema = z.object({
   chatId: z.string().min(1, "Title Id is required"),
 });
+
+export const RenameChatTitleSchema = z.object({
+  chatTitleId: z.string().min(1, { message: "Chat title id is required" }),
+  newTitile: z
+    .string()
+    .min(1, { message: " the New title is required to rename" }),
+  currentPath: z.string().min(1, "The current Path is required"),
+});
+export const DeleteChatTitleShcema = RenameChatTitleSchema.omit({
+  newTitile: true,
+});

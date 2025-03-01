@@ -1,31 +1,44 @@
 "use client";
+import { deleteChatSession } from "@/lib/actions/chat.action";
 import { cn } from "@/lib/utils";
 import { DropdownMenuItem } from "@radix-ui/react-dropdown-menu";
 import { motion } from "framer-motion";
 import { Ellipsis } from "lucide-react";
 import { useParams, useRouter } from "next/navigation";
-import React, { useState } from "react";
 import DropDownMenu from "./DropDownMenu";
 import ImageIcon from "./shared/ImageIcon";
 
 interface SideBarItemPros {
   text: string;
   chatId: string;
+  isEditing: boolean;
+  changeText: (value: React.ChangeEvent<HTMLInputElement>) => void;
+  handleSubmit: (e: React.FormEvent<HTMLFormElement>) => void;
+  input: string;
+  toggle: ({
+    chatTitleId,
+    newTitle,
+  }: {
+    chatTitleId: string;
+    newTitle: string;
+  }) => void;
+  disable: boolean;
 }
 
-export default function SidebarItem({ chatId, text }: SideBarItemPros) {
-  const [isEditing, setIsEditing] = useState(false);
-  const [input, setInput] = useState(text);
+export default function SidebarItem({
+  chatId,
+  handleSubmit,
+  isEditing,
+  changeText,
+  text,
+  input,
+  disable,
+  toggle,
+}: SideBarItemPros) {
   const router = useRouter();
   const params = useParams();
+
   const currentActive = localStorage.getItem("selectedSidebarItem");
-  const toggle = () => setIsEditing((prev) => !prev);
-  const changeText = (value: React.ChangeEvent<HTMLInputElement>) =>
-    setInput(value.target.value);
-  const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
-    e.preventDefault();
-    toggle();
-  };
 
   function hanleSelectedSidebar() {
     const current = localStorage.getItem("selectedSidebarItem");
@@ -39,7 +52,7 @@ export default function SidebarItem({ chatId, text }: SideBarItemPros) {
 
   return (
     <div
-      onClick={hanleSelectedSidebar}
+      onClick={disable ? () => {} : hanleSelectedSidebar}
       className={cn(
         "bg-light-darker/4 hover:bg-opacity-90 grid h-fit w-full cursor-pointer grid-cols-[1fr_8fr_1fr_1fr] items-center gap-1.5 rounded-md border-none px-1 py-3 pl-2 text-white transition-all duration-300",
         !isEditing && "hover:bg-light-gray/30",
@@ -62,12 +75,13 @@ export default function SidebarItem({ chatId, text }: SideBarItemPros) {
             y: 0,
             opacity: 1,
           }}
-          onSubmit={handleSubmit}
+          onSubmit={(e) => handleSubmit(e)}
           className="col-span-full"
         >
           <input
-            title="title  change input"
+            title="title change input"
             autoFocus
+            disabled={disable}
             value={input}
             onClick={(e) => e.stopPropagation()}
             onChange={changeText}
@@ -79,7 +93,7 @@ export default function SidebarItem({ chatId, text }: SideBarItemPros) {
         </motion.form>
       )}
       {!isEditing && (
-        <p className="line-clamp-1 h-fit text-[0.8rem] font-normal text-wrap">
+        <p className="line-clamp-1 h-fit text-[0.9rem] font-normal text-wrap">
           {text}
         </p>
       )}
@@ -89,12 +103,28 @@ export default function SidebarItem({ chatId, text }: SideBarItemPros) {
           trigger={<Ellipsis className="ml-auto cursor-pointer" />}
         >
           <DropdownMenuItem
-            onClick={toggle}
+            disabled={disable}
+            onClick={(e) => {
+              e.stopPropagation();
+              toggle({ chatTitleId: chatId, newTitle: text });
+            }}
             className="hover:bg-medium-gray/50 flex cursor-pointer items-center gap-2 rounded-sm px-2 py-2 transition-all duration-200 hover:border-none hover:outline-hidden"
           >
             <span className="text-sm font-normal">Edit the Title</span>
           </DropdownMenuItem>
-          <DropdownMenuItem className="hover:bg-medium-gray/50 flex cursor-pointer items-center gap-2 rounded-sm px-2 py-2 transition-all duration-200 hover:border-none hover:outline-hidden">
+          <DropdownMenuItem
+            onClick={async (e) => {
+              e.stopPropagation();
+              await deleteChatSession({
+                chatTitleId: chatId,
+                currentPath: "/chat",
+              });
+              if (chatId === localStorage.getItem("selectedSidebarItem")) {
+                localStorage.removeItem("selectedSidebarItem");
+              }
+            }}
+            className="hover:bg-medium-gray/50 flex cursor-pointer items-center gap-2 rounded-sm px-2 py-2 transition-all duration-200 hover:border-none hover:outline-hidden"
+          >
             <span className="text-sm font-normal">Delete The Chat</span>
           </DropdownMenuItem>
         </DropDownMenu>

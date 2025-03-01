@@ -42,6 +42,13 @@ interface PreviousChatPros {
   role: string;
 }
 
+interface RenameChatTitleParams {
+  chatTitleId: string;
+  newTitile: string;
+  currentPath: string;
+}
+type DeleteChatTitleParams = Omit<RenameChatTitleParams, "newTitile">;
+
 interface RenderActiveProps extends PreviousChatPros {
   isLoading: boolean;
 }
