@@ -72,11 +72,13 @@ export default function ChatLists({ children }: ChatListPros) {
   function formSubmitHandler(
     event?: { preventDefault?: (() => void) | undefined } | undefined,
   ) {
+    if (!session) return;
     setIsFinish(false);
     handleSubmit(event);
   }
 
   function handlestartVoice() {
+    if (!session) return;
     setStartVoice((prev) => !prev);
     toggle();
   }
@@ -170,7 +172,7 @@ export default function ChatLists({ children }: ChatListPros) {
             inputValue={input}
           />
 
-          {showScrollToBottomIcon && (
+          {showScrollToBottomIcon && children !== undefined && (
             <ScrollToDownButton onClick={scrolloToBottom} />
           )}
         </>

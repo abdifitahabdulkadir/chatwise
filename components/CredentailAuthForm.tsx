@@ -46,6 +46,7 @@ export default function CredentialAuthForm<T extends FieldValues>({
             ? "Signed up successfully"
             : "Signed In successfully",
       });
+
       router.push("/");
     } else {
       toast({

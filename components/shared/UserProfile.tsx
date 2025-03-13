@@ -4,11 +4,12 @@ import { DropdownMenuItem } from "@radix-ui/react-dropdown-menu";
 import { LogOut, Settings } from "lucide-react";
 import { signOut, useSession } from "next-auth/react";
 import Image from "next/image";
+import { useRouter } from "next/navigation";
 import DropDownMenu from "../DropDownMenu";
 
 export default function UserProfile() {
   const { data } = useSession();
-
+  const router = useRouter();
   return (
     <div className="hover:bg-light-gray/30 hover:bg-opacity-90 border-light-gray/50 flex cursor-pointer items-center gap-2 rounded-sm border px-4 py-2 text-left text-xs text-white shadow-none lg:text-sm">
       {data === null ||
@@ -43,6 +44,7 @@ export default function UserProfile() {
           <DropdownMenuItem
             onClick={async () => {
               await signOut();
+              router.replace("/auth/signin");
             }}
             className="hover:bg-medium-gray/50 flex cursor-pointer items-center gap-2 rounded-sm px-2 py-1 transition-all duration-200 hover:border-none hover:outline-hidden"
           >

@@ -13,11 +13,16 @@ interface MainProps {
 }
 export default function Main({ children, sidebarLists }: MainProps) {
   const router = useRouter();
+
   useEffect(() => {
-    const current = window.localStorage.getItem("selectedSidebarItem");
-    if (current) {
-      router.replace(`/chat/${current}`, { scroll: false });
-    }
+    (async () => {
+      if (typeof window !== undefined) {
+        const current = localStorage.getItem("selectedSidebarItem");
+        if (current) {
+          router.replace(`/chat/${current}`, { scroll: false });
+        }
+      }
+    })();
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
   return (
