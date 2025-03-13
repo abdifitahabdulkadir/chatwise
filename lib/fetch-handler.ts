@@ -1,8 +1,10 @@
-import { RequestError } from "./http-erros";
 import handleError from "./error-handler";
+import { RequestError } from "./http-erros";
 
 interface FetchOptions extends RequestInit {
   timeout?: number;
+  maxRetries?: number;
+  retryDelay?: number;
 }
 
 export async function fetchHandler<T>(
@@ -11,6 +13,8 @@ export async function fetchHandler<T>(
 ): Promise<ActionResponse<T>> {
   const {
     timeout = 10000,
+    maxRetries = 3,
+    retryDelay = 1000,
     headers: customHeaders = {},
     ...restOptions
   } = options;
