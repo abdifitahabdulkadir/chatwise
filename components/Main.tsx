@@ -1,4 +1,5 @@
 "use client";
+
 import { cn } from "@/lib/utils";
 import { useRouter } from "next/navigation";
 import { ReactNode, useEffect } from "react";
@@ -7,6 +8,7 @@ import ChatLists from "./ChatLists";
 import LeftSideBar from "./LeftSideBar";
 import NavBar from "./NavBar";
 import SideBarProvider from "./SidBarToggleProvider";
+
 interface MainProps {
   children: ReactNode | undefined;
   sidebarLists: ChatTitleI[];
