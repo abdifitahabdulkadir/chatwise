@@ -176,7 +176,7 @@ export async function deleteChatSession(params: DeleteChatTitleParams) {
   session.startTransaction();
 
   try {
-    const title = await ChatTitleModel.deleteOne(
+    await ChatTitleModel.deleteOne(
       {
         userId,
         chatId: chatTitleId,

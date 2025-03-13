@@ -5,6 +5,7 @@ import { DropdownMenuItem } from "@radix-ui/react-dropdown-menu";
 import { motion } from "framer-motion";
 import { Ellipsis } from "lucide-react";
 import { useParams, useRouter } from "next/navigation";
+import { useEffect, useState } from "react";
 import DropDownMenu from "./DropDownMenu";
 import ImageIcon from "./shared/ImageIcon";
 
@@ -37,8 +38,14 @@ export default function SidebarItem({
 }: SideBarItemPros) {
   const router = useRouter();
   const params = useParams();
+  const [currentActiveItem, setCurrentActiveItem] = useState("");
 
-  const currentActive = localStorage.getItem("selectedSidebarItem");
+  useEffect(function () {
+    if (typeof window !== undefined) {
+      const currentActive = localStorage.getItem("selectedSidebarItem");
+      setCurrentActiveItem(currentActive ?? "");
+    }
+  }, []);
 
   function hanleSelectedSidebar() {
     const current = localStorage.getItem("selectedSidebarItem");
@@ -56,7 +63,7 @@ export default function SidebarItem({
       className={cn(
         "bg-light-darker/4 hover:bg-opacity-90 grid h-fit w-full cursor-pointer grid-cols-[1fr_8fr_1fr_1fr] items-center gap-1.5 rounded-md border-none px-1 py-3 pl-2 text-white transition-all duration-300",
         !isEditing && "hover:bg-light-gray/30",
-        currentActive === chatId && "bg-light-gray/30",
+        currentActiveItem === chatId && "bg-light-gray/30",
       )}
     >
       {!isEditing && (

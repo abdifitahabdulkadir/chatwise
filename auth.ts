@@ -21,9 +21,9 @@ export const { handlers, auth, signIn, signOut } = NextAuth({
       },
       async authorize(credentials) {
         const validate = SignInSchema.safeParse(credentials);
+
         if (validate.success) {
           const { email, password } = validate.data;
-
           const { data: existedUserAccount, success: accountSuccess } =
             await API.accounts.getProviderByProviderAccountId(email);
 
