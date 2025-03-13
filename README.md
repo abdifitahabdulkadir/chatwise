@@ -1,5 +1,7 @@
 # Chatwise
 
+<img src="https://github.com/abdifitahabdulkadir/chatwise/blob/main/chatwise.png" alt="easymart image" style="width: 100%; height: 500px; margin: 20px auto; display: block;" />
+
 ## 📝 Description
 ChatWise is an intelligent AI-powered platform for seamless conversations, brainstorming, and problem-solving. Explore ideas, ask questions, and get insights instantly.
 [](https://ibb.co/xgMzfx1)
