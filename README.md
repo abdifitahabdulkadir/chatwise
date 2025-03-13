@@ -1,36 +1,81 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# Chatwise
 
-## Getting Started
+## 📝 Description
+ChatWise is an intelligent AI-powered platform for seamless conversations, brainstorming, and problem-solving. Explore ideas, ask questions, and get insights instantly.
+[](https://ibb.co/xgMzfx1)
 
-First, run the development server:
+## 🚀 Technogies
+Here are Technogies used for building this project.
+## 🚀 Technogies
+
+Here are Technogies used for building this project.
+
+![NPM Version](https://img.shields.io/npm/v/next?style=for-the-badge&logoColor=blue&logoSize=100&label=Nextjs&labelColor=%22%234A4947%22&color=black)
+
+![NPM Version](https://img.shields.io/npm/v/react?style=for-the-badge&logoColor=blue&logoSize=100&label=Reactjs&labelColor=227B94&color=black)
+
+![NPM Version](https://img.shields.io/npm/v/typescript?style=for-the-badge&logoColor=blue&logoSize=100&label=Typescript&labelColor=08C2FF&color=black)
+
+![NPM Version](https://img.shields.io/npm/v/tailwindcss?style=for-the-badge&logoColor=blue&logoSize=100&label=Tailwing.css&labelColor=0a83c9&color=black)
+
+![NPM Version](https://img.shields.io/npm/v/framer-motion?style=for-the-badge&logoColor=blue&logoSize=100&label=Frame%20motion&labelColor=0a83c9&color=black)
+
+
+![NPM Version](https://img.shields.io/npm/v/%40google%2Fgenerative-ai?style=for-the-badge&logoColor=blue&logoSize=100&label=Google%20Gemmini%20Ai&color=blue)
+
+![NPM Version](https://img.shields.io/npm/v/%4011labs%2Freact?style=for-the-badge&logoColor=blue&logoSize=100&label=ElevenLabs%20React%20SDK&color=blue)
+
+
+## 🌐 Demo
+
+Here is a working live demo:  https://chatwise1.vercel.app/
+
+## 🛠️ Setup Project
+
+### 🍴 Prerequisites
+
+You need to install or make sure that these tools are pre-installed on your machine:
+
+- [NodeJS](https://nodejs.org/en/download/): It is a JavaScript runtime build.
+- [Git](https://git-scm.com/downloads): It is an open source version control system.
+
+Clone the project
 
 ```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
+  https://github.com/abdifitahabdulkadir/chatwise.git
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+Go to the project directory
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+```bash
+  cd chatwise
+```
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+Install dependencies
+```bash
+  npm install
+```
 
-## Learn More
+Start the server
 
-To learn more about Next.js, take a look at the following resources:
+```bash
+  npm run dev
+```
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+## 🤔 FAQ
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+### Is this proejct open source?
 
-## Deploy on Vercel
+Yes, It is open source project , feel free to contribute, clone and even learn by your own self.
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+### Is this project finished or still in process?
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+It is still in development, lacking a lot of features which will be soon in coming weeks and months.
+
+### Can I use this project for my own?
+
+No, you cannot use this project entirely for your own purposes. However, feel free to contribute, and if you use it, please provide proper credit and respect the copyright.
+
+## 📋 License
+
+This is project is under MIT License.
