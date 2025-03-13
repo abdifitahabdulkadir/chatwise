@@ -21,7 +21,7 @@ export const API = {
       });
     },
     async getProviderByProviderAccountId(providerAccountId: string) {
-      console.log(BASE_URL);
+      console.log("Base url is : ", BASE_URL);
       const result = await fetchHandler<AccountI>(
         `${BASE_URL}/auth/accounts/providerAccountId`,
         {

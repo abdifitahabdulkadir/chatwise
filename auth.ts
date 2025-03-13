@@ -26,7 +26,7 @@ export const { handlers, auth, signIn, signOut } = NextAuth({
           const { email, password } = validate.data;
           const { data: existedUserAccount, success: accountSuccess } =
             await API.accounts.getProviderByProviderAccountId(email);
-
+          console.log("existed user account", existedUserAccount);
           if (!accountSuccess) throw new InvalidLoginError(message);
 
           const { data: existedUser, success: userSuccess } =
