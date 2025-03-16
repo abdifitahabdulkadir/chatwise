@@ -7,13 +7,13 @@ import { useChat } from "@ai-sdk/react";
 import { useSession } from "next-auth/react";
 import { useParams } from "next/navigation";
 import { ReactNode, useEffect, useRef, useState } from "react";
+import { v4 as uuid } from "uuid";
 import ChatInput from "./ChatInput";
 import RenderContent from "./ChatItems";
 import ConverstationWithAI from "./ConverstationWithAI";
 import EmptyChats from "./EmptyChats";
 import ScrollToDownButton from "./ScrollToDownButton";
 import { useSidebarProvider } from "./SidBarToggleProvider";
-
 interface ChatListPros {
   children: ReactNode | undefined;
 }
@@ -25,6 +25,10 @@ export default function ChatLists({ children }: ChatListPros) {
   const [isFinish, setIsFinish] = useState(false);
   const [startVoice, setStartVoice] = useState(false);
   const session = useSession();
+  const currentParamId = String(
+    Array.isArray(params.id) ? (params.id[1] ?? "") : (params.id ?? ""),
+  );
+  const uniqueId = currentParamId.length < 36 ? uuid() : currentParamId;
   const [showScrollToBottomIcon, setShowScrollToBottomIcon] = useState(false);
   const {
     messages,
@@ -38,7 +42,7 @@ export default function ChatLists({ children }: ChatListPros) {
       addToSidebar([
         {
           title: input,
-          chatId: String(Array.isArray(params.id) ? params.id[1] : params.id),
+          chatId: uniqueId,
           userId: session.data?.user?.id,
         },
       ]);
@@ -48,7 +52,7 @@ export default function ChatLists({ children }: ChatListPros) {
       setMessage({
         content: message.content,
         role: message.role,
-        titleId: String(Array.isArray(params.id) ? params.id[1] : params.id),
+        titleId: uniqueId,
         question: input,
       });
     },
@@ -105,7 +109,6 @@ export default function ChatLists({ children }: ChatListPros) {
         answer: message.content,
         role: message.role == "user" ? "user" : "system",
       });
-
       if (!result.success) {
         toast({
           title: "Failed to Store Chat",

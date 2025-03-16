@@ -30,7 +30,7 @@ export default function Main({ children, sidebarLists }: MainProps) {
   return (
     <SideBarProvider>
       <main className="bg-medium-gray flex min-h-screen w-full items-center justify-center">
-        <NavBar />
+        <NavBar sidebarLists={sidebarLists} />
         <section
           className={cn(
             "grid w-full flex-1 grid-cols-[15rem_1fr] overflow-hidden max-md:grid-cols-1",

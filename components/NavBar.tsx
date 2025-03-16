@@ -6,12 +6,15 @@ import { usePathname } from "next/navigation";
 import MobileSidebar from "./MobileSidebar";
 import { useSidebarProvider } from "./SidBarToggleProvider";
 
-export default function NavBar() {
+interface Props {
+  sidebarLists?: ChatTitleI[];
+}
+export default function NavBar({ sidebarLists }: Props) {
   const { toggle } = useSidebarProvider();
   const pathName = usePathname();
   return (
     <div className="fixed top-0 z-50 flex h-[6vh] w-full items-center justify-between gap-2 bg-transparent px-2 py-6 pb-2">
-      <MobileSidebar />
+      <MobileSidebar sidebarLists={sidebarLists} />
       <PanelLeft
         onClick={toggle}
         className="mt-1 ml-2 size-[30px] cursor-pointer text-white transition-all duration-300 hover:scale-[1.1] max-md:hidden"

@@ -3,7 +3,6 @@
 import { auth } from "@/auth";
 import { Session } from "next-auth";
 import { ZodError, ZodSchema } from "zod";
-import dbConnect from "./dbconnection";
 import { UnauthorizedError, ValidationError } from "./http-erros";
 
 type ActionOptions<T> = {
@@ -39,6 +38,5 @@ export async function actionHandler<T>({
     }
   }
 
-  await dbConnect();
   return { params, session };
 }

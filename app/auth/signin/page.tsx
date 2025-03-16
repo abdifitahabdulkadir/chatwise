@@ -1,6 +1,6 @@
 "use client";
 import CredentailAuthForm from "@/components/CredentailAuthForm";
-import { signInWithCredentials } from "@/lib/actions/crendetial.action";
+import { signInWithCredentials } from "@/lib/actions/auth.action";
 import { SignInSchema } from "@/lib/validations";
 
 export default function SignInPage() {

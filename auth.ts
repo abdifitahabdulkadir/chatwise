@@ -3,8 +3,8 @@ import NextAuth, { CredentialsSignin } from "next-auth";
 import Credentials from "next-auth/providers/credentials";
 import GitHub from "next-auth/providers/github";
 import Google from "next-auth/providers/google";
-import { API } from "./lib/api";
 import { SignInSchema } from "./lib/validations";
+import prisma from "./prisma";
 
 const message = "Invalid Crendentials, Please check your email and password";
 class InvalidLoginError extends CredentialsSignin {
@@ -24,25 +24,31 @@ export const { handlers, auth, signIn, signOut } = NextAuth({
 
         if (validate.success) {
           const { email, password } = validate.data;
-          const { data: existedUserAccount, success: accountSuccess } =
-            await API.accounts.getProviderByProviderAccountId(email);
-          console.log("existed user account", existedUserAccount);
-          if (!accountSuccess) throw new InvalidLoginError(message);
+          const existedAccount = await prisma.account.findFirst({
+            where: {
+              providerAccountId: email,
+            },
+          });
 
-          const { data: existedUser, success: userSuccess } =
-            await API.users.getUserById(String(existedUserAccount?.userId));
+          if (!existedAccount) throw new InvalidLoginError(message);
 
-          if (!userSuccess) throw new InvalidLoginError(message);
+          const existedUser = await prisma.user.findFirst({
+            where: {
+              id: existedAccount.userId,
+            },
+          });
+
+          if (!existedUser) throw new InvalidLoginError(message);
 
           const verifyPassword = bycrpt.compare(
             password,
-            existedUserAccount?.password ?? "",
+            existedAccount?.password ?? "",
           );
 
           if (!verifyPassword) throw new InvalidLoginError(message);
 
           return {
-            id: String(existedUserAccount?.userId),
+            id: String(existedAccount?.userId),
             name: existedUser?.name ?? "",
             email,
             image: existedUser?.image ?? null,
@@ -65,33 +71,85 @@ export const { handlers, auth, signIn, signOut } = NextAuth({
     async signIn({ user, account }) {
       if (account?.type === "credentials") return true;
       if (!account || !user) return false;
+
       const userInfo = {
         name: user.name!,
         email: user.email!,
         image: user.image!,
       };
+      try {
+        await prisma.$transaction(async (prismaTransactionClient) => {
+          // if user is already existed.
 
-      const { success } = await API.auth.authenticateWithOAuth({
-        user: {
-          email: userInfo.email,
-          name: userInfo.name,
-          image: userInfo.image,
-        },
-        provider: account.provider as "github" | "google",
-        providerAccountId: account.providerAccountId,
-      });
+          let userExisited = await prismaTransactionClient.user.findFirst({
+            where: {
+              email: userInfo.email,
+            },
+          });
 
-      if (!success) return false;
-      return true;
+          // otherwise, create if user is new user.
+          if (!userExisited) {
+            userExisited = await prismaTransactionClient.user.create({
+              data: {
+                name: userInfo.name,
+                email: userInfo.email,
+                image: userInfo.image,
+              },
+            });
+          }
+
+          // user existed, update name and image to reflect latest user
+          // info in our  app
+          else {
+            await prismaTransactionClient.user.update({
+              where: {
+                id: userExisited.id,
+              },
+              data: {
+                name: userInfo.name,
+                image: userInfo.image,
+              },
+            });
+          }
+
+          // find account that asssociates with user (if any)
+          const userAccount = await prismaTransactionClient.account.findFirst({
+            where: {
+              userId: userExisited.id,
+              provider: account.provider as "github" | "google",
+              providerAccountId: account.providerAccountId,
+            },
+          });
+
+          if (!userAccount) {
+            await prismaTransactionClient.account.create({
+              data: {
+                userId: userExisited.id,
+                name: userInfo.name,
+                image: userInfo.image,
+                provider: account.provider as "github" | "google",
+                providerAccountId: account.providerAccountId,
+              },
+            });
+          }
+        });
+
+        return true;
+      } catch (err) {
+        return false;
+      }
     },
 
     // modify jwt then will be avalaible in the session.
     async jwt({ token, account }) {
       if (account) {
-        const { data: accountHolderData, success } =
-          await API.accounts.getProviderById(account.providerAccountId);
-        if (!success) return token;
-        token.sub = String(accountHolderData?.userId);
+        const existedAccount = await prisma.account.findFirst({
+          where: {
+            providerAccountId: account.providerAccountId,
+          },
+        });
+        if (!existedAccount) return token;
+        token.sub = String(existedAccount?.userId);
       }
       return token;
     },

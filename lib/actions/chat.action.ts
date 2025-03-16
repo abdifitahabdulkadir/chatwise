@@ -1,12 +1,11 @@
 "use server";
 
-import ChatsModel from "@/database/chat.model";
-import ChatTitleModel from "@/database/chatttile.model";
-import mongoose from "mongoose";
 import { revalidatePath } from "next/cache";
 import { z } from "zod";
 import { actionHandler } from "../action-handler";
 import handleError from "../error-handler";
+
+import prisma from "@/prisma";
 import {
   DeleteChatTitleShcema,
   GetAllChatsSchema,
@@ -27,54 +26,59 @@ export async function storeChat(
     return handleError("server", validateResult) as ErrorResponse;
   }
 
-  const session = await mongoose.startSession();
-  session.startTransaction();
-
   const { question, answer, chatId } = params;
   const userId = validateResult.session?.user?.id;
+  if (!userId)
+    return handleError(
+      "server",
+      new Error("Authenticated User can only do this operation"),
+    ) as ErrorResponse;
   try {
-    let currentTitle = await ChatTitleModel.findOne({ chatId }).session(
-      session,
-    );
-    const message = [
+    const buildChat = [
       {
         content: question,
         role: "user",
-        chatId,
+        chatId: chatId!,
       },
       {
         content: answer,
         role: "system",
-        chatId,
+        chatId: chatId!,
       },
     ];
-    if (!currentTitle) {
-      [currentTitle, ,] = await Promise.all([
-        ChatTitleModel.create(
-          [
-            {
-              userId,
-              title: question,
-              chatId,
-            },
-          ],
-          { session },
-        ),
-        ChatsModel.create([...message], { session }),
-      ]);
-    } else {
-      const chatMessage = await ChatsModel.create([...message], { session });
-      if (!chatMessage) throw new Error("Failed to store chat message");
-    }
+    return await prisma.$transaction(async (currentTransactionClient) => {
+      //find if chatid is already existed
+      const currentTitle = await currentTransactionClient.chat.findFirst({
+        where: {
+          chatId: chatId,
+        },
+      });
 
-    await session.commitTransaction();
+      //if not, create new chat title with given chat Id
+      if (!currentTitle) {
+        await currentTransactionClient.titles.create({
+          data: {
+            title: question,
+            chatId: chatId!,
+            userId: userId!,
+          },
+        });
 
-    return { success: true, data: JSON.parse(JSON.stringify(currentTitle)) };
+        // also add current chat under newly created chat title
+        await currentTransactionClient.chat.createMany({
+          data: buildChat,
+        });
+      } else {
+        // if chat title existed, then only append
+        //current message to its messages.
+        await currentTransactionClient.chat.createMany({
+          data: buildChat,
+        });
+      }
+      return { success: true };
+    });
   } catch (error) {
-    await session.abortTransaction();
     return handleError("server", error) as ErrorResponse;
-  } finally {
-    await session.endSession();
   }
 }
 
@@ -90,8 +94,13 @@ export async function getChatSidebarTitles(): Promise<
 
   try {
     const userId = validateResult.session?.user?.id;
-    const titles = await ChatTitleModel.find({ userId }).sort({
-      _id: -1,
+    const titles = await prisma.titles.findMany({
+      where: {
+        userId,
+      },
+      orderBy: {
+        id: "desc",
+      },
     });
 
     return { success: true, data: JSON.parse(JSON.stringify(titles)) };
@@ -117,7 +126,14 @@ export async function getChats(
 
     if (!chatId) return { success: true, data: undefined };
 
-    const chats = await ChatsModel.find({ chatId }).sort({ _id: 1 });
+    const chats = await prisma.chat.findMany({
+      where: {
+        chatId,
+      },
+      orderBy: {
+        id: "asc",
+      },
+    });
     if (!chats || chats.length === 0) return { success: true, data: undefined };
     return { success: true, data: JSON.parse(JSON.stringify(chats)) };
   } catch (error) {
@@ -139,15 +155,16 @@ export async function renameChatTitle(params: RenameChatTitleParams) {
   const userId = validationResult?.session?.user?.id;
 
   try {
-    const updatedTittle = await ChatTitleModel.findOneAndUpdate(
-      {
-        userId,
+    if (userId) throw new Error("Authenticated users are allowed to rename ");
+    const updatedTittle = await prisma.titles.update({
+      where: {
+        userId: userId!,
         chatId: chatTitleId,
       },
-      {
+      data: {
         title: newTitile,
       },
-    );
+    });
     if (!updatedTittle)
       throw new Error("Failed to update the title try again.");
     revalidatePath(currentPath);
@@ -172,31 +189,29 @@ export async function deleteChatSession(params: DeleteChatTitleParams) {
 
   const { chatTitleId, currentPath } = params;
   const userId = validationResult?.session?.user?.id;
-  const session = await mongoose.startSession();
-  session.startTransaction();
 
   try {
-    await ChatTitleModel.deleteOne(
-      {
-        userId,
-        chatId: chatTitleId,
-      },
-      { session },
-    );
+    return await prisma.$transaction(async (currentTxClient) => {
+      // delete all chats first,
+      await currentTxClient.chat.deleteMany({
+        where: {
+          chatId: chatTitleId,
+        },
+      });
+      // delete the title
+      await currentTxClient.titles.delete({
+        where: {
+          userId,
+          chatId: chatTitleId,
+        },
+      });
 
-    // delete all titles
-    await ChatsModel.deleteMany({
-      chatId: chatTitleId,
+      revalidatePath(currentPath);
+      return {
+        success: true,
+      };
     });
-    await session.commitTransaction();
-    revalidatePath(currentPath);
-    return {
-      success: true,
-    };
   } catch (error) {
-    await session.abortTransaction();
     return handleError("server", error) as ErrorResponse;
-  } finally {
-    await session.endSession();
   }
 }

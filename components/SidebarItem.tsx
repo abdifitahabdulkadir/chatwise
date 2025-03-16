@@ -45,8 +45,6 @@ export default function SidebarItem({
     if (current === chatId && String(params?.id) === chatId) {
       return;
     }
-
-    console.log("chatid i have ", chatId);
     localStorage.removeItem("selectedSidebarItem");
     localStorage.setItem("selectedSidebarItem", chatId);
     router.push(`/chat/${chatId}`);
