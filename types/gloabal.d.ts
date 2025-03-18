@@ -27,9 +27,10 @@ interface AccountI {
 
 interface StoreChatParams {
   question: string;
-  answer: string;
-  role: "system" | "user";
+  answer?: string;
+  role?: "system" | "user";
   chatId?: string;
+  userId: string | undefined;
 }
 
 interface PageRouteParams {

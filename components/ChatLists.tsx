@@ -1,67 +1,56 @@
 "use client";
 
-import { toast } from "@/hooks/use-toast";
-import { storeChat } from "@/lib/actions/chat.action";
-import { cn } from "@/lib/utils";
-import { useChat } from "@ai-sdk/react";
-import { useSession } from "next-auth/react";
+import { useAIChat } from "@/hooks/useAIChat";
+import { useChats } from "@/hooks/useChat";
+import { cn, extractParamId, isNewChat } from "@/lib/utils";
+import { Session } from "next-auth";
 import { useParams } from "next/navigation";
-import { ReactNode, useEffect, useRef, useState } from "react";
-import { v4 as uuid } from "uuid";
+import { useEffect, useRef, useState } from "react";
 import ChatInput from "./ChatInput";
 import RenderContent from "./ChatItems";
 import ConverstationWithAI from "./ConverstationWithAI";
 import EmptyChats from "./EmptyChats";
 import ScrollToDownButton from "./ScrollToDownButton";
 import { useSidebarProvider } from "./SidBarToggleProvider";
-interface ChatListPros {
-  children: ReactNode | undefined;
+import { SystemItemSkelton, UserItemSkelton } from "./Skeltons";
+interface Props {
+  session: Session;
 }
-
-export default function ChatLists({ children }: ChatListPros) {
+export default function ChatLists({ session }: Props) {
   const messageParentRef = useRef<HTMLDivElement | null>(null);
-  const { isSidebarOpen, toggle, addToSidebar } = useSidebarProvider();
-  const params = useParams();
+  const { isSidebarOpen, toggle } = useSidebarProvider();
+  const params: Record<string, string> = useParams();
   const [isFinish, setIsFinish] = useState(false);
   const [startVoice, setStartVoice] = useState(false);
-  const session = useSession();
-  const currentParamId = String(
-    Array.isArray(params.id) ? (params.id[1] ?? "") : (params.id ?? ""),
-  );
-  const uniqueId = currentParamId.length < 36 ? uuid() : currentParamId;
+  let currentParamId = extractParamId(params);
+  const checkIsNewChat = isNewChat(params);
   const [showScrollToBottomIcon, setShowScrollToBottomIcon] = useState(false);
+  const { data, isLoading } = useChats({
+    currentParamId: currentParamId ?? "",
+    enabled: !checkIsNewChat && !!currentParamId,
+  });
+
+  const [question, setQuestion] = useState("");
+
   const {
-    messages,
     handleInputChange,
+    input,
     isLoading: isAIGenerating,
     handleSubmit,
-    input,
-  } = useChat({
-    api: "/api/chat",
-    onResponse() {
-      addToSidebar([
-        {
-          title: input,
-          chatId: uniqueId,
-          userId: session.data?.user?.id,
-        },
-      ]);
+    messages,
+  } = useAIChat({
+    data: {
+      question: question,
+      chatId: currentParamId!,
+      userId: session?.user?.id,
     },
-    onFinish(message) {
-      setIsFinish(true);
-      setMessage({
-        content: message.content,
-        role: message.role,
-        titleId: uniqueId,
-        question: input,
-      });
+    isNewChat: checkIsNewChat,
+    currentParamId: currentParamId ?? "",
+    newTitleItem: {
+      userId: session.user?.id,
+      chatId: currentParamId ?? "",
+      title: question,
     },
-  });
-  const [message, setMessage] = useState({
-    content: "",
-    role: "",
-    titleId: "",
-    question: "",
   });
   useEffect(
     function () {
@@ -97,29 +86,9 @@ export default function ChatLists({ children }: ChatListPros) {
     setShowScrollToBottomIcon(false);
   }
 
-  useEffect(() => {
+  useEffect(function () {
     scrolloToBottom();
-    if (!isFinish) return;
-    if (startVoice) return;
-
-    (async function saveData() {
-      const result = await storeChat({
-        question: message.question,
-        chatId: message.titleId,
-        answer: message.content,
-        role: message.role == "user" ? "user" : "system",
-      });
-      if (!result.success) {
-        toast({
-          title: "Failed to Store Chat",
-          description: "Failed to store chat, try again",
-          variant: "destructive",
-        });
-        return;
-      }
-    })();
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [isFinish]);
+  }, []);
 
   function scrolloToBottom() {
     const current = messageParentRef.current;
@@ -145,12 +114,33 @@ export default function ChatLists({ children }: ChatListPros) {
             className="main-scrollbar w-full overflow-x-clip overflow-y-auto pb-[7rem]"
           >
             <div className="mx-auto w-full max-w-5xl md:max-w-[80rem] md:px-20">
-              {!startVoice && !messages.length && !children && (
-                <EmptyChats className="h-screen max-h-[50vh]" />
-              )}
+              {!startVoice &&
+                !isLoading &&
+                !messages.length &&
+                !data?.data?.length && (
+                  <EmptyChats className="h-screen max-h-[50vh]" />
+                )}
 
               <div className="mx-auto mb-6 flex w-full flex-col items-center gap-4">
-                {children}
+                {isLoading &&
+                  Array.from({ length: 10 }, (_, index) => {
+                    return index % 2 === 0 ? (
+                      <UserItemSkelton key={index} />
+                    ) : (
+                      <SystemItemSkelton key={index} />
+                    );
+                  })}
+                {data &&
+                  !isLoading &&
+                  data?.data?.map(({ content, role }, index) => {
+                    return (
+                      <RenderContent
+                        key={index}
+                        content={content}
+                        role={role === "user" ? "user" : "system"}
+                      />
+                    );
+                  })}
                 {messages.length > 0 &&
                   messages?.map(({ content, role }, index) => {
                     return (
@@ -171,11 +161,14 @@ export default function ChatLists({ children }: ChatListPros) {
             handleRecordVoice={handlestartVoice}
             isLoading={isAIGenerating}
             handleFormSubmit={formSubmitHandler}
-            hanldeOnChange={handleInputChange}
+            hanldeOnChange={(e) => {
+              handleInputChange(e);
+              setQuestion(e.currentTarget.value);
+            }}
             inputValue={input}
           />
 
-          {showScrollToBottomIcon && children !== undefined && (
+          {showScrollToBottomIcon && data?.data?.length !== undefined && (
             <ScrollToDownButton onClick={scrolloToBottom} />
           )}
         </>

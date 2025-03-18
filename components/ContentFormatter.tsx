@@ -8,7 +8,7 @@ export default function ContentFormatter({ content }: { content: string }) {
   return (
     <Markdown
       className={cn(
-        "prose prose-sm prose-strong:text-white prose-ul:text-white/80 prose-ul:leading-8 prose-p:text-white prose-ol:font-normal prose-p:my-0 prose-p:py-0 prose-ul:font-normal prose-ol:text-white/80 prose-ol:my-0 prose-ol:py-0 prose-ul:py-0 prose-ul:my-0 prose-headings:text-white prose-a:text-blue-500 prose-table:mb-1.5 prose-tr:not-last:border-light-gray prose-tr:not-last:border-b-[.4px] prose-th:border-white/50 prose-th:border-b-[.6px] prose-table:text-white/70 mt-6 grid max-w-none text-[1rem] leading-10 break-words",
+        "prose prose-sm prose-strong:text-white prose-ul:text-white/80 prose-ul:leading-8 prose-p:text-white prose-ol:font-normal prose-p:my-0 prose-p:py-0 prose-ul:font-normal prose-ol:text-white/80 prose-ol:my-0 prose-ol:py-0 prose-ul:py-0 prose-ul:my-0 prose-headings:text-white prose-a:text-blue-500 prose-table:mb-1.5 prose-tr:not-last:border-light-gray prose-tr:not-last:border-b-[.4px] prose-th:border-white/50 prose-th:border-b-[.6px] prose-table:text-white/70 ml-2 grid max-w-none text-[1rem] leading-10 break-words",
       )}
       remarkPlugins={[remarkGfm]}
       rehypePlugins={[rehypeRaw]}

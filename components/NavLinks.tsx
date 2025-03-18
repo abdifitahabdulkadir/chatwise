@@ -1,6 +1,8 @@
 import { toast } from "@/hooks/use-toast";
+import { useSidebar } from "@/hooks/useSidebar";
 import { renameChatTitle } from "@/lib/actions/chat.action";
 import { cn } from "@/lib/utils";
+import { useSession } from "next-auth/react";
 import Image from "next/image";
 import { useParams, usePathname, useRouter } from "next/navigation";
 import { useState, useTransition } from "react";
@@ -8,24 +10,22 @@ import { v4 as uuid } from "uuid";
 import UserProfile from "./shared/UserProfile";
 import { useSidebarProvider } from "./SidBarToggleProvider";
 import SidebarItem from "./SidebarItem";
+import { SidebarSkelton } from "./Skeltons";
 import { SheetClose } from "./ui/sheet";
 
 interface NavLinksProps {
   isMobile?: boolean;
-  sidebarLists?: ChatTitleI[];
 }
 interface EditingItemProps {
   chatTitleId?: string;
   newTitle?: string;
   isEditing?: boolean;
 }
-export default function NavLinks({
-  sidebarLists,
-  isMobile = false,
-}: NavLinksProps) {
+export default function NavLinks({ isMobile = false }: NavLinksProps) {
   const { sideBarLists: currentSidebar } = useSidebarProvider();
   const router = useRouter();
   const { id: currentPrams } = useParams();
+  const session = useSession();
   const [editDetails, setEditDetails] = useState<EditingItemProps>({
     chatTitleId: "",
     newTitle: "",
@@ -33,6 +33,16 @@ export default function NavLinks({
   });
   const [isRenaming, startTranstion] = useTransition();
   const currentPath = usePathname();
+  const {
+    data: sidebars,
+    isFetched,
+    isFetchedAfterMount,
+    isLoading,
+  } = useSidebar({
+    enabled: !!session.data,
+    userId: (session.data && session?.data?.user?.id) ?? "",
+  });
+
   const toggle = (detials: EditingItemProps) =>
     setEditDetails({ ...detials, isEditing: true });
   const changeText = (value: React.ChangeEvent<HTMLInputElement>) =>
@@ -44,7 +54,7 @@ export default function NavLinks({
     e.preventDefault();
     toggle({ isEditing: false });
 
-    const isTitleChanged = sidebarLists?.find(
+    const isTitleChanged = sidebars?.data?.find(
       (each) =>
         each.chatId === editDetails.chatTitleId &&
         each.title.trim() === editDetails.newTitle!.trim(),
@@ -72,20 +82,27 @@ export default function NavLinks({
       });
     });
   };
-
+  const data = isFetchedAfterMount
+    ? sidebars?.data
+    : [...currentSidebar, ...(sidebars?.data ?? [])];
   return (
     <div
-      onMouseLeave={() => {
-        if (editDetails.chatTitleId) {
-          setEditDetails({});
-        }
-      }}
+      onMouseLeave={
+        isLoading
+          ? () => {}
+          : () => {
+              if (editDetails.chatTitleId) {
+                setEditDetails({});
+              }
+            }
+      }
       className={cn(
         "bg-dark-gray/60 relative flex h-full w-full flex-col pt-16",
       )}
     >
       <div className="custom-scrollbar h-0 w-full grow overflow-y-auto px-4 py-10">
         <button
+          disabled={isLoading}
           onClick={() => {
             if (Array.isArray(currentPrams) && currentPrams.length > 1) return;
             const id = uuid();
@@ -103,38 +120,44 @@ export default function NavLinks({
           />
           <span className="text-xs lg:text-sm">New chat</span>
         </button>
-        <div className="flex w-full flex-col gap-1 py-5">
-          {[...currentSidebar, ...(sidebarLists || [])]?.map(
-            ({ title, chatId }, index) => {
-              const contnet = (
-                <SidebarItem
-                  disable={isRenaming}
-                  input={
-                    chatId === editDetails.chatTitleId
-                      ? (editDetails.newTitle ?? "")
-                      : title
-                  }
-                  toggle={toggle}
-                  changeText={changeText}
-                  handleSubmit={handleSubmit}
-                  isEditing={
-                    editDetails.chatTitleId === chatId && editDetails.isEditing!
-                  }
-                  chatId={chatId}
-                  key={index}
-                  text={title}
-                />
-              );
-              return isMobile ? (
-                <SheetClose asChild key={index}>
-                  {contnet}
-                </SheetClose>
-              ) : (
-                contnet
-              );
-            },
-          )}
-        </div>
+        {isLoading ? (
+          Array.from({ length: 6 }, (_, index) => {
+            return <SidebarSkelton key={index} />;
+          })
+        ) : (
+          <div className="flex w-full flex-col gap-1 py-5">
+            {data &&
+              data.map(({ title, chatId }, index) => {
+                const contnet = (
+                  <SidebarItem
+                    disable={isRenaming}
+                    input={
+                      chatId === editDetails.chatTitleId
+                        ? (editDetails.newTitle ?? "")
+                        : title
+                    }
+                    toggle={toggle}
+                    changeText={changeText}
+                    handleSubmit={handleSubmit}
+                    isEditing={
+                      editDetails.chatTitleId === chatId &&
+                      editDetails.isEditing!
+                    }
+                    chatId={chatId}
+                    key={index}
+                    text={title}
+                  />
+                );
+                return isMobile ? (
+                  <SheetClose asChild key={index}>
+                    {contnet}
+                  </SheetClose>
+                ) : (
+                  contnet
+                );
+              })}
+          </div>
+        )}
       </div>
       <div className="border-light-gray flex w-full flex-col gap-y-2 border-t px-3 py-4">
         <UserProfile />

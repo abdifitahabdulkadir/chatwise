@@ -1,3 +1,4 @@
+import Provider from "@/components/Provider";
 import { Toaster } from "@/components/ui/toaster";
 import { SessionProvider } from "next-auth/react";
 import { interFont } from "../lib/fonts";
@@ -11,7 +12,7 @@ export default function RootLayout({
     <html lang="en">
       <SessionProvider>
         <body className={` ${interFont.className} antialiased`}>
-          {children}
+          <Provider>{children}</Provider>
           <Toaster />
         </body>
       </SessionProvider>

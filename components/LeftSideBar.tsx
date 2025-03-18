@@ -4,11 +4,7 @@ import { cn } from "@/lib/utils";
 import NavLinks from "./NavLinks";
 import { useSidebarProvider } from "./SidBarToggleProvider";
 
-export default function LeftSideBar({
-  sidebarLists,
-}: {
-  sidebarLists?: ChatTitleI[];
-}) {
+export default function LeftSideBar() {
   const { isSidebarOpen } = useSidebarProvider();
 
   if (isSidebarOpen) return null;
@@ -19,7 +15,7 @@ export default function LeftSideBar({
         "custom-scrollbar h-screen w-full overflow-y-auto max-md:hidden",
       )}
     >
-      <NavLinks sidebarLists={sidebarLists} />
+      <NavLinks />
     </section>
   );
 }

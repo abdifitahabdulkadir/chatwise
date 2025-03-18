@@ -1,19 +1,19 @@
 "use client";
 
 import { cn } from "@/lib/utils";
+import { Session } from "next-auth";
 import { useRouter } from "next/navigation";
-import { ReactNode, useEffect } from "react";
+import { useEffect } from "react";
 import "regenerator-runtime/runtime";
 import ChatLists from "./ChatLists";
 import LeftSideBar from "./LeftSideBar";
 import NavBar from "./NavBar";
 import SideBarProvider from "./SidBarToggleProvider";
 
-interface MainProps {
-  children: ReactNode | undefined;
-  sidebarLists: ChatTitleI[];
+interface Pros {
+  session: Session;
 }
-export default function Main({ children, sidebarLists }: MainProps) {
+export default function Main({ session }: Pros) {
   const router = useRouter();
 
   useEffect(() => {
@@ -27,17 +27,18 @@ export default function Main({ children, sidebarLists }: MainProps) {
     })();
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
+
   return (
     <SideBarProvider>
       <main className="bg-medium-gray flex min-h-screen w-full items-center justify-center">
-        <NavBar sidebarLists={sidebarLists} />
+        <NavBar />
         <section
           className={cn(
             "grid w-full flex-1 grid-cols-[15rem_1fr] overflow-hidden max-md:grid-cols-1",
           )}
         >
-          <LeftSideBar sidebarLists={sidebarLists} />
-          <ChatLists>{children}</ChatLists>
+          <LeftSideBar />
+          <ChatLists session={session} />
         </section>
       </main>
     </SideBarProvider>

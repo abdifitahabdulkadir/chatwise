@@ -22,16 +22,8 @@ export function UserChatItem({ content }: { content: string }) {
   return (
     <div className="flex w-full items-center justify-end">
       <div className="mx-4 flex w-full items-center justify-end">
-        <div className="bg-dark-gray/50 inline-flex items-center gap-x-4 rounded-3xl px-4 py-5">
-          <Image
-            src={"/icons/user.svg"}
-            alt="user icon"
-            width={30}
-            height={30}
-            quality={100}
-            className="h-[30px] w-[30px] object-contain"
-          />
-          <p className="text-md leading-6 font-normal text-wrap text-white">
+        <div className="bg-dark-gray/50 inline-flex w-fit items-center gap-x-4 rounded-2xl px-4 py-5 lg:max-w-[70%]">
+          <p className="text-md leading-7 font-normal text-wrap text-white">
             {content}
           </p>
         </div>
@@ -50,7 +42,7 @@ export function SystemChatItem({ content, isLoading }: SystemPros) {
   return (
     <div className="flex w-full items-center gap-3 py-6 pl-5">
       <div className="grid w-full grid-cols-[5%__1fr] items-start gap-6 md:gap-1">
-        <div className="bg-dark-green flex size-[30px] items-center justify-center rounded-xs">
+        <div className="bg-dark-green me-1 flex size-[30px] items-center justify-center rounded-xs">
           <Image
             src={"/icons/logo.svg"}
             alt="ai icon"

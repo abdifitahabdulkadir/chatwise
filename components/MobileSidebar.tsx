@@ -3,11 +3,8 @@ import { DialogTitle } from "@radix-ui/react-dialog";
 import { AlignJustify } from "lucide-react";
 
 import NavLinks from "./NavLinks";
-interface Props {
-  sidebarLists: ChatTitleI[] | undefined;
-}
 
-export default function MobileSidebar({ sidebarLists }: Props) {
+export default function MobileSidebar() {
   return (
     <div className="hidden max-md:block">
       <Sheet>
@@ -19,7 +16,7 @@ export default function MobileSidebar({ sidebarLists }: Props) {
           side={"left"}
         >
           <DialogTitle className="hidden">Sidebar of chats</DialogTitle>
-          <NavLinks isMobile sidebarLists={sidebarLists} />
+          <NavLinks isMobile />
         </SheetContent>
       </Sheet>
     </div>
