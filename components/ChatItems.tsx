@@ -4,18 +4,13 @@ import ContentFormatter from "./ContentFormatter";
 
 type RenderActiveProps = {
   content: string;
-  isLoading?: boolean;
   role: "system" | "user";
 };
 
-export default function RenderContent({
-  content,
-  isLoading,
-  role,
-}: RenderActiveProps) {
+export default function RenderContent({ content, role }: RenderActiveProps) {
   if (role == "user") return <UserChatItem content={content} />;
 
-  return <SystemChatItem isLoading={isLoading} content={content} />;
+  return <SystemChatItem content={content} />;
 }
 
 export function UserChatItem({ content }: { content: string }) {
@@ -33,11 +28,10 @@ export function UserChatItem({ content }: { content: string }) {
 }
 
 type SystemPros = {
-  isLoading?: boolean;
   content: string;
 };
 
-export function SystemChatItem({ content, isLoading }: SystemPros) {
+export function SystemChatItem({ content }: SystemPros) {
   const formattedContent = formatContent(content);
   return (
     <div className="flex w-full items-center gap-3 py-6 pl-5">
@@ -55,33 +49,31 @@ export function SystemChatItem({ content, isLoading }: SystemPros) {
 
         <ContentFormatter content={formattedContent} />
 
-        {!isLoading && (
-          <>
-            <div className="border-darker col-span-full my-2 border-t-2" />
-            <div className="col-span-4 ml-10 flex w-full items-center gap-2">
-              <button className="hover:bg-dark-gray group cursor-pointer rounded-md px-3 py-2 transition-all duration-200">
-                <Image
-                  src={"/icons/like.svg"}
-                  alt="like button svg icon"
-                  width={16}
-                  height={16}
-                  quality={100}
-                  className="size-[16px] transform transition-all duration-200 group-hover:scale-[1.2]"
-                />
-              </button>
-              <button className="hover:bg-dark-gray group cursor-pointer rounded-md px-3 py-2 transition-all duration-200">
-                <Image
-                  src={"/icons/dislike.svg"}
-                  alt="like button svg icon"
-                  width={16}
-                  height={16}
-                  quality={100}
-                  className="size-[16px] transform transition-all duration-200 group-hover:scale-[1.2]"
-                />
-              </button>
-            </div>
-          </>
-        )}
+        <>
+          <div className="border-darker col-span-full my-2 border-t-2" />
+          <div className="col-span-4 ml-10 flex w-full items-center gap-2">
+            <button className="hover:bg-dark-gray group cursor-pointer rounded-md px-3 py-2 transition-all duration-200">
+              <Image
+                src={"/icons/like.svg"}
+                alt="like button svg icon"
+                width={16}
+                height={16}
+                quality={100}
+                className="size-[16px] transform transition-all duration-200 group-hover:scale-[1.2]"
+              />
+            </button>
+            <button className="hover:bg-dark-gray group cursor-pointer rounded-md px-3 py-2 transition-all duration-200">
+              <Image
+                src={"/icons/dislike.svg"}
+                alt="like button svg icon"
+                width={16}
+                height={16}
+                quality={100}
+                className="size-[16px] transform transition-all duration-200 group-hover:scale-[1.2]"
+              />
+            </button>
+          </div>
+        </>
       </div>
     </div>
   );

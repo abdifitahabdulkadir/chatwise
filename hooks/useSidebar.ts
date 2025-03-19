@@ -5,7 +5,7 @@ interface Props {
   userId: string;
   enabled: boolean;
 }
-export function useSidebar({ userId, enabled }: Props) {
+export function useGetSidebars({ userId, enabled }: Props) {
   return useQuery({
     queryKey: ["sidebars"],
     enabled: enabled,

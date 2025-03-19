@@ -1,14 +1,14 @@
 import { fetchHandler } from "@/lib/fetch-handler";
 import { useMutation } from "@tanstack/react-query";
 import { toast } from "./use-toast";
-import { useSidebar } from "./useSidebar";
+import { useGetSidebars } from "./useSidebar";
 
 interface Props {
   currentParamId: string;
   userId: string;
 }
 export function useStoreChats({ currentParamId, userId }: Props) {
-  const { refetch } = useSidebar({
+  const { refetch } = useGetSidebars({
     userId: userId,
     enabled: !!userId,
   });

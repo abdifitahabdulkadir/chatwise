@@ -20,9 +20,8 @@ export default function ChatLists({ session }: Props) {
   const messageParentRef = useRef<HTMLDivElement | null>(null);
   const { isSidebarOpen, toggle } = useSidebarProvider();
   const params: Record<string, string> = useParams();
-  const [isFinish, setIsFinish] = useState(false);
   const [startVoice, setStartVoice] = useState(false);
-  let currentParamId = extractParamId(params);
+  const currentParamId = extractParamId(params);
   const checkIsNewChat = isNewChat(params);
   const [showScrollToBottomIcon, setShowScrollToBottomIcon] = useState(false);
   const { data, isLoading } = useChats({
@@ -66,7 +65,6 @@ export default function ChatLists({ session }: Props) {
     event?: { preventDefault?: (() => void) | undefined } | undefined,
   ) {
     if (!session) return;
-    setIsFinish(false);
     handleSubmit(event);
   }
 
@@ -147,7 +145,6 @@ export default function ChatLists({ session }: Props) {
                       <RenderContent
                         key={index}
                         content={content}
-                        isLoading={!isFinish}
                         role={role === "user" ? "user" : "system"}
                       />
                     );

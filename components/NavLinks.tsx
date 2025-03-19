@@ -1,11 +1,10 @@
-import { toast } from "@/hooks/use-toast";
-import { useSidebar } from "@/hooks/useSidebar";
-import { renameChatTitle } from "@/lib/actions/chat.action";
+import { useRenameSidebar } from "@/hooks/useRenameSidebar";
+import { useGetSidebars } from "@/hooks/useSidebar";
 import { cn } from "@/lib/utils";
 import { useSession } from "next-auth/react";
 import Image from "next/image";
-import { useParams, usePathname, useRouter } from "next/navigation";
-import { useState, useTransition } from "react";
+import { useParams, useRouter } from "next/navigation";
+import { useState } from "react";
 import { v4 as uuid } from "uuid";
 import UserProfile from "./shared/UserProfile";
 import { useSidebarProvider } from "./SidBarToggleProvider";
@@ -26,25 +25,27 @@ export default function NavLinks({ isMobile = false }: NavLinksProps) {
   const router = useRouter();
   const { id: currentPrams } = useParams();
   const session = useSession();
+  const userId = (session.data && session?.data?.user?.id) ?? "";
   const [editDetails, setEditDetails] = useState<EditingItemProps>({
     chatTitleId: "",
     newTitle: "",
     isEditing: false,
   });
-  const [isRenaming, startTranstion] = useTransition();
-  const currentPath = usePathname();
+
   const {
     data: sidebars,
-    isFetched,
     isFetchedAfterMount,
     isLoading,
-  } = useSidebar({
+  } = useGetSidebars({
     enabled: !!session.data,
-    userId: (session.data && session?.data?.user?.id) ?? "",
+    userId,
   });
+
+  const { mutate, isPending: isRenaming } = useRenameSidebar();
 
   const toggle = (detials: EditingItemProps) =>
     setEditDetails({ ...detials, isEditing: true });
+
   const changeText = (value: React.ChangeEvent<HTMLInputElement>) =>
     setEditDetails((prev) => {
       return { ...prev, newTitle: String(value.target.value) };
@@ -59,32 +60,21 @@ export default function NavLinks({ isMobile = false }: NavLinksProps) {
         each.chatId === editDetails.chatTitleId &&
         each.title.trim() === editDetails.newTitle!.trim(),
     );
+
     if (isTitleChanged) return;
+    if (!editDetails.chatTitleId || !userId || !editDetails.newTitle) return;
 
-    startTranstion(async () => {
-      const result = await renameChatTitle({
-        chatTitleId: editDetails.chatTitleId!,
-        newTitile: editDetails.newTitle!,
-        currentPath: currentPath,
-      });
-
-      if (result.success) {
-        toast({
-          title: "Successfully Edited ",
-          description: "Edited the title successfully",
-        });
-        return;
-      }
-      toast({
-        title: "Failed to chnage",
-        description: "Failed while changing title Name",
-        variant: "destructive",
-      });
+    mutate({
+      userId,
+      newTitile: editDetails.newTitle ?? "",
+      chatTitleId: editDetails.chatTitleId ?? "",
     });
   };
+
   const data = isFetchedAfterMount
     ? sidebars?.data
     : [...currentSidebar, ...(sidebars?.data ?? [])];
+
   return (
     <div
       onMouseLeave={

@@ -1,5 +1,4 @@
 "use client";
-import { deleteChatSession } from "@/lib/actions/chat.action";
 import { cn } from "@/lib/utils";
 import { DropdownMenuItem } from "@radix-ui/react-dropdown-menu";
 import { motion } from "framer-motion";
@@ -113,15 +112,8 @@ export default function SidebarItem({
             <span className="text-sm font-normal">Edit the Title</span>
           </DropdownMenuItem>
           <DropdownMenuItem
-            onClick={async (e) => {
+            onClick={(e) => {
               e.stopPropagation();
-              await deleteChatSession({
-                chatTitleId: chatId,
-                currentPath: "/chat",
-              });
-              if (chatId === localStorage.getItem("selectedSidebarItem")) {
-                localStorage.removeItem("selectedSidebarItem");
-              }
             }}
             className="hover:bg-medium-gray/50 flex cursor-pointer items-center gap-2 rounded-sm px-2 py-2 transition-all duration-200 hover:border-none hover:outline-hidden"
           >
