@@ -1,6 +1,6 @@
 "use client";
 
-import CredentailAuthForm from "@/components/CredentailAuthForm";
+import CredentailAuthForm from "@/components/Forms/CredentailAuthForm";
 import { signUpWithCrendentials } from "@/lib/actions/auth.action";
 import { SignUpSchema } from "@/lib/validations";
 
