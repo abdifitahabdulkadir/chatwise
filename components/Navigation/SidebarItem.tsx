@@ -4,8 +4,8 @@ import { DropdownMenuItem } from "@radix-ui/react-dropdown-menu";
 import { motion } from "framer-motion";
 import { Ellipsis } from "lucide-react";
 import { useParams, useRouter } from "next/navigation";
-import DropDownMenu from "./DropDownMenu";
-import ImageIcon from "./shared/ImageIcon";
+import DropDownMenu from "../DropDownMenu";
+import ImageIcon from "../shared/ImageIcon";
 
 interface SideBarItemPros {
   text: string;

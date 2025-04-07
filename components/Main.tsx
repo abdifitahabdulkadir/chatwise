@@ -5,10 +5,10 @@ import { Session } from "next-auth";
 import { useRouter } from "next/navigation";
 import { useEffect } from "react";
 import "regenerator-runtime/runtime";
-import ChatLists from "./ChatLists";
-import LeftSideBar from "./LeftSideBar";
-import NavBar from "./NavBar";
-import SideBarProvider from "./SidBarToggleProvider";
+import ChatLists from "./Chats/ChatLists";
+import LeftSideBar from "./Navigation/LeftSideBar";
+import NavBar from "./Navigation/NavBar";
+import SideBarProvider from "./Navigation/SidBarToggleProvider";
 
 interface Pros {
   session: Session;

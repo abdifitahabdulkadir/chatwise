@@ -1,6 +1,6 @@
 import { formatContent } from "@/lib/utils";
 import Image from "next/image";
-import ContentFormatter from "./ContentFormatter";
+import ContentFormatter from "../ContentFormatter";
 
 type RenderActiveProps = {
   content: string;

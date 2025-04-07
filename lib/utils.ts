@@ -21,7 +21,7 @@ export function extractParamId(params: Record<string, string>) {
 }
 
 export function isNewChat(params: Record<string, string>) {
-  if (params.id === undefined) return false;
+  if (params.id === undefined) return true;
   const value = params.id;
   return value.length === 2 && value[0] == "new" && value.at(-1)?.length === 36;
 }

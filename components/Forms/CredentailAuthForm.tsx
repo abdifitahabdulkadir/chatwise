@@ -11,10 +11,11 @@ import {
   useForm,
 } from "react-hook-form";
 import { z, ZodType } from "zod";
+import { OAuthButtons } from "../shared/OauthButtons";
+import { Button } from "../ui/button";
+import { Input } from "../ui/input";
 import { FormFieldItem, FormLabel, FromErrorElement } from "./FormElements";
-import { OAuthButtons } from "./OauthButtons";
-import { Button } from "./ui/button";
-import { Input } from "./ui/input";
+
 interface CredentialAuthFormProps<T extends FieldValues> {
   schema: ZodType<T>;
   defaultValues: T;

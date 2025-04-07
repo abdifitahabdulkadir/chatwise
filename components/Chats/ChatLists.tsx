@@ -2,32 +2,26 @@
 
 import { useAIChat } from "@/hooks/useAIChat";
 import { useChats } from "@/hooks/useChat";
-import { cn, extractParamId, isNewChat } from "@/lib/utils";
+import { cn } from "@/lib/utils";
 import { Session } from "next-auth";
-import { useParams } from "next/navigation";
 import { useEffect, useRef, useState } from "react";
+import { useSidebarProvider } from "../Navigation/SidBarToggleProvider";
+import ScrollToDownButton from "../ScrollToDownButton";
+import { SystemItemSkelton, UserItemSkelton } from "../shared/Skeltons";
 import ChatInput from "./ChatInput";
 import RenderContent from "./ChatItems";
 import ConverstationWithAI from "./ConverstationWithAI";
 import EmptyChats from "./EmptyChats";
-import ScrollToDownButton from "./ScrollToDownButton";
-import { useSidebarProvider } from "./SidBarToggleProvider";
-import { SystemItemSkelton, UserItemSkelton } from "./Skeltons";
 interface Props {
   session: Session;
 }
 export default function ChatLists({ session }: Props) {
   const messageParentRef = useRef<HTMLDivElement | null>(null);
   const { isSidebarOpen, toggle } = useSidebarProvider();
-  const params: Record<string, string> = useParams();
   const [startVoice, setStartVoice] = useState(false);
-  const currentParamId = extractParamId(params);
-  const checkIsNewChat = isNewChat(params);
+
   const [showScrollToBottomIcon, setShowScrollToBottomIcon] = useState(false);
-  const { data, isLoading } = useChats({
-    currentParamId: currentParamId ?? "",
-    enabled: !checkIsNewChat && !!currentParamId,
-  });
+  const { data, isLoading } = useChats();
 
   const [question, setQuestion] = useState("");
 
@@ -40,23 +34,21 @@ export default function ChatLists({ session }: Props) {
   } = useAIChat({
     data: {
       question: question,
-      chatId: currentParamId!,
       userId: session?.user?.id,
     },
-    isNewChat: checkIsNewChat,
-    currentParamId: currentParamId ?? "",
     newTitleItem: {
       userId: session.user?.id,
-      chatId: currentParamId ?? "",
       title: question,
     },
   });
   useEffect(
     function () {
-      if (messageParentRef.current) {
-        messageParentRef.current.scrollTop =
-          messageParentRef.current.scrollHeight;
-      }
+      setTimeout(function () {
+        if (messageParentRef.current) {
+          messageParentRef.current.scrollTop =
+            messageParentRef.current.scrollHeight;
+        }
+      }, 500);
     },
     [messages],
   );

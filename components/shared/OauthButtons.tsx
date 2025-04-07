@@ -1,7 +1,7 @@
 "use client";
 import { toast } from "@/hooks/use-toast";
 import { signIn } from "next-auth/react";
-import { Button } from "./ui/button";
+import { Button } from "../ui/button";
 export function OAuthButtons({ disabled }: { disabled: boolean }) {
   const handleAuth = async (provider: "github" | "google") => {
     try {

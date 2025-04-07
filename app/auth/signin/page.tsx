@@ -1,5 +1,5 @@
 "use client";
-import CredentailAuthForm from "@/components/CredentailAuthForm";
+import CredentailAuthForm from "@/components/Forms/CredentailAuthForm";
 import { signInWithCredentials } from "@/lib/actions/auth.action";
 import { SignInSchema } from "@/lib/validations";
 

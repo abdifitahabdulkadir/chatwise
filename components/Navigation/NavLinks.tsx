@@ -6,11 +6,11 @@ import Image from "next/image";
 import { useParams, useRouter } from "next/navigation";
 import { useState } from "react";
 import { v4 as uuid } from "uuid";
-import UserProfile from "./shared/UserProfile";
+import { SidebarSkelton } from "../shared/Skeltons";
+import UserProfile from "../shared/UserProfile";
+import { SheetClose } from "../ui/sheet";
 import { useSidebarProvider } from "./SidBarToggleProvider";
 import SidebarItem from "./SidebarItem";
-import { SidebarSkelton } from "./Skeltons";
-import { SheetClose } from "./ui/sheet";
 
 interface NavLinksProps {
   isMobile?: boolean;
@@ -32,15 +32,10 @@ export default function NavLinks({ isMobile = false }: NavLinksProps) {
     isEditing: false,
   });
 
-  const {
-    data: sidebars,
-    isFetchedAfterMount,
-    isLoading,
-  } = useGetSidebars({
+  const { data: sidebars, isLoading } = useGetSidebars({
     enabled: !!session.data,
     userId,
   });
-
   const { mutate, isPending: isRenaming } = useRenameSidebar();
 
   const toggle = (detials: EditingItemProps) =>
@@ -71,9 +66,15 @@ export default function NavLinks({ isMobile = false }: NavLinksProps) {
     });
   };
 
-  const data = isFetchedAfterMount
-    ? sidebars?.data
-    : [...currentSidebar, ...(sidebars?.data ?? [])];
+  let data: ChatTitleI[] = [];
+  if (
+    currentSidebar.length &&
+    sidebars?.data?.at(0)?.chatId !== currentSidebar.at(0)?.chatId
+  ) {
+    data = [...currentSidebar, ...(sidebars?.data ?? [])];
+  } else {
+    data = sidebars?.data ?? [];
+  }
 
   return (
     <div
@@ -133,7 +134,7 @@ export default function NavLinks({ isMobile = false }: NavLinksProps) {
                       editDetails.chatTitleId === chatId &&
                       editDetails.isEditing!
                     }
-                    chatId={chatId}
+                    chatId={chatId!}
                     key={index}
                     text={title}
                   />

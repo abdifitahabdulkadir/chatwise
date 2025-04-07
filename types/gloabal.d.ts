@@ -11,7 +11,7 @@ interface UserI {
   image?: string;
 }
 interface ChatTitleI {
-  chatId: string;
+  chatId?: string | undefined;
   title: string;
   userId: Schema.Types.ObjectId;
 }

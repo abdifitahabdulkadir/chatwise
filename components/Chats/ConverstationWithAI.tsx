@@ -6,7 +6,7 @@ import { Mic, MicOff, X } from "lucide-react";
 import { useEffect, useState } from "react";
 import BeatLoader from "react-spinners/BeatLoader";
 import ScaleLoader from "react-spinners/ScaleLoader";
-import ActionButton from "./ActionButton";
+import ActionButton from "../shared/ActionButton";
 import EmptyChats from "./EmptyChats";
 
 interface ConversationPros {
