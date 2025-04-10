@@ -1,3 +1,4 @@
+import { useDeleteChat } from "@/hooks/useDeleteChat";
 import { useRenameSidebar } from "@/hooks/useRenameSidebar";
 import { useGetSidebars } from "@/hooks/useSidebar";
 import { cn } from "@/lib/utils";
@@ -36,7 +37,8 @@ export default function NavLinks({ isMobile = false }: NavLinksProps) {
     enabled: !!session.data,
     userId,
   });
-  const { mutate, isPending: isRenaming } = useRenameSidebar();
+  const { mutate: renameSidebar, isPending: isRenaming } = useRenameSidebar();
+  const { mutate: deleteChat, isPending: isDeleting } = useDeleteChat();
 
   const toggle = (detials: EditingItemProps) =>
     setEditDetails({ ...detials, isEditing: true });
@@ -59,23 +61,20 @@ export default function NavLinks({ isMobile = false }: NavLinksProps) {
     if (isTitleChanged) return;
     if (!editDetails.chatTitleId || !userId || !editDetails.newTitle) return;
 
-    mutate({
+    renameSidebar({
       userId,
       newTitile: editDetails.newTitle ?? "",
       chatTitleId: editDetails.chatTitleId ?? "",
     });
   };
 
-  let data: ChatTitleI[] = [];
-  if (
-    currentSidebar.length &&
-    sidebars?.data?.at(0)?.chatId !== currentSidebar.at(0)?.chatId
-  ) {
-    data = [...currentSidebar, ...(sidebars?.data ?? [])];
-  } else {
-    data = sidebars?.data ?? [];
+  function handleDeleteChat(chatId: string) {
+    console.log("delete this chatId: ", chatId);
+    deleteChat({
+      chatTitleId: chatId,
+      userId,
+    });
   }
-
   return (
     <div
       onMouseLeave={
@@ -117,8 +116,8 @@ export default function NavLinks({ isMobile = false }: NavLinksProps) {
           })
         ) : (
           <div className="flex w-full flex-col gap-1 py-5">
-            {data &&
-              data.map(({ title, chatId }, index) => {
+            {sidebars?.data &&
+              sidebars?.data.map(({ title, chatId }, index) => {
                 const contnet = (
                   <SidebarItem
                     disable={isRenaming}
@@ -128,6 +127,7 @@ export default function NavLinks({ isMobile = false }: NavLinksProps) {
                         : title
                     }
                     toggle={toggle}
+                    handleDeleteChat={handleDeleteChat}
                     changeText={changeText}
                     handleSubmit={handleSubmit}
                     isEditing={

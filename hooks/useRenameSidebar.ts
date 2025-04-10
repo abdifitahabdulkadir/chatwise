@@ -1,3 +1,4 @@
+import { sidebarKey } from "@/constants";
 import { fetchHandler } from "@/lib/fetch-handler";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 
@@ -20,30 +21,30 @@ export function useRenameSidebar() {
     onMutate: async (newItem) => {
       await queryClient.cancelQueries({ queryKey: ["sidebars"] });
 
-      const previousTodos = queryClient.getQueryData<{
+      const previousSidabrs = queryClient.getQueryData<{
         success: boolean;
         data: ChatTitleI[];
       }>(["sidebars"]);
 
-      const index = previousTodos?.data.findIndex(
+      const index = previousSidabrs?.data.findIndex(
         (item) =>
           item.chatId === newItem.chatTitleId && item.userId === newItem.userId,
       );
 
       if (index !== -1 && index !== undefined) {
-        if (previousTodos && previousTodos.data) {
-          previousTodos.data[index].title = newItem?.newTitile;
+        if (previousSidabrs && previousSidabrs.data) {
+          previousSidabrs.data[index].title = newItem?.newTitile;
         }
       }
-      return { previousTodos };
+      return { previousSidabrs };
     },
 
     onError: (__, _, context) => {
-      queryClient.setQueryData(["sidebars"], context?.previousTodos);
+      queryClient.setQueryData([sidebarKey], context?.previousSidabrs);
     },
 
-    onSettled: () => {
-      queryClient.invalidateQueries({ queryKey: ["sidebars"] });
+    onSettled: async () => {
+      await queryClient.invalidateQueries({ queryKey: ["sidebars"] });
     },
   });
 }

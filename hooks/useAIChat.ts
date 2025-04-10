@@ -1,38 +1,40 @@
-import { useSidebarProvider } from "@/components/Navigation/SidBarToggleProvider";
 import { extractParamId, isNewChat } from "@/lib/utils";
 import { useChat } from "@ai-sdk/react";
-import { useParams } from "next/navigation";
+import { useParams, useRouter } from "next/navigation";
 import { useState } from "react";
 import { v4 as uuid } from "uuid";
 import { useStoreChats } from "./useStoreChats";
+import { useUpateSidebar } from "./useUpateSidebar";
 
-interface Props {
-  data: StoreChatParams;
-  newTitleItem: ChatTitleI;
-}
-
-export function useAIChat({ data, newTitleItem }: Props) {
-  const { addToSidebar } = useSidebarProvider();
+export function useAIChat({ userId, question }: StoreChatParams) {
+  // const { addToSidebar } = useSidebarProvider();
+  const { mutate: updateSidebar } = useUpateSidebar();
   const params: Record<string, string> = useParams();
   const currentParamId = extractParamId(params);
   const checkIsNewChat = isNewChat(params);
   const [newChatId] = useState(() => uuid());
-  const { mutate } = useStoreChats({
+  const router = useRouter();
+  const { mutate: storeChats } = useStoreChats({
     currentParamId: checkIsNewChat ? newChatId : (currentParamId ?? ""),
-    userId: newTitleItem.userId,
+    userId: userId!,
   });
+
   return useChat({
     api: "/api/chat",
     async onResponse() {
       if (checkIsNewChat) {
-        addToSidebar([{ ...newTitleItem, chatId: newChatId }]);
+        updateSidebar({
+          data: { title: question, userId: userId, chatId: newChatId },
+        });
       }
     },
     onFinish(message) {
-      mutate({
-        ...{ ...data, chatId: checkIsNewChat ? newChatId : currentParamId },
-        answer: message.content,
+      storeChats({
+        chatId: checkIsNewChat ? newChatId : currentParamId,
         role: message.role === "user" ? "user" : "system",
+        answer: message.content,
+        question: question,
+        userId: userId,
       });
     },
   });

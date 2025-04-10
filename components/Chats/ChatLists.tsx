@@ -32,14 +32,8 @@ export default function ChatLists({ session }: Props) {
     handleSubmit,
     messages,
   } = useAIChat({
-    data: {
-      question: question,
-      userId: session?.user?.id,
-    },
-    newTitleItem: {
-      userId: session.user?.id,
-      title: question,
-    },
+    userId: session?.user?.id,
+    question: question,
   });
   useEffect(
     function () {
@@ -52,7 +46,6 @@ export default function ChatLists({ session }: Props) {
     },
     [messages],
   );
-
   function formSubmitHandler(
     event?: { preventDefault?: (() => void) | undefined } | undefined,
   ) {

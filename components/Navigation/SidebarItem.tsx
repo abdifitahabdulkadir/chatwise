@@ -22,6 +22,7 @@ interface SideBarItemPros {
     newTitle: string;
   }) => void;
   disable: boolean;
+  handleDeleteChat: (chatId: string) => void;
 }
 
 export default function SidebarItem({
@@ -32,6 +33,7 @@ export default function SidebarItem({
   text,
   input,
   disable,
+  handleDeleteChat,
   toggle,
 }: SideBarItemPros) {
   const router = useRouter();
@@ -114,6 +116,7 @@ export default function SidebarItem({
           <DropdownMenuItem
             onClick={(e) => {
               e.stopPropagation();
+              handleDeleteChat(chatId);
             }}
             className="hover:bg-medium-gray/50 flex cursor-pointer items-center gap-2 rounded-sm px-2 py-2 transition-all duration-200 hover:border-none hover:outline-hidden"
           >

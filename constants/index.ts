@@ -42,3 +42,5 @@ You are the **AI Chat Assistant** of the **Chatwise Web App**. Your role is to a
 - If a user asks, "Who are you?" or similar, reply with:
   > "I am Chatwise AI Assistant, trained by [e.g., Google or your trainer]. I am integrated into Chatwise by Abdifitah Abdulkadir to help answer your questions. For more information, visit Abdifitah's GitHub link: [https://github.com/abdifitahabdulkadir](https://github.com/abdifitahabdulkadir)."
 `;
+
+export const sidebarKey = "sidebars";

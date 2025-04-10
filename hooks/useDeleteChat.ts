@@ -1,48 +1,29 @@
-// import { fetchHandler } from "@/lib/fetch-handler";
-// import { useMutation, useQueryClient } from "@tanstack/react-query";
+import { fetchHandler } from "@/lib/fetch-handler";
+import { useMutation, useQueryClient } from "@tanstack/react-query";
+import { useRouter } from "next/navigation";
 
-// interface Props {
-//   chatTitleId: string;
-//   userId: string;
-// }
+interface Props {
+  chatTitleId: string;
+  userId: string;
+}
 
-// export function useDeleteChat() {
-//   const queryClient = useQueryClient();
-//   return useMutation({
-//     mutationKey: ["sidebars"],
-//     mutationFn: (data: Props) => {
-//       return fetchHandler(`/api/sidebar`, {
-//         method: "DELETE",
-//         body: JSON.stringify({ ...data }),
-//       });
-//     },
-//     onMutate: async (newItem) => {
-//       await queryClient.cancelQueries({ queryKey: ["sidebars"] });
+export function useDeleteChat() {
+  const router = useRouter();
 
-//       const previousTodos = queryClient.getQueryData<{
-//         success: boolean;
-//         data: ChatTitleI[];
-//       }>(["sidebars"]);
+  const queryClient = useQueryClient();
+  return useMutation({
+    mutationKey: ["sidebars"],
+    mutationFn: (data: Props) => {
+      return fetchHandler(`/api/sidebar`, {
+        method: "DELETE",
+        body: JSON.stringify({ ...data }),
+      });
+    },
 
-//       const index = previousTodos?.data.findIndex(
-//         (item) =>
-//           item.chatId === newItem.chatTitleId && item.userId === newItem.userId,
-//       );
-
-//       if (index !== -1 && index !== undefined) {
-//         if (previousTodos && previousTodos.data) {
-//           previousTodos.data[index].title = newItem?.newTitile;
-//         }
-//       }
-//       return { previousTodos };
-//     },
-
-//     onError: (__, _, context) => {
-//       queryClient.setQueryData(["sidebars"], context?.previousTodos);
-//     },
-
-//     onSettled: () => {
-//       queryClient.invalidateQueries({ queryKey: ["sidebars"] });
-//     },
-//   });
-// }
+    onSuccess() {
+      localStorage.removeItem("selectedSidebarItem");
+      queryClient.invalidateQueries({ queryKey: ["sidebars"] });
+      router.push("/chat");
+    },
+  });
+}

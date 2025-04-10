@@ -30,52 +30,44 @@ export async function GET(req: Request) {
 
 export async function POST(req: NextRequest) {
   try {
-    const { question, chatId, userId, answer }: StoreChatParams =
+    const { chatId, userId, answer, question }: StoreChatParams =
       await req.json();
+
+    // find if chatid is already existed
+    const currentTitle = await prisma.titles.findFirst({
+      where: {
+        chatId: chatId,
+        userId: userId!,
+      },
+      select: {
+        chatId: true,
+        title: true,
+      },
+    });
+
+    // //if not, cancel the transaction and throw an error
+    if (!currentTitle) {
+      throw new Error("Not found title with given Chat Id");
+    }
+
+    // if chat title existed, then only append
+    // current message to its messages.
     const buildChat = [
       {
-        content: question,
-        role: "user",
         chatId: chatId!,
+        content: question!,
+        role: "user",
       },
       {
-        content: answer ?? "",
-        role: "system",
         chatId: chatId!,
+        content: answer!,
+        role: "system",
       },
     ];
-
-    return await prisma.$transaction(async (currentTransactionClient) => {
-      //find if chatid is already existed
-      const currentTitle = await currentTransactionClient.chat.findFirst({
-        where: {
-          chatId: chatId,
-        },
-      });
-
-      //if not, create new chat title with given chat Id
-      if (!currentTitle) {
-        await currentTransactionClient.titles.create({
-          data: {
-            title: question,
-            chatId: chatId!,
-            userId: userId!,
-          },
-        });
-
-        // also add current chat under newly created chat title
-        await currentTransactionClient.chat.createMany({
-          data: buildChat,
-        });
-      } else {
-        // if chat title existed, then only append
-        //current message to its messages.
-        await currentTransactionClient.chat.createMany({
-          data: buildChat,
-        });
-      }
-      return NextResponse.json({ success: true });
+    await prisma.chat.createMany({
+      data: buildChat,
     });
+    return NextResponse.json({ success: true });
   } catch (error) {
     return handleError("api", error) as ApiErroResponse;
   }
