@@ -105,6 +105,7 @@ export default function SidebarItem({
         >
           <DropdownMenuItem
             disabled={disable}
+          
             onClick={(e) => {
               e.stopPropagation();
               toggle({ chatTitleId: chatId, newTitle: text });

@@ -84,7 +84,7 @@ export default function ChatLists({ session }: Props) {
   return (
     <div
       className={cn(
-        "relative mt-20 grid h-[90vh] w-full grid-rows-[1fr_auto]",
+        "relative mt-20 grid h-[88vh]  w-full grid-rows-[1fr_auto]",
         isSidebarOpen ? "col-span-full" : "cols-span-1",
       )}
     >

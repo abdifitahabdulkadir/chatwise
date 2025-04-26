@@ -10,7 +10,6 @@ import { v4 as uuid } from "uuid";
 import { SidebarSkelton } from "../shared/Skeltons";
 import UserProfile from "../shared/UserProfile";
 import { SheetClose } from "../ui/sheet";
-import { useSidebarProvider } from "./SidBarToggleProvider";
 import SidebarItem from "./SidebarItem";
 
 interface NavLinksProps {
@@ -22,7 +21,7 @@ interface EditingItemProps {
   isEditing?: boolean;
 }
 export default function NavLinks({ isMobile = false }: NavLinksProps) {
-  const { sideBarLists: currentSidebar } = useSidebarProvider();
+ 
   const router = useRouter();
   const { id: currentPrams } = useParams();
   const session = useSession();
@@ -38,7 +37,7 @@ export default function NavLinks({ isMobile = false }: NavLinksProps) {
     userId,
   });
   const { mutate: renameSidebar, isPending: isRenaming } = useRenameSidebar();
-  const { mutate: deleteChat, isPending: isDeleting } = useDeleteChat();
+  const { mutate: deleteChat} = useDeleteChat();
 
   const toggle = (detials: EditingItemProps) =>
     setEditDetails({ ...detials, isEditing: true });

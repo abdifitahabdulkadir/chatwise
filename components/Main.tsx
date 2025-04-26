@@ -30,11 +30,11 @@ export default function Main({ session }: Pros) {
 
   return (
     <SideBarProvider>
-      <main className="bg-medium-gray flex min-h-screen w-full items-center justify-center">
+      <main className="bg-medium-gray  flex  min-h-screen w-full items-center justify-center">
         <NavBar />
         <section
           className={cn(
-            "grid w-full flex-1 grid-cols-[15rem_1fr] overflow-hidden max-md:grid-cols-1",
+            "grid w-full  grid-cols-[17%_1fr] flex-1   max-md:grid-cols-1",
           )}
         >
           <LeftSideBar />

@@ -12,7 +12,7 @@ export default function LeftSideBar() {
   return (
     <section
       className={cn(
-        "custom-scrollbar h-screen w-full overflow-y-auto max-md:hidden",
+        "custom-scrollbar h-screen  w-full overflow-y-auto max-md:hidden",
       )}
     >
       <NavLinks />
