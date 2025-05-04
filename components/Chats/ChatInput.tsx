@@ -15,13 +15,13 @@ interface ChatInputProps {
   handleRecordVoice: () => void;
   isVoicetoVoice: boolean;
 }
+
 export default function ChatInput({
   handleFormSubmit,
   hanldeOnChange,
   inputValue,
   isVoicetoVoice,
   isLoading,
-  handleRecordVoice,
 }: ChatInputProps) {
   const ref = useRef<HTMLTextAreaElement | null>(null);
 
@@ -74,6 +74,7 @@ export default function ChatInput({
             {!isLoading && (
               <div
                 onClick={(e) => {
+                  if (isLoading || inputValue.length === 0) return;
                   e.preventDefault();
                   handleFormSubmit(e);
                 }}

@@ -89,7 +89,7 @@ export default function ChatLists({ session }: Props) {
       <div
         onScroll={hanldeOnScroll}
         ref={messageParentRef}
-        className="custom-scrollbar flex-1 overflow-x-hidden pt-[6rem] pb-[4rem]"
+        className="custom-scrollbar flex-1 overflow-x-hidden pb-[4rem]"
       >
         <div className="w-full">
           <div className="mx-auto w-full max-w-5xl md:max-w-[80rem] md:px-20">

@@ -1,5 +1,6 @@
 "use client";
 
+import { cn } from "@/lib/utils";
 import { Session } from "next-auth";
 import { useRouter } from "next/navigation";
 import { useEffect } from "react";
@@ -35,7 +36,7 @@ export default function Main({ session }: Pros) {
 
         <section className="flex flex-1 overflow-hidden">
           <LeftSideBar />
-          <div className="flex h-full w-[80%] flex-1 flex-col lg:max-w-[82%]">
+          <div className={cn("flex h-full flex-1 flex-col pt-20")}>
             <ChatLists session={session} />
           </div>
         </section>
