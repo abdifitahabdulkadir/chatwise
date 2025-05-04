@@ -1,133 +1,148 @@
-# Chatwise
+# 🧠 Chatwise
 
-<img src="https://github.com/abdifitahabdulkadir/chatwise/blob/main/chatwise.png" alt="easymart image" style="width: 100%; height: 500px; margin: 20px auto; display: block;" />
+<p align="center">
+  <img src="https://github.com/abdifitahabdulkadir/chatwise/blob/main/chatwise.png" alt="Chatwise Screenshot" width="100%" height="500px" />
+</p>
 
-## 📝 Description
+## ✨ Description
 
-ChatWise is an intelligent AI-powered platform for seamless conversations, brainstorming, and problem-solving. Explore ideas, ask questions, and get insights instantly.
-[](https://ibb.co/xgMzfx1)
+**ChatWise** is an intelligent AI-powered platform designed for seamless conversations, brainstorming, and problem-solving. Instantly explore ideas, ask questions, and get insightful responses.
 
-## 🚀 Technogies
+🔗 [**Live App**](https://chatwise1.vercel.app/)
 
-Here are Technogies used for building this project.
+---
 
-![NPM Version](https://img.shields.io/npm/v/next?style=for-the-badge&logoColor=blue&logoSize=100&label=Nextjs&labelColor=%22%234A4947%22&color=black)
+## 🚀 Technologies Used
 
-![NPM Version](https://img.shields.io/npm/v/react?style=for-the-badge&logoColor=blue&logoSize=100&label=Reactjs&labelColor=227B94&color=black)
+| Technology       | Badge                                                                                                                  |
+| ---------------- | ---------------------------------------------------------------------------------------------------------------------- |
+| Next.js          | ![Next.js](https://img.shields.io/npm/v/next?style=for-the-badge&label=Next.js&color=black)                            |
+| React.js         | ![React](https://img.shields.io/npm/v/react?style=for-the-badge&label=React.js&color=black)                            |
+| TypeScript       | ![TypeScript](https://img.shields.io/npm/v/typescript?style=for-the-badge&label=TypeScript&color=black)                |
+| Tailwind CSS     | ![Tailwind](https://img.shields.io/npm/v/tailwindcss?style=for-the-badge&label=TailwindCSS&color=black)                |
+| Framer Motion    | ![Framer Motion](https://img.shields.io/npm/v/framer-motion?style=for-the-badge&label=Framer%20Motion&color=black)     |
+| Google Gemini AI | ![Gemini](https://img.shields.io/npm/v/%40google%2Fgenerative-ai?style=for-the-badge&label=Google%20Gemini&color=blue) |
+| ElevenLabs SDK   | ![ElevenLabs](https://img.shields.io/npm/v/%4011labs%2Freact?style=for-the-badge&label=ElevenLabs%20SDK&color=blue)    |
 
-![NPM Version](https://img.shields.io/npm/v/typescript?style=for-the-badge&logoColor=blue&logoSize=100&label=Typescript&labelColor=08C2FF&color=black)
+---
 
-![NPM Version](https://img.shields.io/npm/v/tailwindcss?style=for-the-badge&logoColor=blue&logoSize=100&label=Tailwing.css&labelColor=0a83c9&color=black)
+## 🌐 Live Demo
 
-![NPM Version](https://img.shields.io/npm/v/framer-motion?style=for-the-badge&logoColor=blue&logoSize=100&label=Frame%20motion&labelColor=0a83c9&color=black)
+👉 [https://chatwise1.vercel.app/](https://chatwise1.vercel.app/)
 
-![NPM Version](https://img.shields.io/npm/v/%40google%2Fgenerative-ai?style=for-the-badge&logoColor=blue&logoSize=100&label=Google%20Gemmini%20Ai&color=blue)
+---
 
-![NPM Version](https://img.shields.io/npm/v/%4011labs%2Freact?style=for-the-badge&logoColor=blue&logoSize=100&label=ElevenLabs%20React%20SDK&color=blue)
+## 🛠️ Getting Started
 
-## 🌐 Demo
+### 📦 Prerequisites
 
-Here is a working live demo: https://chatwise1.vercel.app/
+Make sure the following tools are installed on your machine:
 
-## 🛠️ Setup Project
+- [Node.js](https://nodejs.org/en/download/)
+- [Git](https://git-scm.com/downloads)
 
-### 🍴 Prerequisites
+---
 
-You need to install or make sure that these tools are pre-installed on your machine:
-
-- [NodeJS](https://nodejs.org/en/download/): It is a JavaScript runtime build.
-- [Git](https://git-scm.com/downloads): It is an open source version control system.
-
-Clone the project
-
-```bash
-  https://github.com/abdifitahabdulkadir/chatwise.git
-```
-
-Go to the project directory
-
-```bash
-  cd chatwise
-```
-
-#### Make sure you get all the fallowing API keys In your Env files
-
-1. At root of your application, create .env.local file.
-
-2. This project is using Next-auth (Auth.js) so kindly read thier docs if you have been slepy for a while.
-   thier offical webiste <br> 👉 **[Offical Link of Auth.js]([https://authjs.dev/getting-started/installation?framework=Next.js])**
-
-3. Get Google API key for authentication Google OAuth
-   form this link <br> 👉
-   **[Google API Link]([https://console.cloud.google.com/apis/dashboard?pli=1&project=coffee-app-412811])**
+### 📁 Clone the Repository
 
 ```bash
-AUTH_GOOGLE_ID="Google Client ID"
-AUTH_GOOGLE_SECRET="Google  Secret ID"
+git clone https://github.com/abdifitahabdulkadir/chatwise.git
+
+cd chatwise
 ```
 
-4. Also get API keys from github using this link <br>
-   👉 **[Github API Link]([https://docs.github.com/en/apps/oauth-apps/using-oauth-apps/installing-an-oauth-app-in-your-personal-account])**
+---
+
+### 🔐 Environment Setup
+
+1. Create a `.env.local` file in the root directory.
+
+2. Add the following credentials:
+
+#### 🔑 Google OAuth (via [Google Console](https://console.cloud.google.com/apis))
 
 ```bash
-AUTH_GITHUB_ID="Github client ID"
-AUTH_GITUB_SECRET="Github  Secret ID"
+AUTH_GOOGLE_ID="Your Google client ID"
+AUTH_GOOGLE_SECRET="Your google Secret ID"
 ```
 
-5. Create Database in mongodbDB and get Database Url <br> 👉 **[Official Account of MongoDB]([https://www.mongodb.com/])**
+#### 🔑 GitHub OAuth (via [GitHub OAuth App](https://docs.github.com/en/apps/oauth-apps))
 
 ```bash
-DATABASE_URL ='your database url'
+AUTH_GITHUB_ID="Your Github Client ID"
+AUTH_GITUB_SECRET="Your Github Secret ID"
 ```
 
-6. This proect also is using 11Labs's React SDK for voice to voice chat, and you can get it <br> 👉 **[Offical React SDK Docs For 11labs]([https://elevenlabs.io/docs/conversational-ai/libraries/react])**
+#### 🗃️ MongoDB Database (via [MongoDB](https://www.mongodb.com/))
 
 ```bash
-NEXT_PUBLIC_EVELNLABS_API_KEY="Your 11lbas API Key"
+DATABASE_URL="mongodb string url"
 ```
 
-7. This proect is using Google's Gemmini API key for AI integration so grap the free API key from this link
-   <br> 👉 **[Offical Google Studio AI]([https://aistudio.google.com/apikey])**
+#### 🧠 Google Gemini AI (via [Gemini AI Studio](https://aistudio.google.com/apikey))
 
-8. Finally, If you get trush issue from next-auth while running your next appliaciton locally then add
-   the falflowng env variable to the .env.local
+```bash
+GEMINI_API_KEY="your-gemini-api-key"
+```
+
+#### 🎙️ ElevenLabs SDK (via [11Labs Docs](https://elevenlabs.io/docs/conversational-ai/libraries/react))
+
+```bash
+NEXT_PUBLIC_EVELNLABS_API_KEY="your-11labs-api-key"
+```
+
+#### ⚠️ NextAuth Host Issue Fix (Only in development)
+
+if you get an error telling you have trust issue on your local machine -computer after you built the app locally then add local url to the .env.local file and you should good to go.
 
 ```bash
 AUTH_TRUST_HOST='http://localhost:3000/'
 ```
 
-9. finally the fallowing command to generate Secret key that next-auth (auth.js) will use it to hash your data.
+3. Generate the Auth.js secret key:
 
 ```bash
 npx auth secret
 ```
 
-### Install dependencies
+---
+
+### 📦 Install Dependencies
 
 ```bash
-  npm install
+npm install
 ```
 
-Start the server
+---
+
+### ▶️ Run the App
 
 ```bash
-  npm run dev
+npm run dev
 ```
 
-## 🤔 FAQ
+---
 
-### Is this proejct open source?
+## 🙋‍♂️ FAQ
 
-Yes, It is open source project , feel free to contribute, clone and even learn by your own self.
+### ❓ Is this project open source?
 
-### Is this project finished or still in process?
+✅ Yes! You’re welcome to contribute, fork, or learn it.
 
-It is still in development, lacking a lot of features which will be soon in coming weeks and months.
+### ❓ Is the project complete?
 
-### Can I use this project for my own?
+🚧 Not yet! It’s still under active development. New features are coming soon.
 
-No, you cannot use this project entirely for your own purposes. However, feel free to contribute, and if you use it, please provide proper credit and respect to the creater (@abdifitahabdulkadir).
+### ❓ Can I use this project for commercial purposes?
 
-## 📋 License
+❌ No, not entirely. You're welcome to learn from it or contribute, but credit to the author [@abdifitahabdulkadir](https://github.com/abdifitahabdulkadir) is required.
 
-This is project is under MIT License.
+---
+
+## 📄 License
+
+This project is licensed under the [MIT License](LICENSE).
+
+---
+
+Finally, Feel free to ⭐️ the repository if you find it useful!
