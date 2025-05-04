@@ -145,4 +145,4 @@ This project is licensed under the [MIT License](LICENSE).
 
 ---
 
-Finally, Feel free to ⭐️ the repository if you find it useful!
+Finally, Feel free to ⭐️ the repository if you find it useful!.
