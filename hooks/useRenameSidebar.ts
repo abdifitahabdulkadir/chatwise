@@ -1,4 +1,3 @@
-import { sidebarKey } from "@/constants";
 import { fetchHandler } from "@/lib/fetch-handler";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 
@@ -40,7 +39,7 @@ export function useRenameSidebar() {
     },
 
     onError: (__, _, context) => {
-      queryClient.setQueryData([sidebarKey], context?.previousSidabrs);
+      queryClient.setQueryData(["sidebars"], context?.previousSidabrs);
     },
 
     onSettled: async () => {
