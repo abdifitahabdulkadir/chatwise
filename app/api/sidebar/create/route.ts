@@ -5,18 +5,18 @@ import { NextRequest, NextResponse } from "next/server";
 // store the title
 export async function POST(req: NextRequest) {
   try {
-    const { chatId, title, userId }: ChatTitleI = await req.json();
+    const { id, title, userId }: ChatTitleI = await req.json();
 
     const existed = await prisma.titles.findFirst({
       where: {
-        chatId: chatId,
+        id: id,
         userId: userId,
       },
     });
     if (!existed) {
       await prisma.titles.create({
         data: {
-          chatId: chatId!,
+          id: id!,
           userId: userId,
           title: title,
         },

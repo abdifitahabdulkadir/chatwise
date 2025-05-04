@@ -1,5 +1,6 @@
 import handleError from "@/lib/error-handler";
 import prisma from "@/prisma";
+
 import { NextRequest, NextResponse } from "next/server";
 
 export async function GET(req: Request) {
@@ -7,6 +8,7 @@ export async function GET(req: Request) {
 
   try {
     if (!chatId) return NextResponse.json({ success: true, data: undefined });
+
     const chats = await prisma.chat.findMany({
       where: {
         chatId,
@@ -36,11 +38,11 @@ export async function POST(req: NextRequest) {
     // find if chatid is already existed
     const currentTitle = await prisma.titles.findFirst({
       where: {
-        chatId: chatId,
+        id: chatId,
         userId: userId!,
       },
       select: {
-        chatId: true,
+        id: true,
         title: true,
       },
     });
@@ -64,6 +66,7 @@ export async function POST(req: NextRequest) {
         role: "system",
       },
     ];
+
     await prisma.chat.createMany({
       data: buildChat,
     });

@@ -5,7 +5,6 @@ import { motion } from "framer-motion";
 import { Ellipsis } from "lucide-react";
 import { useParams, useRouter } from "next/navigation";
 import DropDownMenu from "../DropDownMenu";
-import ImageIcon from "../shared/ImageIcon";
 
 interface SideBarItemPros {
   text: string;
@@ -23,6 +22,7 @@ interface SideBarItemPros {
   }) => void;
   disable: boolean;
   handleDeleteChat: (chatId: string) => void;
+  ref: React.RefObject<HTMLDivElement | null>;
 }
 
 export default function SidebarItem({
@@ -35,6 +35,7 @@ export default function SidebarItem({
   disable,
   handleDeleteChat,
   toggle,
+  ref,
 }: SideBarItemPros) {
   const router = useRouter();
   const params = useParams();
@@ -46,23 +47,23 @@ export default function SidebarItem({
     if (current === chatId && String(params?.id) === chatId) {
       return;
     }
-    localStorage.removeItem("selectedSidebarItem");
-    localStorage.setItem("selectedSidebarItem", chatId);
-    router.push(`/chat/${chatId}`);
+    localStorage.setItem("selectedSidebarItem", String(chatId));
+    if (ref.current) {
+      const scrollTop = ref.current?.scrollTop;
+      localStorage.setItem("scrollTop", String(scrollTop ? scrollTop : 0));
+    }
+    router.push(`/chat/${chatId}`, { scroll: true });
   }
-
+  console.log("active sidebar", currentActive);
   return (
     <div
       onClick={disable ? () => {} : hanleSelectedSidebar}
       className={cn(
-        "bg-light-darker/4 hover:bg-opacity-90 grid h-fit w-full cursor-pointer grid-cols-[1fr_8fr_1fr_1fr] items-center gap-1.5 rounded-md border-none px-1 py-3 pl-2 text-white transition-all duration-300",
+        "bg-light-darker/4 hover:bg-opacity-90 grid h-fit w-full cursor-pointer grid-cols-[9fr_1fr_1fr] items-center gap-1.5 rounded-md border-none py-3 pl-2 text-white transition-all duration-300",
         !isEditing && "hover:bg-light-gray/30",
         currentActive === chatId && "bg-light-gray/30",
       )}
     >
-      {!isEditing && (
-        <ImageIcon iconUrl={"/icons/message.svg"} alt="message icon" />
-      )}
       {isEditing && (
         <motion.form
           initial={{
@@ -94,7 +95,7 @@ export default function SidebarItem({
         </motion.form>
       )}
       {!isEditing && (
-        <p className="line-clamp-1 h-fit text-[0.9rem] font-normal text-wrap">
+        <p className="line-clamp-2 h-fit text-[0.9rem] font-normal text-wrap">
           {text}
         </p>
       )}
@@ -105,7 +106,6 @@ export default function SidebarItem({
         >
           <DropdownMenuItem
             disabled={disable}
-          
             onClick={(e) => {
               e.stopPropagation();
               toggle({ chatTitleId: chatId, newTitle: text });

@@ -5,8 +5,10 @@ import { cn } from "@/lib/utils";
 import { useSession } from "next-auth/react";
 import Image from "next/image";
 import { useParams, useRouter } from "next/navigation";
-import { useState } from "react";
+import { useEffect, useRef, useState } from "react";
+import ClipLoader from "react-spinners/ClipLoader";
 import { v4 as uuid } from "uuid";
+import InfiniteScrollWrapper from "../InfiniteScrollWrapper";
 import { SidebarSkelton } from "../shared/Skeltons";
 import UserProfile from "../shared/UserProfile";
 import { SheetClose } from "../ui/sheet";
@@ -20,8 +22,8 @@ interface EditingItemProps {
   newTitle?: string;
   isEditing?: boolean;
 }
+
 export default function NavLinks({ isMobile = false }: NavLinksProps) {
- 
   const router = useRouter();
   const { id: currentPrams } = useParams();
   const session = useSession();
@@ -32,15 +34,25 @@ export default function NavLinks({ isMobile = false }: NavLinksProps) {
     isEditing: false,
   });
 
-  const { data: sidebars, isLoading } = useGetSidebars({
+  const {
+    data: pages,
+    isLoading,
+    hasNextPage,
+    isFetching,
+    fetchNextPage,
+  } = useGetSidebars({
     enabled: !!session.data,
     userId,
   });
+
+  const ref = useRef<HTMLDivElement>(null);
   const { mutate: renameSidebar, isPending: isRenaming } = useRenameSidebar();
-  const { mutate: deleteChat} = useDeleteChat();
+  const { mutate: deleteChat } = useDeleteChat();
 
   const toggle = (detials: EditingItemProps) =>
     setEditDetails({ ...detials, isEditing: true });
+
+  const sidebars = pages?.pages.flatMap((page) => page.data, 2) ?? [];
 
   const changeText = (value: React.ChangeEvent<HTMLInputElement>) =>
     setEditDetails((prev) => {
@@ -51,29 +63,40 @@ export default function NavLinks({ isMobile = false }: NavLinksProps) {
     e.preventDefault();
     toggle({ isEditing: false });
 
-    const isTitleChanged = sidebars?.data?.find(
+    const isTitleChanged = sidebars?.find(
       (each) =>
-        each.chatId === editDetails.chatTitleId &&
-        each.title.trim() === editDetails.newTitle!.trim(),
+        each?.id === editDetails.chatTitleId &&
+        each?.title.trim() === editDetails.newTitle!.trim(),
     );
 
-    if (isTitleChanged) return;
-    if (!editDetails.chatTitleId || !userId || !editDetails.newTitle) return;
-
-    renameSidebar({
-      userId,
-      newTitile: editDetails.newTitle ?? "",
-      chatTitleId: editDetails.chatTitleId ?? "",
-    });
+    if (
+      !isTitleChanged &&
+      (!editDetails.chatTitleId || !userId || !editDetails.newTitle)
+    )
+      renameSidebar({
+        userId,
+        newTitile: editDetails.newTitle ?? "",
+        chatTitleId: editDetails.chatTitleId ?? "",
+      });
   };
 
+  // handle delete chat
   function handleDeleteChat(chatId: string) {
-    console.log("delete this chatId: ", chatId);
     deleteChat({
       chatTitleId: chatId,
       userId,
     });
   }
+
+  // responsible for scrolling to the postion we left off
+  useEffect(function () {
+    const element = ref.current;
+    if (element) {
+      const previousScrollPosition =
+        Number(localStorage.getItem("scrollTop")) || 0;
+      element.scrollTop = previousScrollPosition;
+    }
+  }, []);
   return (
     <div
       onMouseLeave={
@@ -89,7 +112,10 @@ export default function NavLinks({ isMobile = false }: NavLinksProps) {
         "bg-dark-gray/60 relative flex h-full w-full flex-col pt-16",
       )}
     >
-      <div className="custom-scrollbar h-0 w-full grow overflow-y-auto px-4 py-10">
+      <div
+        ref={ref}
+        className="custom-scrollbar h-0 w-full grow overflow-auto px-4 py-10"
+      >
         <button
           disabled={isLoading}
           onClick={() => {
@@ -114,39 +140,48 @@ export default function NavLinks({ isMobile = false }: NavLinksProps) {
             return <SidebarSkelton key={index} />;
           })
         ) : (
-          <div className="flex w-full flex-col gap-1 py-5">
-            {sidebars?.data &&
-              sidebars?.data.map(({ title, chatId }, index) => {
-                const contnet = (
-                  <SidebarItem
-                    disable={isRenaming}
-                    input={
-                      chatId === editDetails.chatTitleId
-                        ? (editDetails.newTitle ?? "")
-                        : title
-                    }
-                    toggle={toggle}
-                    handleDeleteChat={handleDeleteChat}
-                    changeText={changeText}
-                    handleSubmit={handleSubmit}
-                    isEditing={
-                      editDetails.chatTitleId === chatId &&
-                      editDetails.isEditing!
-                    }
-                    chatId={chatId!}
-                    key={index}
-                    text={title}
-                  />
-                );
-                return isMobile ? (
-                  <SheetClose asChild key={index}>
-                    {contnet}
-                  </SheetClose>
-                ) : (
-                  contnet
-                );
-              })}
-          </div>
+          <InfiniteScrollWrapper
+            onBottotomReached={() =>
+              !isFetching && hasNextPage && fetchNextPage()
+            }
+          >
+            <div className="flex w-full flex-col gap-1 py-5">
+              {sidebars.length > 0 &&
+                sidebars.map((item, index) => {
+                  const id = item?.id;
+                  const title = item?.title;
+                  const contnet = (
+                    <SidebarItem
+                      ref={ref}
+                      disable={isRenaming}
+                      input={
+                        id === editDetails.chatTitleId
+                          ? (editDetails.newTitle ?? "")
+                          : (title ?? "")
+                      }
+                      toggle={toggle}
+                      handleDeleteChat={handleDeleteChat}
+                      changeText={changeText}
+                      handleSubmit={handleSubmit}
+                      isEditing={
+                        editDetails.chatTitleId === id && editDetails.isEditing!
+                      }
+                      chatId={id ?? ""}
+                      key={index}
+                      text={title ?? ""}
+                    />
+                  );
+                  return isMobile ? (
+                    <SheetClose asChild key={index}>
+                      {contnet}
+                    </SheetClose>
+                  ) : (
+                    contnet
+                  );
+                })}
+            </div>
+            {isFetching && <ClipLoader color="#0fa47f" size={30} />}
+          </InfiniteScrollWrapper>
         )}
       </div>
       <div className="border-light-gray flex w-full flex-col gap-y-2 border-t px-3 py-4">

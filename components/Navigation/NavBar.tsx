@@ -10,7 +10,7 @@ export default function NavBar() {
   const { toggle } = useSidebarProvider();
   const pathName = usePathname();
   return (
-    <div className="fixed top-0 z-50 flex h-[6vh] w-full items-center justify-between gap-2 bg-transparent px-2 py-6 pb-2">
+    <div className="fixed top-0 z-50 flex h-[6vh] w-[97%] items-center justify-between gap-2 bg-transparent px-2 py-6 pb-2">
       <MobileSidebar />
       <PanelLeft
         onClick={toggle}

@@ -1,6 +1,5 @@
 "use client";
 
-import { cn } from "@/lib/utils";
 import { Session } from "next-auth";
 import { useRouter } from "next/navigation";
 import { useEffect } from "react";
@@ -13,6 +12,7 @@ import SideBarProvider from "./Navigation/SidBarToggleProvider";
 interface Pros {
   session: Session;
 }
+
 export default function Main({ session }: Pros) {
   const router = useRouter();
 
@@ -30,15 +30,14 @@ export default function Main({ session }: Pros) {
 
   return (
     <SideBarProvider>
-      <main className="bg-medium-gray  flex  min-h-screen w-full items-center justify-center">
+      <main className="flex h-screen w-full flex-col">
         <NavBar />
-        <section
-          className={cn(
-            "grid w-full  grid-cols-[17%_1fr] flex-1   max-md:grid-cols-1",
-          )}
-        >
+
+        <section className="flex flex-1 overflow-hidden">
           <LeftSideBar />
-          <ChatLists session={session} />
+          <div className="flex h-full w-[80%] flex-1 flex-col lg:max-w-[82%]">
+            <ChatLists session={session} />
+          </div>
         </section>
       </main>
     </SideBarProvider>

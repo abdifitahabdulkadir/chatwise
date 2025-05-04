@@ -1,6 +1,6 @@
 import { fetchHandler } from "@/lib/fetch-handler";
 import { extractParamId } from "@/lib/utils";
-import { useQuery } from "@tanstack/react-query";
+import { useInfiniteQuery, useQuery } from "@tanstack/react-query";
 import { useParams } from "next/navigation";
 
 export function useChats() {
@@ -8,7 +8,7 @@ export function useChats() {
   const currentParamId = extractParamId(params);
   return useQuery({
     queryKey: [currentParamId],
-    queryFn: () => fetchHandler<ChatItemI[]>(`/api/chat/${currentParamId}`),
+    queryFn: () => fetchHandler<ChatItemI[]>(`/api/chat/${currentParamId}`, {}),
     enabled: !!currentParamId,
   });
 }

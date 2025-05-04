@@ -19,7 +19,6 @@ export function useStoreChats({ currentParamId, userId }: Props) {
     mutationFn: (data: StoreChatParams) => {
       if (!data.userId)
         throw new Error("Only Authenticated User can access this feature");
-
       return fetchHandler(`/api/chat/${currentParamId}`, {
         method: "POST",
         body: JSON.stringify(data),

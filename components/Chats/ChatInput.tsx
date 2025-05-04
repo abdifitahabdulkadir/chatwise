@@ -1,6 +1,6 @@
 "use client";
 import { cn } from "@/lib/utils";
-import { Mic, Paperclip } from "lucide-react";
+import { Mic } from "lucide-react";
 import { useEffect, useRef } from "react";
 
 interface ChatInputProps {
@@ -39,7 +39,7 @@ export default function ChatInput({
   return (
     <div
       className={cn(
-        "bg-medium-gray absolute bottom-0 left-[50%] z-40 mt-6 flex h-fit w-[90%] -translate-x-[50%] transform items-center justify-center py-5",
+        "bg-medium-gray flex h-fit w-full items-center justify-center py-5",
       )}
     >
       <form
@@ -68,14 +68,6 @@ export default function ChatInput({
         />
         {!isVoicetoVoice && (
           <div className="flex w-fit items-center justify-end gap-x-2 self-end">
-            {!isLoading && (
-              <button
-                className="cursor-pointer"
-                onClick={() => document.getElementById("fileInput")?.click()}
-              >
-                <Paperclip className="text-darker size-4" />
-              </button>
-            )}
             {isLoading && (
               <div className="bg-dark-green size-4 animate-pulse rounded-md p-1" />
             )}

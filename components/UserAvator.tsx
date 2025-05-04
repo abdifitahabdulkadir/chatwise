@@ -1,6 +1,5 @@
 import { useSession } from "next-auth/react";
 import Image from "next/image";
-import React from "react";
 
 export default function UserAvator() {
   const { data } = useSession();

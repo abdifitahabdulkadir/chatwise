@@ -5,15 +5,19 @@ import { NextRequest, NextResponse } from "next/server";
 //get all sidebars of current user.
 export async function POST(req: NextRequest) {
   try {
-    const userId = await req.json();
+    const { userId, cursor: nextId } = await req.json();
+
     const titles = await prisma.titles.findMany({
+      take: 10,
+      skip: nextId === 1 ? 0 : nextId,
       where: {
         userId,
       },
       orderBy: {
-        id: "desc",
+        id: "asc",
       },
     });
+
     return NextResponse.json({
       success: true,
       data: JSON.parse(JSON.stringify(titles)),
@@ -32,7 +36,7 @@ export async function PUT(req: Request) {
     const updatedTittle = await prisma.titles.update({
       where: {
         userId: userId!,
-        chatId: chatTitleId,
+        id: chatTitleId,
       },
       data: {
         title: newTitile,
@@ -67,7 +71,7 @@ export async function DELETE(req: Request) {
       await currentTxClient.titles.delete({
         where: {
           userId,
-          chatId: chatTitleId,
+          id: chatTitleId,
         },
       });
 

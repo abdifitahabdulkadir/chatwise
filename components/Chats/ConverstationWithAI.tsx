@@ -54,8 +54,8 @@ export default function ConverstationWithAI({
   );
 
   return (
-    <div className="flex h-full w-full flex-col items-center justify-between py-20">
-      <div className="mb-[20rem] flex w-full grow flex-col items-center justify-center pb-20">
+    <div className="flex h-full w-full flex-col py-10">
+      <div className="flex flex-1 items-center justify-center px-4">
         {status === "connecting" && !isSpeaking && (
           <BeatLoader color="#00897b" size={30} />
         )}
@@ -69,7 +69,7 @@ export default function ConverstationWithAI({
         ) : null}
       </div>
 
-      <div className="mt-auto flex w-full items-center justify-center gap-6">
+      <div className="flex w-full items-center justify-center gap-6 py-6">
         <ActionButton
           title="Start Conversation"
           isRecording={status === "connected"}
@@ -81,6 +81,7 @@ export default function ConverstationWithAI({
             <Mic className="text-darker scale-[1.4]" />
           )}
         </ActionButton>
+
         <ActionButton
           title="Close Voice"
           onClick={async () => {

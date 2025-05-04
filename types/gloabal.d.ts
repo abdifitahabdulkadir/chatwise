@@ -11,10 +11,11 @@ interface UserI {
   image?: string;
 }
 interface ChatTitleI {
-  chatId?: string | undefined;
+  id?: string;
   title: string;
   userId: Schema.Types.ObjectId;
 }
+
 interface AccountI {
   _id: Schema.Types.ObjectId;
   provider: "credentials" | "github" | "google";

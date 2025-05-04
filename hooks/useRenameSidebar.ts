@@ -28,7 +28,7 @@ export function useRenameSidebar() {
 
       const index = previousSidabrs?.data.findIndex(
         (item) =>
-          item.chatId === newItem.chatTitleId && item.userId === newItem.userId,
+          item.id === newItem.chatTitleId && item.userId === newItem.userId,
       );
 
       if (index !== -1 && index !== undefined) {

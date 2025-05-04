@@ -9,9 +9,11 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="en">
+    <html lang="en" className="scroll-smooth">
       <SessionProvider>
-        <body className={` ${interFont.className} antialiased`}>
+        <body
+          className={` ${interFont.className} bg-medium-gray m-0 box-content p-0 antialiased`}
+        >
           <Provider>{children}</Provider>
           <Toaster />
         </body>

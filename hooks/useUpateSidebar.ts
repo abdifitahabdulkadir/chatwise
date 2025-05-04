@@ -21,19 +21,27 @@ export function useUpateSidebar() {
         success: boolean;
         data: ChatTitleI[];
       }>(["sidebars"]);
-
-      const index = previousSidebars?.data.findIndex(
-        (item) => item.chatId === data.chatId && item.userId === data.userId,
-      );
+      let index = -1;
+      if (previousSidebars?.data) {
+        index = previousSidebars?.data?.findIndex(
+          (item) => item.id === data.id && item.userId === data.userId,
+        );
+      }
 
       if (index === -1 || index === undefined) {
+        if (!previousSidebars?.data) {
+          previousSidebars = {
+            success: true,
+            data: [],
+          };
+        }
         previousSidebars?.data.push(data);
       }
 
       return previousSidebars;
     },
 
-    onError: (__, _, context) => {
+    onError: (err, _, context) => {
       queryClient.setQueryData(["sidebars"], context?.data);
     },
 
