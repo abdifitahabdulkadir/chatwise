@@ -1,6 +1,6 @@
 "use client";
 import { cn } from "@/lib/utils";
-import { Mic } from "lucide-react";
+import { ArrowUp } from "lucide-react";
 import { useEffect, useRef } from "react";
 
 interface ChatInputProps {
@@ -72,8 +72,15 @@ export default function ChatInput({
               <div className="bg-dark-green size-4 animate-pulse rounded-md p-1" />
             )}
             {!isLoading && (
-              <div className="flex size-[2.3rem] cursor-pointer items-center justify-center rounded-full bg-white/50 p-1 transition-all duration-200 hover:scale-[1.1]">
-                <Mic onClick={handleRecordVoice} className="text-darker" />
+              <div
+                onClick={(e) => {
+                  e.preventDefault();
+                  handleFormSubmit(e);
+                }}
+                className="bg-dark-green/30 flex size-[2.3rem] cursor-pointer items-center justify-center rounded-full p-1 transition-all duration-200 hover:scale-[1.1]"
+              >
+                <ArrowUp className="text-white" />
+                {/* <Mic onClick={handleRecordVoice} className="text-darker" /> */}
               </div>
             )}
           </div>
